@@ -1,0 +1,14 @@
+Implementar uma rede Token Ring conectado a 4 servidoras do Dinf usando
+sockets datagram.
+Codigo exemplo do socket:
+    www.linuxhowtos.org/daal6/server_udp.c
+    www.linuxhowtos.org/daal6/client_udp.c
+Programa deve capturar tudo o que for digitado em uma maquina e distribuir
+isso para as 4 maquinas, mostrando na tela das quatro.
+    Cada maquina deve segurar a mensagem por 2 segundos antes de enviar.
+Tempo de passe do bastao.
+    1 mensagem.
+    caso a maquina nao queira unviar nenhuma mensagem deve mandar o bastao
+    imediatamente ao recebe-lo.
+    ordem das servidoras deve estar em um arquivo ou ser passada pelo usuario
+    no carregamento do programa. 
