@@ -1,0 +1,269 @@
+\documentclass{beamer}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage{verbatim}
+
+\title{Empacotamento e Tipagem Genérica em ADA}
+\author{Aramis Fernandes \& Elder Crul}
+
+\begin{document}
+
+    % Uma das formas possiveis para declarar um frame:
+    \frame{\titlepage}
+
+    % [2]
+    \frame
+    {
+        \frametitle{Sumário}
+        \tableofcontents
+    }
+
+    % Manda os highlight da secao corrente:
+    \AtBeginSection[]
+    {
+        \begin{frame}{Sumário}
+            \tableofcontents[currentsection]
+        \end{frame}
+    }
+
+    % Aqui a secao comeca efetivamente:
+    \section{Empacotamento}
+
+    % Cada frame eh um slide:
+    \begin{frame}{O que é?}
+        Segundo o Prof. Direne, é a Arte de ocultar gradualmente a informação.
+    \end{frame}
+
+    %%%
+    \begin{frame}{E em ADA...}
+        \begin{itemize}
+            \item<1-> Existem dois tipos de pacotes:
+            \begin{itemize}
+                \item ADT (\textit{Abstract Data Type}): visíveis e privados;
+                \item ASM (\textit{Abstract State Machine}): objeto.
+            \end{itemize}
+            \item<2-> ASM.public: operações e não atributos.
+            \item<2-> ASM.private: *TODOS* os atributos.
+        \end{itemize}
+    \end{frame}
+
+    %%% Exemplos de código:
+    \begin{frame}[containsverbatim]
+
+        \frametitle{Exemplo:}
+        \begin{verbatim}
+-- Definicao de um pacote onde especificacoes,
+-- variaveis, tipos, constantes, etc.,
+-- sao todos visiveis pelos programas que
+-- usarao o pacote:
+
+package Public_Only_Package is
+
+    type Range_10 is range 1 .. 10;
+
+end Public_Only_Package;
+        \end{verbatim}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+
+        \frametitle{Exemplo:}
+        \begin{verbatim}
+-- Pacote privado:
+package Not_That_Public_Package is
+
+    type Private_Type is private;
+
+private
+
+   type Private_Type is array (1 .. 10) of Integer;
+
+end Not_That_Public_Package;
+        \end{verbatim}
+    \end{frame}
+
+    % Manda os highlight da secao corrente:
+    \AtBeginSection[]
+    {
+        \begin{frame}{Sumário}
+            \tableofcontents[currentsection]
+        \end{frame}
+    }
+    % A secao seguinte:
+    \section{Unidades Genéricas}
+    \begin{frame}{Polimorfismo Paramétrico}
+        \begin{itemize}
+            \item<1-> A idéia de reutilização de código surge devido à
+            necessidade de construir programas baseados em blocos de construção
+            bem estabelecidos que possam ser combinados para formar um sistema
+            mais amplo e complexo;
+            \item<2-> A reutilização de código melhora a produtividade e a
+            qualidade do \textit{software};
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Polimorfismo Paramétrico}
+        \begin{itemize}
+            \item<1-> Uma das maneiras em que a linguagem \textbf{ADA} suporta
+            essa característica é por meio de unidades de genéricos. Uma unidade
+            genérica é uma unidade que define algoritmos em termos de tipos e
+            operações que não estão definidas até o momento em que são
+            instanciados;
+            \item<2-> Eventualmente escrevemos código similar, com pequenas
+            mudanças nos tipos das variáveis, mas com os mesmos algoritmos;
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+        \frametitle{Exemplo de Sobrecarga de tipo:}
+        \begin{verbatim}
+-- Na especificacao
+generic
+    type Element_T is private;
+
+procedure Swap (X, Y : in out Element_T);
+
+-- No corpo:
+procedure Swap (X, Y : in out Element_T) is
+    Temporary : constant Element_T := X;
+begin
+    X := Y;
+    Y := Temporary;
+end Swap;
+        \end{verbatim}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+        \frametitle{Instanciando Entidades Genéricas}
+        \begin{itemize}
+            \item<1-> As entidades declaradas como genéricas não podem ser
+            usadas diretamente, é necessário instanciá-las antes, por exemplo:
+            \begin{verbatim}
+
+procedure Swap_Integers is new Swap (Integer);
+
+            \end{verbatim}
+            \item<2-> A procedure genérica pode ser instanciada para todos os
+            tipos desejados. Pode ser instanciada com menores diferentes, ou se
+            o mesmo identificador for usado, cada declaração sobrecarrega a
+            procedure.
+            \begin{verbatim}
+
+procedure Instance_Swap is new Swap (Float);
+procedure Instance_Swap is new Swap (Day_T);
+procedure Instance_Swap is new Swap (Element_T => Stack_T);
+
+            \end{verbatim}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+        \frametitle{Tipos de unidades Genéricas}
+        \begin{verbatim}
+generic
+    ... formal parameters ...
+procedure Proc (...);
+
+generic
+    ... formal parameters ...
+procedure Func (...) return ...;
+
+generic
+    ... formal parameters ...
+package Pack is
+    ...
+end Pack;
+        \end{verbatim}
+    \end{frame}
+
+    \begin{frame}{Subprogramas como Parâmetro}
+        \begin{itemize}
+            \item<1-> Escrever uma função genérica que retorne o maior entre
+            dois elementos, independente de tipo;
+
+            \item<2-> Talvez o tipo instanciado não tenha o operador $>$ (em
+            tipos definidos pelo usuário, por exemplo);
+
+            \item<3-> Neste caso, como comparar os elementos?
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+        \frametitle{Subprogramas como Parâmetro (sobrecarga de código)}
+        \begin{verbatim}
+-- Spec:
+generic
+  type ValueType is private;
+
+  with function Compare(L, R: ValueType) return Boolean;
+
+  function Maximum_Generic(L, R: ValueType)\
+    return ValueType;
+        \end{verbatim}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+        \frametitle{Subprogramas como Parâmetro (sobrecarga de código)}
+        \begin{verbatim}
+-- Body:
+function Maximum_Generic (L, R: ValueType)\
+    return ValueType is
+  begin
+      if Compare(L,R) then
+          return L;
+      else
+          return R;
+      end if;
+  end Maximum_Generic;
+        \end{verbatim}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+        \frametitle{Instanciando Maximum\_Generic como comparador de números com
+        ponto flutuante}
+        \begin{verbatim}
+function Max_Gen_Float is
+  new Maximum_Generic (ValueType => Float, Compare => ">");
+
+function Min_Gen_Float is
+  new Maximum_Generic (ValueType => Float, Compare => "<");
+        \end{verbatim}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+        \frametitle{Instanciando a função Maximum\_Generic como "Car"}
+        \begin{verbatim}
+-- Definindo o tipo "carro"
+type Car is record
+  Id: Long_Long_Integer;
+  NumRodas: Positive range 1..10;
+  Cor: Color;
+  HPs: Floar range 0.0 .. 2_000.0;
+end record;
+
+-- Definindo uma função que compara dois carros entre si:
+function CarCompare (A, B: Car) return Boolean is
+  begin
+    if A.HPs > B.HPs then
+        return True;
+    else
+        return False;
+    end if;
+  end CarCompare;
+        \end{verbatim}
+    \end{frame}
+
+    \begin{frame}[containsverbatim]
+        \frametitle{Instanciando a função Maximum\_Generic como "Car"}
+        \begin{verbatim}
+function MaxCar is
+  new Maximum_Generic (ValueType => Car, Compare => CarCompare);
+
+  Palio: Car := (1, 4, Blue, 65);
+  BMW: Car := (1, 4, Blue, 260);
+
+  MaxCars (Palio, BMW);
+        \end{verbatim}
+    \end{frame}
+
+\end{document}

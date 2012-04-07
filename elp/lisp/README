@@ -1,0 +1,17 @@
+### Enunciado:
+
+O seguinte trabalho consiste em fazer um programa cuja entrada eh um arquivo
+texto, e os objetivos sao:
+- encontrar uma string;
+- encontrar uma substring;
+- contar o numero de ocorrencias da string;
+- contar o numero de ocorrencias da substring.
+
+O programa deve ser feito na linguagem lisp.
+
+### Nota:
+
+A implementacao atual procura sequencias de caracteres dentro de um arquivo
+texto, sejam elas strings ou substrings. Ainda, efetua a contagem de linhas onde
+sao encontradas tais ocorrencias.
+
