@@ -1,0 +1,6 @@
+Descricao do(s) trabalho(s):
+
+1) Calcular a intersecao de dois poligonos:
+  - Entrada: o conjunto de pontos que define cada poligono;
+  - Saida: o conjunto de pontos que representa o poligono formado pela
+    intersecao dos dois poligonos dados na entrada.
