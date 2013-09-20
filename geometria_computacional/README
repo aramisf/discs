@@ -1,6 +1,4 @@
-Descricao dos trabalhos:
+Diretorio destinado ao armazenamento do codigo dos trabalhos da disciplina de
+Geometria Computacional, ministrada pelo Professor Andre Guedes.
 
-1) Calcular a intersecao de dois poligonos:
-  - Entrada: o conjunto de pontos que define cada poligono;
-  - Saida: o conjunto de pontos que representa o poligono formado pela
-    intersecao dos dois poligonos dados na entrada.
+A descricao de cada trabalho foi movida para seus respectivos diretorios.
