@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 # This is a class to make a representation of a graph.
+class Graph(object):
 
-# Here is where all the magic happens ;)
+    def __init__(self, AdjMtrxFP):
 
-# Main class, where `graph' is a representation of a graph, and k is the value
-# for the maximum desired treewidth.
+        self.size = int(AdjMtrxFP.readline().strip())
+
+        self.mtrx = [ i.strip() for i in AdjMtrxFP.readlines() ]
+
 class TreeDecomposition(object):
 
     # A Tree Decomposition is a set of sets, each of which has some vertices of
@@ -14,15 +17,7 @@ class TreeDecomposition(object):
 
     #XXX: Graph must be an object, as the subset must.
 
-    def __init__(self, graph, k = None):
+    def __init__(self, graph, subset):
 
-        if not k:
-            self.simpleDecomposition (graph)
-
-        else:
-            self.kDecomposition (graph)
-
-        # A list to represent the graph
-        self.DecomposedTree = []
 
 
