@@ -27,19 +27,22 @@ my @uniao_duais;  # cjto uniao, cujo dual eh a resposta do problema
 ## Funcoes auxiliares: ##
 #########################
 
-# Calculo da equacao da reta entre dois pontos dados:
+# Calculo da equacao da reta entre dois pontos dados. Os dois parametros
+# recebidos aqui sao referencias para arrays.
 sub calcula_eq_reta {
 
-  my @ponto_a = split ' ', shift;
-  my @ponto_b = split ' ', shift;
+  my $pt_a = shift;
+  my $pt_b = shift;
+
+  #print "Recebi ponto a: @$pt_a\n";
 
   my %reta;   # Equacao da reta, indexada pelos coeficientes
 
-  $reta{'a'} = sprintf "%.2f", $ponto_a[1] - $ponto_b[1];
-  $reta{'b'} = sprintf "%.2f", $ponto_b[0] - $ponto_a[0];
-  $reta{'c'} = sprintf "%.2f", $ponto_a[0]*$ponto_b[1] - $ponto_a[1]*$ponto_b[0];
+  $reta{'a'} = sprintf "%.2f", $$pt_a[1] - $$pt_b[1];
+  $reta{'b'} = sprintf "%.2f", $$pt_b[0] - $$pt_a[0];
+  $reta{'c'} = sprintf "%.2f", $$pt_a[0] * $$pt_b[1] - $$pt_a[1] * $$pt_b[0];
 
-  print "EQ_RETA: $reta{'a'}x + $reta{'b'}y + $reta{'c'}\n";
+  #print "EQ_RETA: $reta{'a'}x + $reta{'b'}y + $reta{'c'}\n";
   return \%reta;
 
 }
@@ -68,34 +71,40 @@ sub calcula_intersecao {
     $pt_intersec[1] = sprintf "%.2f", $$eq_ref{'b'} / $$eq_ref{'a'} * $pt_intersec[0];
   }
 
-  return "$pt_intersec[0] $pt_intersec[1]";
+  #print "\n\nCalcula intersecao retornando: @pt_intersec\n\n";
+  return \@pt_intersec;
 }
 
 # Encontra a equacao de reta entre os dois pontos passados como parametro, e
 # tambem o ponto dual, que eh o ponto 'oposto' `a reta formada pelos mesmos
-# dois pontos dados. Os dois pontos vem no formato de string: "0.0 0.0"
+# dois pontos dados. Os dois parametros recebidos sao referencias para os
+# arrays dos pontos.
 sub calcula_dual {
 
   my $pt_a = shift;
   my $pt_b = shift;
+
+  #print "Calcula DUAL: '@$pt_a' '@$pt_b'\n";
   
   my $equacao     = calcula_eq_reta($pt_a, $pt_b);  # AQUI RETORNA UMA HASHREF
-  my $pt_intersec = calcula_intersecao($equacao);   # RECEBE UMA HASHREF E RETORNA UMA STRING
+  my $pt_intersec = calcula_intersecao($equacao);   # RECEBE UMA HASHREF E RETORNA UM ARRAYREF
   my $pt_dual     = dual_do_ponto($pt_intersec);
 
   return $pt_dual;
 }
 
+# Calcula o dual de um ponto de intersecao dado. O ponto dado eh uma referencia
+# para um array (x,y)
 sub dual_do_ponto {
 
-  my @pt_intersec = split ' ', shift;
+  my $pt_intersec = shift;
   my @ponto_dual = (0.0, 0.0);
-  my $denom = sprintf "%.2f", $pt_intersec[0] ** 2 + $pt_intersec[1] ** 2;
+  my $denom = sprintf "%.2f", $$pt_intersec[0] ** 2 + $$pt_intersec[1] ** 2;
 
   if ($denom != 0) {
 
-    $ponto_dual[0] = sprintf "%.2f", - $pt_intersec[0] / $denom;
-    $ponto_dual[1] = sprintf "%.2f", - $pt_intersec[1] / $denom;
+    $ponto_dual[0] = sprintf "%.2f", - $$pt_intersec[0] / $denom;
+    $ponto_dual[1] = sprintf "%.2f", - $$pt_intersec[1] / $denom;
   }
 
   else {
@@ -104,7 +113,67 @@ sub dual_do_ponto {
     $ponto_dual[1] = 0.0;
   }
 
-  return "$ponto_dual[0] $ponto_dual[1]";
+  return \@ponto_dual;
+}
+
+sub ordena_anti_horario {
+
+  my $lista_de_pontos = shift;  # Lembrando que a fcao recebe uma referencia
+                                # para um array
+
+  # Quadrantes:
+  my (@q1,@q2,@q3,@q4);
+  my (@q_ord1,@q_ord2,@q_ord3,@q_ord4);
+  my @lista_ordenada_antihorario;
+
+  #print "Lista: @$lista_de_pontos\n";
+  for (@$lista_de_pontos) {
+
+    print "Lendo @$_\n";
+    if (@$_[0] > 1e-3 && @$_[1] > 1e-3) { # Com duas casas decimais 1e-3 sera
+                                          # suficiente
+      push @q2, [@$_];
+    }
+    elsif (@$_[0] < 1e-3 && @$_[1] > 1e-3) {
+      push @q1, [@$_];
+    }
+    elsif (@$_[0] < 1e-3 && @$_[1] < 1e-3) {
+      push @q3, [@$_];
+    }
+    else {
+      push @q4, [@$_];
+    }
+  }
+
+  sub comparador {
+
+    my $p1 = $a; # Referencias p arrays
+    my $p2 = $b; # Referencias p arrays
+
+    print "COMPARADOR P1: $a\n";
+    print "COMPARADOR P2: $b\n";
+    exit 0;
+    #return -1 if $p2[0] == 0;
+    #return  1 if $p2[1] == 0;
+
+    #my $a = $p1[0] != 0.0 ? $p0[1] / $p1[0] : $p1[0];
+    #my $b = $p2[0] != 0.0 ? $p2[1] / $p2[0] : $p2[0];
+
+    return $a <=> $b
+  }
+
+  # Agora eh soh ordenar os pontos nos quadrantes:
+  # TODO: Passar arrays dois a dois:
+  print "Q1: $_\n" for (@q1);
+  for (my $ary = 0; $ary < @q1-1; $ary++) {
+    push @q_ord1, sort comparador($q1[$ary],$q1[$ary+1]);
+  }
+  @q2 = sort comparador @q2;
+  @q3 = sort comparador @q3;
+  @q4 = sort comparador @q4;
+  
+  push @lista_ordenada_antihorario, (reverse @q1, @q3, @q4, @q2);
+
 }
 
 
@@ -129,7 +198,8 @@ chomp ($n = <STDIN>);             # Numero de pontos
 for (my $i = 0; $i < $n; $i++) {  # Pontos com duas coordenadas
 
   chomp($_ = <STDIN>);
-  push @n, sprintf ("%.2f %.2f", split);
+  my @elemento = split;
+  push @n, \@elemento;
 }
 
 # Lendo o segundo poligono
@@ -137,11 +207,14 @@ chomp ($m = <STDIN>);         # Numero de pontos
 for (my $i = 0; $i < $m; $i++) {  # Pontos com duas coordenadas
 
   chomp($_ = <STDIN>);
-  push @m, sprintf ("%.2f %.2f", split);
+  my @elemento = split; 
+  push @m, \@elemento;
 }
 
 #print "N: $n\n";
-#print "$_ " for (@n);
+#for (@n){
+#  print "@$_\n";
+#}
 #print "\n";
 #print "M: $m\n";
 #print "$_ " for (@m);
@@ -154,21 +227,24 @@ for (my $i=0; $i < scalar @n-1; $i++) {
 
   push @dual_n, calcula_dual($n[$i], $n[$i+1]);
 }
-push @dual_n, calcula_dual($n[-1], $n[0]);  # Para fechar o poligono
-print "Dual N:\n";
-print "$_\n" for @dual_n;
+#push @dual_n, calcula_dual($n[-1], $n[0]);  # Para fechar o poligono
+#print "Dual N:\n";
+#print "$_\n" for @dual_n;
 
 for (my $i=0; $i < scalar @m-1; $i++) {
 
   push @dual_m, calcula_dual($m[$i], $m[$i+1]);
 }
 push @dual_m, calcula_dual($m[-1], $m[0]);  # Para fechar o poligono
-print "Dual M:\n";
-print "$_\n" for @dual_m;
+#print "Dual M:\n";
+#print "$_\n" for @dual_m;
 
+push @uniao_duais, (@dual_n, @dual_m);
+#print "convex_hull (@uniao_duais)\n";
+#convex_hull (\@uniao_duais);
+ordena_anti_horario(\@uniao_duais);
+#fecho_convexo(\@uniao_duais);
 
 # TODO:
-# - Uniao dos duais dos poligonos n e m;
-# - Ordenar a uniao;
 # - Fazer o fechamento convexo da uniao (ja ordenada);
 # - Fazer o dual do fechamento.
