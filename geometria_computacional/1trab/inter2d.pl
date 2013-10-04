@@ -18,9 +18,10 @@ my @m;  # cjto de pontos do 2o poligono
 my @eqs_n;  # equacoes de reta dos poligonos n e m.
 my @eqs_m;  # sao vetores de hashes.
 
-my @dual_n;       # cjto de pontos duais do 1o poligono
-my @dual_m;       # cjto de pontos duais do 2o poligono
-my @uniao_duais;  # cjto uniao, cujo dual eh a resposta do problema
+my @dual_n;           # cjto de pontos duais do 1o poligono
+my @dual_m;           # cjto de pontos duais do 2o poligono
+my @uniao_duais;      # cjto uniao, cujo dual eh a resposta do problema
+my @uniao_duais_ord;  # cjto uniao ORDENADO, cujo dual eh a resposta do problema
 
 
 #########################
@@ -38,9 +39,9 @@ sub calcula_eq_reta {
 
   my %reta;   # Equacao da reta, indexada pelos coeficientes
 
-  $reta{'a'} = sprintf "%.2f", $$pt_a[1] - $$pt_b[1];
-  $reta{'b'} = sprintf "%.2f", $$pt_b[0] - $$pt_a[0];
-  $reta{'c'} = sprintf "%.2f", $$pt_a[0] * $$pt_b[1] - $$pt_a[1] * $$pt_b[0];
+  $reta{'a'} = $$pt_a[1] - $$pt_b[1];
+  $reta{'b'} = $$pt_b[0] - $$pt_a[0];
+  $reta{'c'} = $$pt_a[0] * $$pt_b[1] - $$pt_a[1] * $$pt_b[0];
 
   #print "EQ_RETA: $reta{'a'}x + $reta{'b'}y + $reta{'c'}\n";
   return \%reta;
@@ -48,7 +49,8 @@ sub calcula_eq_reta {
 }
 
 # Calcula o ponto de intersecao entre a reta dada e a reta perpendicular a ela,
-# que passa pelo ponto (0,0). Retorna *um* ponto, e o conjunto de pontos duais formara um poligono dual.
+# que passa pelo ponto (0,0). Retorna *um* ponto, e o conjunto de pontos duais
+# formara um poligono dual.
 sub calcula_intersecao {
 
   my $eq_ref = shift;
@@ -56,19 +58,19 @@ sub calcula_intersecao {
 
   if ($$eq_ref{'a'} == 0) {
     $pt_intersec[0] = 0.0;
-    $pt_intersec[1] = sprintf "%.2f", -$$eq_ref{'c'} / $$eq_ref{'b'};
+    $pt_intersec[1] = -$$eq_ref{'c'} / $$eq_ref{'b'};
   }
 
   elsif ($$eq_ref{'b'} == 0) {
     $pt_intersec[1] = 0.0;
-    $pt_intersec[0] = sprintf "%.2f", -$$eq_ref{'c'} / $$eq_ref{'a'};
+    $pt_intersec[0] = -$$eq_ref{'c'} / $$eq_ref{'a'};
   }
 
   else {
-    $pt_intersec[0] = sprintf "%.2f", $$eq_ref{'c'} / $$eq_ref{'b'} /
+    $pt_intersec[0] = $$eq_ref{'c'} / $$eq_ref{'b'} /
         (-$$eq_ref{'a'} / $$eq_ref{'b'} - $$eq_ref{'b'} / $$eq_ref{'a'});
 
-    $pt_intersec[1] = sprintf "%.2f", $$eq_ref{'b'} / $$eq_ref{'a'} * $pt_intersec[0];
+    $pt_intersec[1] = $$eq_ref{'b'} / $$eq_ref{'a'} * $pt_intersec[0];
   }
 
   #print "\n\nCalcula intersecao retornando: @pt_intersec\n\n";
@@ -99,12 +101,12 @@ sub dual_do_ponto {
 
   my $pt_intersec = shift;
   my @ponto_dual = (0.0, 0.0);
-  my $denom = sprintf "%.2f", $$pt_intersec[0] ** 2 + $$pt_intersec[1] ** 2;
+  my $denom = $$pt_intersec[0] ** 2 + $$pt_intersec[1] ** 2;
 
   if ($denom != 0) {
 
-    $ponto_dual[0] = sprintf "%.2f", - $$pt_intersec[0] / $denom;
-    $ponto_dual[1] = sprintf "%.2f", - $$pt_intersec[1] / $denom;
+    $ponto_dual[0] = - $$pt_intersec[0] / $denom;
+    $ponto_dual[1] = - $$pt_intersec[1] / $denom;
   }
 
   else {
@@ -118,62 +120,82 @@ sub dual_do_ponto {
 
 sub ordena_anti_horario {
 
-  my $lista_de_pontos = shift;  # Lembrando que a fcao recebe uma referencia
-                                # para um array
-
+  my $lista_de_pontos_ref = shift;  # Lembrando que a fcao recebe uma referencia
+                                    # para um array
   # Quadrantes:
   my (@q1,@q2,@q3,@q4);
-  my (@q_ord1,@q_ord2,@q_ord3,@q_ord4);
+  my (@q1_ord,@q2_ord,@q3_ord,@q4_ord);
+
+  # E suas respectivas referencias (que serao usadas na ordenacao):
+  my @q_refs      = (\@q1,\@q2,\@q3,\@q4);
+  my @q_ord_refs  = (\@q1_ord,\@q2_ord,\@q3_ord,\@q4_ord);
+
+  # Resultado final fica aqui:
   my @lista_ordenada_antihorario;
 
-  #print "Lista: @$lista_de_pontos\n";
-  for (@$lista_de_pontos) {
+  for (@$lista_de_pontos_ref) {
 
-    print "Lendo @$_\n";
-    if (@$_[0] > 1e-3 && @$_[1] > 1e-3) { # Com duas casas decimais 1e-3 sera
+    # x > 0 e y > 0 -> 1o quadrante
+    if (@$_[0] > 1e-5 && @$_[1] > 1e-5) { # Com duas casas decimais 1e-5 sera
                                           # suficiente
-      push @q2, [@$_];
-    }
-    elsif (@$_[0] < 1e-3 && @$_[1] > 1e-3) {
       push @q1, [@$_];
+      #print "pushando \@q1, [@$_]\n";
     }
-    elsif (@$_[0] < 1e-3 && @$_[1] < 1e-3) {
+
+    # x < 0 e y > 0 -> 2o quadrante
+    elsif (@$_[0] < 1e-5 && @$_[1] > 1e-5) {
+
+      push @q2, [@$_];
+      #print "pushando \@q2, [@$_]\n";
+    }
+
+    # x < 0 e y < 0 -> 3o quadrante
+    elsif (@$_[0] < 1e-5 && @$_[1] < 1e-5) {
+
       push @q3, [@$_];
+      #print "pushando \@q3, [@$_]\n";
     }
+
+    # x > 0 e y < 0 -> 4o quadrante
     else {
+
       push @q4, [@$_];
+      #print "pushando \@q4, [@$_]\n";
     }
-  }
+  } # /for(@$lista_de_pontos_ref)
 
-  sub comparador {
+  sub comparador { 
 
-    my $p1 = $a; # Referencias p arrays
-    my $p2 = $b; # Referencias p arrays
+    my $p1 = $a; # Referencia p array
+    my $p2 = $b; # Referencia p array
 
-    print "COMPARADOR P1: $a\n";
-    print "COMPARADOR P2: $b\n";
-    exit 0;
-    #return -1 if $p2[0] == 0;
-    #return  1 if $p2[1] == 0;
+    my $a = $$p1[0] != 0.0 ? $$p1[1] / $$p1[0] : $$p1[0];
+    my $b = $$p2[0] != 0.0 ? $$p2[1] / $$p2[0] : $$p2[0];
 
-    #my $a = $p1[0] != 0.0 ? $p0[1] / $p1[0] : $p1[0];
-    #my $b = $p2[0] != 0.0 ? $p2[1] / $p2[0] : $p2[0];
-
-    return $a <=> $b
-  }
+    return $a <=> $b;
+  } # /comparador
 
   # Agora eh soh ordenar os pontos nos quadrantes:
-  # TODO: Passar arrays dois a dois:
-  print "Q1: $_\n" for (@q1);
-  for (my $ary = 0; $ary < @q1-1; $ary++) {
-    push @q_ord1, sort comparador($q1[$ary],$q1[$ary+1]);
-  }
-  @q2 = sort comparador @q2;
-  @q3 = sort comparador @q3;
-  @q4 = sort comparador @q4;
-  
-  push @lista_ordenada_antihorario, (reverse @q1, @q3, @q4, @q2);
+  # Primeiro, percorro a lista dos vetores dos quadrantes:
+  for (my $i = 0; $i < @q_refs; $i++) {
 
+    # Dae percorro cada um dos arrays:
+    #print "for (my \$ary = 0; \$ary < ", @{$q_refs[$i]}-1 ,"; \$ary++)\n";
+    for (my $ary = 0; $ary < @{$q_refs[$i]}-1; $ary++) {
+
+      push @{$q_ord_refs[$i]}, sort comparador(@{$q_refs[$i]}[$ary], @{$q_refs[$i]}[$ary+1]);
+
+      # tem q tirar o ultimo pq o sort retorna dois elementos, e somente o
+      # primeiro deve ficar ateh que se chegue no final do laco.
+      pop @{$q_ord_refs[$i]} if ($ary < @{$q_refs[$i]}-2);
+    }
+  } # /for (@q_refs)
+
+  push @lista_ordenada_antihorario, (@q1_ord, @q2_ord, @q3_ord, @q4_ord);
+
+  #print "Lista Final:\n";
+  #print "@$_\n" for (@lista_ordenada_antihorario);
+  return \@lista_ordenada_antihorario;
 }
 
 
@@ -217,7 +239,7 @@ for (my $i = 0; $i < $m; $i++) {  # Pontos com duas coordenadas
 #}
 #print "\n";
 #print "M: $m\n";
-#print "$_ " for (@m);
+#print "@$_\n" for (@m);
 
 # Para cada um dos pontos, bora calcular a equacao da reta entre eles. Como
 # sabemos, por definicao (do enunciado) que os pontos sao dados no sentido
@@ -227,7 +249,7 @@ for (my $i=0; $i < scalar @n-1; $i++) {
 
   push @dual_n, calcula_dual($n[$i], $n[$i+1]);
 }
-#push @dual_n, calcula_dual($n[-1], $n[0]);  # Para fechar o poligono
+push @dual_n, calcula_dual($n[-1], $n[0]);  # Para fechar o poligono
 #print "Dual N:\n";
 #print "$_\n" for @dual_n;
 
@@ -240,11 +262,16 @@ push @dual_m, calcula_dual($m[-1], $m[0]);  # Para fechar o poligono
 #print "$_\n" for @dual_m;
 
 push @uniao_duais, (@dual_n, @dual_m);
+
 #print "convex_hull (@uniao_duais)\n";
 #convex_hull (\@uniao_duais);
-ordena_anti_horario(\@uniao_duais);
+@uniao_duais_ord = @{ordena_anti_horario(\@uniao_duais)};
+print "Uniao Duais ordenada:\n";
+print "@$_\n" for (@uniao_duais_ord); # Essa blzinha aqui eh uma lista de refs
+                                      # p array.
 #fecho_convexo(\@uniao_duais);
 
 # TODO:
 # - Fazer o fechamento convexo da uniao (ja ordenada);
-# - Fazer o dual do fechamento.
+# - Fazer o dual do fechamento;
+# - Tirar os print que nao serao mais usados com certeza.
