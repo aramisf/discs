@@ -22,9 +22,10 @@ my @dual_n;           # cjto de pontos duais do 1o poligono
 my @dual_m;           # cjto de pontos duais do 2o poligono
 my @uniao_duais;      # cjto uniao, cujo dual do fechamento eh a resposta do
                       # problema
-my @uniao_duais_ord;
+
+my @uniao_duais_ord;  # @uniao_duais_ord eh uma lista de refs p array.
 my @fechamento;       # cujo dual eh a resposta do problema
-my $intersecao;       # cjto de pontos da intersecao
+my @intersecao;       # cjto de pontos da intersecao
 
 
 #########################
@@ -38,17 +39,13 @@ sub calcula_eq_reta {
   my $pt_a = shift;
   my $pt_b = shift;
 
-  #print "Recebi ponto a: @$pt_a\n";
-
   my %reta;   # Equacao da reta, indexada pelos coeficientes
 
   $reta{'a'} = $$pt_a[1] - $$pt_b[1];
   $reta{'b'} = $$pt_b[0] - $$pt_a[0];
   $reta{'c'} = $$pt_a[0] * $$pt_b[1] - $$pt_a[1] * $$pt_b[0];
 
-  #print "EQ_RETA: $reta{'a'}x + $reta{'b'}y + $reta{'c'}\n";
   return \%reta;
-
 }
 
 # Calcula o ponto de intersecao entre a reta dada e a reta perpendicular a ela,
@@ -76,7 +73,6 @@ sub calcula_intersecao {
     $pt_intersec[1] = $$eq_ref{'b'} / $$eq_ref{'a'} * $pt_intersec[0];
   }
 
-  #print "\n\nCalcula intersecao retornando: @pt_intersec\n\n";
   return \@pt_intersec;
 }
 
@@ -89,8 +85,6 @@ sub calcula_dual {
   my $pt_a = shift;
   my $pt_b = shift;
 
-  #print "Calcula DUAL: '@$pt_a' '@$pt_b'\n";
-  
   my $equacao     = calcula_eq_reta($pt_a, $pt_b);  # AQUI RETORNA UMA HASHREF
   my $pt_intersec = calcula_intersecao($equacao);   # RECEBE UMA HASHREF E RETORNA UM ARRAYREF
   my $pt_dual     = dual_do_ponto($pt_intersec);
@@ -140,16 +134,12 @@ sub ordena_anti_horario {
 
       # 1o quadrante
       if (@$_[1] >= 0) {
-
         push @q1, [@$_];
-        #print "pushando \@q1, [@$_]\n";
       }
 
       # 4o quadrante
       elsif (@$_[1] < 0) {
-
         push @q4, [@$_];
-        #print "pushando \@q4, [@$_]\n";
       }
     }
 
@@ -157,16 +147,12 @@ sub ordena_anti_horario {
 
       # 2o quadrante
       if (@$_[1] >= 0) {
-
         push @q2, [@$_];
-        #print "pushando \@q2, [@$_]\n";
       }
 
       # 3o quadrante
       elsif (@$_[1] < 0) {
-
         push @q3, [@$_];
-        #print "pushando \@q3, [@$_]\n";
       }
     }
   } # /for(@$lista_de_pontos_ref)
@@ -182,11 +168,68 @@ sub ordena_anti_horario {
 
   push @lista_ordenada_antihorario, (@q1_ord, @q2_ord, @q3_ord, @q4_ord);
 
-  #print "Lista Final:\n";
-  #print "@$_\n" for (@lista_ordenada_antihorario);
-
   # Lista de referencias para arrays
   return @lista_ordenada_antihorario;
+} # /ordena_antihorario
+
+## Fecho convexo:
+# Neste caso a lista que a funcao recebe jah esta ordenada, entao parte do
+# algorito ja esta feita.
+sub fecho_convexo {
+
+  return @_ if @_ < 2;
+  my @lista = @_;
+
+  # O algoritmo divide os pontos em dois conjuntos:
+  my @cima;
+  my @baixo;
+
+  my $i = 0;
+  while ($i < @lista) {
+
+    my $i_cima = my $i_baixo = $i;
+    my ($x, $y_cima) = @{$lista[$i]};
+    my $y_baixo = $y_cima;
+
+    # Encontra pelo menos o menor e maior Y para o X atual
+    while (++$i < @lista and $lista[$i][0] == $x) {
+
+      my $y = $lista[$i][1];
+
+      if ($y < $y_baixo) {
+        $i_baixo = $i;
+        $y_baixo = $y;
+      }
+      elsif ($y > $y_cima) {
+        $i_cima = $i;
+        $y_cima = $y;
+      }
+    }
+
+    while (@baixo >= 2) {
+
+      my ($ox, $oy) = @{$baixo[-2]};
+      last if ($baixo[-1][1] - $oy) * ($x - $ox) < ($y_baixo - $oy) * ($baixo[-1][0] - $ox);
+      pop @baixo;
+    }
+
+    push @baixo, $lista[$i_baixo];
+
+    while (@cima >= 2) {
+
+      my ($ox, $oy) = @{$cima[-2]};
+      last if ($cima[-1][1] - $oy) * ($x - $ox) > ($y_cima - $oy) * ($cima[-1][0] - $ox);
+      pop @cima;
+    }
+
+    push @cima, $lista[$i_cima];
+  }
+
+  # Removendo duplicatas
+  shift @cima if $cima[0][1] == $baixo[0][1];
+  pop @cima if @cima and $cima[-1][1] == $baixo[-1][1];
+
+  return (@baixo, reverse @cima);
 }
 
 #########################
@@ -223,13 +266,6 @@ for (my $i = 0; $i < $m; $i++) {  # Pontos com duas coordenadas
   push @m, \@elemento;
 }
 
-#print "N: $n\n";
-#for (@n){
-#  print "@$_\n";
-#}
-#print "\n";
-#print "M: $m\n";
-#print "@$_\n" for (@m);
 
 # Para cada um dos pontos, bora calcular a equacao da reta entre eles. Como
 # sabemos, por definicao (do enunciado) que os pontos sao dados no sentido
@@ -239,27 +275,34 @@ for (my $i=0; $i < scalar @n-1; $i++) {
 
   push @dual_n, calcula_dual($n[$i], $n[$i+1]);
 }
-push @dual_n, calcula_dual($n[-1], $n[0]);  # Para fechar o poligono
-#print "Dual N:\n";
-#print "$_\n" for @dual_n;
+# Para fechar o poligono
+push @dual_n, calcula_dual($n[-1], $n[0]);
 
 for (my $i=0; $i < scalar @m-1; $i++) {
 
   push @dual_m, calcula_dual($m[$i], $m[$i+1]);
 }
-push @dual_m, calcula_dual($m[-1], $m[0]);  # Para fechar o poligono
-#print "Dual M:\n";
-#print "$_\n" for @dual_m;
+# Para fechar o poligono
+push @dual_m, calcula_dual($m[-1], $m[0]);
 
+# Unindo as listas de duais
 push @uniao_duais, (@dual_n, @dual_m);
 
+# Ordenando no sentido anti-horario:
 @uniao_duais_ord = ordena_anti_horario(\@uniao_duais);
-print "Uniao Duais ordenada:\n";
-print "@$_\n" for (@uniao_duais_ord); # @uniao_duais_ord eh uma lista de refs
-                                      # p array.
-#fecho_convexo(@uniao_duais_ord);
 
-# TODO:
-# - Fazer o fechamento convexo da uniao (ja ordenada);
-# - Fazer o dual do fechamento;
-# - Tirar os print que nao serao mais usados com certeza.
+# Encontrando o fechamento convexo do conjunto de pontos:
+@fechamento = fecho_convexo(@uniao_duais_ord);
+
+for (my $i=0; $i < @fechamento-1; $i++) {
+  push @intersecao, calcula_dual($fechamento[$i],$fechamento[$i+1]);
+}
+
+
+# Imprimindo a saida na tela:
+print scalar @intersecao."\n";
+for (@intersecao) {
+  print sprintf "%.2f %.2f\n", @$_;
+}
+
+exit 0;
