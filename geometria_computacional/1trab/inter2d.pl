@@ -1,4 +1,4 @@
-#!/user/bin/perl
+#!/usr/bin/perl
 # vim: tw=0:ts=2:et
 
 use warnings;
