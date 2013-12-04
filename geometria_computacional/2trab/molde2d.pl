@@ -56,6 +56,30 @@ sub calcula_vetores { # e seus respectivos vetores normais
 } # /calcula_vetores
 
 
+sub percorre_faces {
+
+  for (my $i=0; $i< @$normais; $i++) {
+
+    # Vetor normal u agora aponta para fora do poligono:
+    my @u = (
+              -$$normais[$i][0],
+              -$$normais[$i][1]
+            );
+
+    print "Lendo face: @u\n";
+    # Testa se ele tem no maximo 180 graus de angulo com as outras faces:
+    for (my $j = $i+1; $j < @$normais; $j++) {
+
+      # cos(teta) = u.v/|u|.|v|
+      my @v = @{$$normais[$j]};
+      print "cosseno_de_teta(@u, @v)\n";
+      my $cos = cosseno_de_teta(@u, @v);
+
+      # TODO: Como saber se o angulo entre os dois é maior q 180o?
+    }
+  }
+} # /percorre_faces
+
 #########################
 ## Programa principal: ##
 #########################
