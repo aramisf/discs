@@ -19,6 +19,22 @@ my $normais;    # as retas normais de cada vetor
 ## Ferramentas : ##
 ###################
 
+sub cosseno_de_teta {
+
+  # Lembra que cos(teta) = (u.v) / (|u|.|v|)
+
+  my $uref = shift;
+  my $vref = shift;
+
+  my $produto_interno = @$uref[0] * @$vref[0] + @$uref[1] * @$vref[1];  # u.x * v.x + u.y * v.y
+
+  my $norma_de_u = sqrt (@$uref[0]*@$uref[0] + @$uref[1]*@$uref[1]);
+
+  my $norma_de_v = sqrt (@$vref[0]*@$vref[0] + @$vref[1]*@$vref[1]);
+
+  return $produto_interno / ($norma_de_u * $norma_de_v);
+}
+
 sub calcula_vetores { # e seus respectivos vetores normais
 
   for (my $i=0; $i < @$pontos-1; $i++) {
@@ -58,26 +74,34 @@ sub calcula_vetores { # e seus respectivos vetores normais
 
 sub percorre_faces {
 
-  for (my $i=0; $i< @$normais; $i++) {
+  for (my $i=0; $i < @$normais; $i++) {
 
-    # Vetor normal u agora aponta para fora do poligono:
+    # Vetor normal u agora aponta para fora do poligono (u = u * -1):
     my @u = (
               -$$normais[$i][0],
               -$$normais[$i][1]
             );
 
-    print "Lendo face: @u\n";
-    # Testa se ele tem no maximo 180 graus de angulo com as outras faces:
+    my $deu_boa = 1;  # assumo que vai dar boa
+
+    #print "Lendo face: @u\n";
+    # Testa se ele tem no maximo 90 graus de angulo com as outras faces:
     for (my $j = $i+1; $j < @$normais; $j++) {
 
       # cos(teta) = u.v/|u|.|v|
       my @v = @{$$normais[$j]};
       print "cosseno_de_teta(@u, @v)\n";
-      my $cos = cosseno_de_teta(@u, @v);
+      my $cos = cosseno_de_teta(\@u, \@v);
+      #print "$cos\n";
+      $deu_boa = 0 and last if ($cos < 0);
+    }
 
-      # TODO: Como saber se o angulo entre os dois é maior q 180o?
+    if ($deu_boa) {
+      return $i+1;  # +1 pq a numeracao das faces comeca com 1
     }
   }
+
+  return 0;
 } # /percorre_faces
 
 #########################
@@ -85,6 +109,7 @@ sub percorre_faces {
 #########################
 
 chomp ($n = <STDIN>);             # Numero de pontos
+
 for (my $i = 0; $i < $n; $i++) {  # Pontos com duas coordenadas
 
   chomp($_ = <STDIN>);
@@ -92,3 +117,18 @@ for (my $i = 0; $i < $n; $i++) {  # Pontos com duas coordenadas
 }
 
 calcula_vetores();
+
+print "Vetores:\n";
+for (@$vetores) {
+
+  print "@$_\n";
+}
+
+print "Normais:\n";
+for (@$normais) {
+
+  print "@$_\n";
+}
+
+print percorre_faces();
+exit 0;
