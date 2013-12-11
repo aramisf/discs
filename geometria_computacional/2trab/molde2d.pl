@@ -23,13 +23,14 @@ sub cosseno_de_teta {
 
   # Lembra que cos(teta) = (u.v) / (|u|.|v|)
 
+  # Usando referencias:
   my $uref = shift;
   my $vref = shift;
 
-  my $produto_interno = @$uref[0] * @$vref[0] + @$uref[1] * @$vref[1];  # u.x * v.x + u.y * v.y
+  # Para calcular o produto interno: u.x * v.x + u.y * v.y
+  my $produto_interno = @$uref[0] * @$vref[0] + @$uref[1] * @$vref[1];
 
   my $norma_de_u = sqrt (@$uref[0]*@$uref[0] + @$uref[1]*@$uref[1]);
-
   my $norma_de_v = sqrt (@$vref[0]*@$vref[0] + @$vref[1]*@$vref[1]);
 
   return $produto_interno / ($norma_de_u * $norma_de_v);
@@ -92,13 +93,12 @@ sub percorre_faces {
         $deu_boa = 0;
         last;
       }
-
     }
 
     if ($deu_boa && $i != @$normais-1) {
+
       return $i+1;  # +1 pq a numeracao das faces comeca com 1
     }
-
   }
 
   return 0;
