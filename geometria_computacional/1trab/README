@@ -1,70 +1,25 @@
-Primeiro Trabalho Prático CI338/CI756 - 2013/2 André Guedes Intersecção de
-Polígonos Convexos em 2D
+Intersecao entre Poligonos
 
-O objetivo do trabalho é a implementação de um algoritmo que resolva o problema
-de intersecção de dois polígonos convexos no plano.  O de deve ser feito:
+Aramis S. H. Fernandes
 
-O problema de ser resolvido e implementado. A entrada e a saída de dados devem
-ser padronizadas. O nome do executável deve ser inter2d.  Entrada:
+O programa calcula uma intersecao entre dois poligonos dados.
+O formato de entrada é descrito no arquivo ENUNCIADO e tambem em comentarios
+dentro do codigo. Alias, dentro do codigo tem bastante comentario, por isso
+optei por resumir este README para evitar ser redundante.
 
-O arquivo de entrada deve ser lida da entrada padrão (stdin).
+Assume-se que a entrada eh sempre valida e que os poligonos dados na entrada sao
+convexos.
 
-A primeira linha é formada pelo número de vértices do primeiro polígono. Depois
-temos as coordenadas (ponto flutuante) dos vértices do primeiro polígono. Em
-seguida o número de vértices do segundo polígono e depois as coordenadas dos
-vértices. Em cada polígono os vértices estão em ordem anti-horária.
+O programa utiliza o metodo do calculo dual para encontrar a intersecao. O metodo
+foi discutido em sala e pode ser resumido assim:
 
-Exemplo:
+- Calcula-se o ponto dual de cada um dos segmentos que formam os poligonos;
+- Monta-se o fechamento convexo da uniao desses pontos;
+- Calcula-se o dual do fechamento convexo;
+- O dual do fechamento eh a intersecao entre os dois poligonos dados.
 
-  3
-  0 0
-  10 0
-  5 5.5
-  4
-  0.0 3
-  10 3.1
-  10 10.2
-  0 10
+O fechamento convexo, por sua vez, eh calculado atraves do algoritmo da Cadeia
+Monotonica de Andrew, um algoritmo de complexidade O(n log n).
 
-Saída:
-
-A saída deve ser escrita na saída padrão (stdout).
-
-O formato é o mesmo (só para um polígono) da entrada. Os números em ponto
-flutuante devem ser escritos com 2 casas decimais (truncados) e cada par de
-coordenadas deve ser separado por somente um espaço. Em nenhuma linha deve ter
-espaços antes ou depois do conteúdo.
-
-Exemplo:
-
-  3
-  0.00 0.00
-  10.00 0.00
-  5.10 5.50
-
-Requisitos mínimos:
-
-O trabalho deve ser feito de forma que possa ser compilado e executado nas
-servidoras de computação do Departamento de Informática.
-
-Não deve ter nenhuma opção de linha comando. O arquivo será lido da entrada
-padrão (stdin).  O que deve ser entregue:
-
-Além dos arquivos fonte, deve acompanhar um makefile e um arquivo README
-explicando o que foi feito e com o nome dos autores. Qualquer particularidade
-deve estar descrita neste texto.
-
-Para compilar vou usar os comandos make clean (para limpar compilações
-anteriores) e make, portanto preparem o makefile para fazer isso. O resultado do
-make deverá ficar no mesmo diretório onde está o makefile.  Forma de entrega:
-
-O trabalho deve ser empacotado em um arquivo id.tar.gz, onde id é uma string que
-identifique o autor (sem espaços). Pode ser só o sobrenome, o login, GRR ou o
-que quiser. Ao descompactar este arquivo deverá ser criado um diretório de nome
-id que conterá todos os demais arquivos. O make deverá funcionar dentro deste
-diretório (não em subdiretórios).
-
-Este arquivo deve ser enviado por e-mail ao endereço do professor (andre) com o
-assunto "CI338-trab1" (exatamente).  Equipe:
-
-O trabalho é individual.
+Depois disso, o programa imprime o resultado na tela, respeitando a padronizacao
+de duas casas decimais, conforme o especificado.
