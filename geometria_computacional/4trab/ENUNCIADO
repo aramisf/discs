@@ -4,15 +4,20 @@ CI338 - 2013/2
 André Guedes
 Implementação do algoritmo Quick-Hull para fecho convexo em 3D
 
-O objetivo do trabalho é a implementação do algoritmo Quick-Hull para fecho convexo em três dimensões.
+O objetivo do trabalho é a implementação do algoritmo Quick-Hull para fecho
+convexo em três dimensões.
 
 O de deve ser feito:
 
-Os dados devem ser lidos da entrada padrão e a resposta escrita na saída padrão. O nome do executável deve ser quickhull3d.
+Os dados devem ser lidos da entrada padrão e a resposta escrita na saída padrão.
+O nome do executável deve ser quickhull3d.
 
 Entrada:
 
-O arquivo de entrada deve ser lida da entrada padrão (stdin) e deve ser composta de um texto com os pontos para os quais o fecho convexo vai ser calculado. Cada linha do arquivo é uma tripla de números, separados por um ou mais espaços, representando as coordenadas x, y e z dos pontos.
+O arquivo de entrada deve ser lida da entrada padrão (stdin) e deve ser composta
+de um texto com os pontos para os quais o fecho convexo vai ser calculado. Cada
+linha do arquivo é uma tripla de números, separados por um ou mais espaços,
+representando as coordenadas x, y e z dos pontos.
 
 Exemplo:
 
@@ -23,11 +28,21 @@ Exemplo:
   10 10 10
 Saída:
 
-A saída do programa deve ser escrita na saida padrão (stdout) e deve ser um texto com a malha que forma a superfície do fecho convexo (triangulação).
+A saída do programa deve ser escrita na saida padrão (stdout) e deve ser um
+texto com a malha que forma a superfície do fecho convexo (triangulação).
 
-A primeira linha é formada pelo número de vértices da triangulação, n, e pelo número de triângulos, m, separados por um espaço. Depois temos as coordenadas (ponto flutuante) dos vértices da triangulação (três números), separadas por espaço, um vértice por linha. Cada vértice será referenciado por um número de 1 a n, na ordem em que aparecem na entrada. Depois dos vértices temos os triângulos, descritos com 6 números inteiros indicando os índices dos 3 vértices em ordem anti-horária e os índices dos 3 triângulos vizinhos. Cada triângulo será numerado de 1 a m, na ordem em que aparecem na entrada.
+A primeira linha é formada pelo número de vértices da triangulação, n, e pelo
+número de triângulos, m, separados por um espaço. Depois temos as coordenadas
+(ponto flutuante) dos vértices da triangulação (três números), separadas por
+espaço, um vértice por linha. Cada vértice será referenciado por um número de 1
+a n, na ordem em que aparecem na entrada. Depois dos vértices temos os
+triângulos, descritos com 6 números inteiros indicando os índices dos 3 vértices
+em ordem anti-horária e os índices dos 3 triângulos vizinhos. Cada triângulo
+será numerado de 1 a m, na ordem em que aparecem na entrada.
 
-Os números em ponto flutuante devem ser escritos com 2 casas decimais (truncados) e cada par de números deve ser separado por somente um espaço. Em nenhuma linha deve ter espaços antes ou depois do conteúdo.
+Os números em ponto flutuante devem ser escritos com 2 casas decimais
+(truncados) e cada par de números deve ser separado por somente um espaço. Em
+nenhuma linha deve ter espaços antes ou depois do conteúdo.
 
 Exemplo:
 
@@ -36,27 +51,38 @@ Exemplo:
   10.00 0.00 0.00
   0.00 10.00 1.00
   3.00 3.00 3.00
-  1 3 2 3 4 2 
+  1 3 2 3 4 2
   1 4 3 3 1 4
   3 4 2 4 1 2
   1 2 4 3 2 1
 Requisitos mínimos:
 
-O trabalho deve ser feito de forma que possa ser compilado e executado nas servidoras de computação do Departamento de Informática.
+O trabalho deve ser feito de forma que possa ser compilado e executado nas
+servidoras de computação do Departamento de Informática.
 
-Não deve ter nenhuma opção de linha comando. O arquivo será lido da entrada padrão (stdin). O resultado deve sempre ser escrito na saída padrão (stdout).
+Não deve ter nenhuma opção de linha comando. O arquivo será lido da entrada
+padrão (stdin). O resultado deve sempre ser escrito na saída padrão (stdout).
 
 O que deve ser entregue:
 
-Além dos arquivos fonte, deve acompanhar um makefile e um arquivo README explicando o que foi feito e com o nome dos autores. Qualquer particularidade deve estar descrita neste texto.
+Além dos arquivos fonte, deve acompanhar um makefile e um arquivo README
+explicando o que foi feito e com o nome dos autores. Qualquer particularidade
+deve estar descrita neste texto.
 
-Para compilar vou usar os comandos make clean (para limpar compilações anteriores) e make, portanto preparem o makefile para fazer isso. O resultado do make deverá ficar no mesmo diretório onde está o makefile.
+Para compilar vou usar os comandos make clean (para limpar compilações
+anteriores) e make, portanto preparem o makefile para fazer isso. O resultado do
+make deverá ficar no mesmo diretório onde está o makefile.
 
 Forma de entrega:
 
-O trabalho deve ser empacotado em um arquivo id.tar.gz, onde id é uma string que identifique o autor (sem espaços). Pode ser só o sobrenome, o login, GRR ou o que quiser. Ao descompactar este arquivo deverá ser criado um diretório de nome id que conterá todos os demais arquivos. O make deverá funcionar dentro deste diretório (não em subdiretórios).
+O trabalho deve ser empacotado em um arquivo id.tar.gz, onde id é uma string que
+identifique o autor (sem espaços). Pode ser só o sobrenome, o login, GRR ou o
+que quiser. Ao descompactar este arquivo deverá ser criado um diretório de nome
+id que conterá todos os demais arquivos. O make deverá funcionar dentro deste
+diretório (não em subdiretórios).
 
-Este arquivo deve ser enviado por e-mail ao endereço do professor (andre) com o assunto "CI338-trab4" (exatamente).
+Este arquivo deve ser enviado por e-mail ao endereço do professor (andre) com o
+assunto "CI338-trab4" (exatamente).
 
 Equipe:
 
