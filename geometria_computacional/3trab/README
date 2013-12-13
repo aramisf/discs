@@ -1,0 +1,12 @@
+Implementacao de funcoes para a malha de triangulos
+
+Aramis Fernandes - CI756 - 2013/2
+
+Pressupostos:
+
+- O programa assume que a ordem dos triangulos vizinhos ao triangulo de uma
+  determinada linha estao em sentido anti-horario, assim como foi dito (no
+  enunciado) que os vertices que compoe o triangulo daquela linha sao informados
+  no sentido anti-horario.
+
+
