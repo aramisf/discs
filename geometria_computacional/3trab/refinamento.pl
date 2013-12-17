@@ -17,11 +17,34 @@ my $DCEL  = {}; # DCEL                      Tipo: referencia para uma hash de pa
 
 my $vertices;   # Adivinha..
 my $arestas;    # ^^
+my $triangulos;
 
 
 ###########
 ## Utils ##
 ###########
+
+# Ajusta a malha de triangulos:
+sub ashley {
+
+  my $index = shift;
+
+  # Vertices do triangulo '$index':
+  my $v1 = shift;
+  my $v2 = shift;
+  my $v3 = shift;
+
+  # Vizinhos
+  my $t1 = shift;
+  my $t2 = shift;
+  my $t3 = shift;
+
+  ${$triangulos}{$index}  = {
+                              'vertices' => [$v1, $v2, $v3],
+                              'vizinhos' => [$t1, $t2, $t3]
+                            };
+
+}
 
 # Le entrada:
 sub jessica {
@@ -35,10 +58,13 @@ sub jessica {
   push @$vertices, [ split ' ', <> ] for (1..$n);
 
 
-  # E agora, os vertices que compoe cada triangulo, e os vizinhos de cada
-  # triangulo:
+  # Ashley vai montar os triangulos, e seus vizinhos.
+  ashley($_, split(' ', <>)) for (1..$m);
 
+  # TODO: Agora que lemos e construimos as estruturas basicas provenientes da
+  # entrada, partimos para a construcao da DCEL
 }
+
 
 ########################
 ## Programa principal ##
