@@ -48,9 +48,9 @@ sub ashley {
 
   # Pode dizer q parece feio, mas depois eh bem melhor p acessar e ver se jah
   # existe uma aresta
-  ${$arestas}{"$v1, $v2"} = [$v1, $v2];
-  ${$arestas}{"$v2, $v3"} = [$v2, $v3];
-  ${$arestas}{"$v3, $v1"} = [$v3, $v1];
+  ${$arestas}{"$v1,$v2"} = [$v1, $v2];
+  ${$arestas}{"$v2,$v3"} = [$v2, $v3];
+  ${$arestas}{"$v3,$v1"} = [$v3, $v1];
 
   # Agora criando o triangulo da linha $index, que talvez nao seja utilizado no
   # futuro.
@@ -60,9 +60,9 @@ sub ashley {
                                                 # Note que estou adicionando
                                                 # aqui os mesmos rotulos que
                                                 # adicionei na hash arestas
-                                                "$v1, $v2",
-                                                "$v2, $v3",
-                                                "$v3, $v1"
+                                                "$v1,$v2",
+                                                "$v2,$v3",
+                                                "$v3,$v1"
                                               ],
                               'vizinhos'  => [$t1, $t2, $t3]
                             };
