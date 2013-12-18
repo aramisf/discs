@@ -24,9 +24,13 @@ my $triangulos;
 ## Utils ##
 ###########
 
-# Ajusta a malha de triangulos:
+# Cria os triangulos e as monta a lista de arestas. Por enquanto estou num
+# dilema, pois se montar a lista de arestas e usar a DCEL, os triangulos e seus
+# vizinhos serao praticamente inuteis. No momento estou decidindo montar os
+# triangulos mesmo assim.
 sub ashley {
 
+  # Varia de 1 a $m
   my $index = shift;
 
   # Vertices do triangulo '$index':
@@ -39,12 +43,27 @@ sub ashley {
   my $t2 = shift;
   my $t3 = shift;
 
-  ${$triangulos}{$index}  = {
-                              'vertices' => [$v1, $v2, $v3],
-                              'vizinhos' => [$t1, $t2, $t3]
-                            };
+  # Pode dizer q parece feio, mas depois eh bem melhor p acessar e ver se jah
+  # existe uma aresta
+  ${$arestas}{"$v1, $v2"} = [$v1, $v2];
+  ${$arestas}{"$v2, $v3"} = [$v2, $v3];
+  ${$arestas}{"$v3, $v1"} = [$v3, $v1];
 
-}
+  # Agora criando o triangulo da linha $index, que talvez nao seja utilizado no
+  # futuro.
+  ${$triangulos}{$index}  = {
+                              'vertices'  => [$v1, $v2, $v3],
+                              'arestas'   =>  [
+                                                # Note que estou adicionando
+                                                # aqui os mesmos rotulos que
+                                                # adicionei na hash arestas
+                                                "$v1, $v2",
+                                                "$v2, $v3",
+                                                "$v3, $v1"
+                                              ],
+                              'vizinhos'  => [$t1, $t2, $t3]
+                            };
+} # /ashley
 
 # Le entrada:
 sub jessica {
@@ -58,13 +77,11 @@ sub jessica {
   push @$vertices, [ split ' ', <> ] for (1..$n);
 
 
-  # Ashley vai montar os triangulos, e seus vizinhos.
+  # Ashley vai montar os triangulos, e seus vizinhos *e tb as arestas (pelo
+  # menos por enqto)*.
   ashley($_, split(' ', <>)) for (1..$m);
 
-  # TODO: Agora que lemos e construimos as estruturas basicas provenientes da
-  # entrada, partimos para a construcao da DCEL
-}
-
+} #/jessica
 
 ########################
 ## Programa principal ##
@@ -74,3 +91,6 @@ jessica();
 
 print "@$_\n" for (@$vertices);
 
+for (keys %$arestas) {
+  print "Chave: $_\nValor: @{${$arestas}{$_}}\n";
+}
