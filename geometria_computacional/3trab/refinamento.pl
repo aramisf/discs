@@ -19,7 +19,8 @@ my $vertices;   # Adivinha..
 my $arestas;    # ^^
 my $triangulos;
 
-my $vertices_ordenados; # Ordenados em sentido antihorario
+my $vertices_ordenados; # Antihorario       Tipo: hash q implementa uma lista
+                        #                         duplamente ligada
 
 
 ###########
@@ -78,7 +79,7 @@ sub madeline {
   my (@q1_ord,@q2_ord,@q3_ord,@q4_ord); # Ordenados
 
   # Resultado final fica aqui:
-  my @lista_ordenada_antihorario;
+  my @lista_ordenada;
 
   # Percorro a lista de pontos dada e insiro cada ponto em seu respectivo
   # quadrante:
@@ -120,10 +121,27 @@ sub madeline {
   @q3_ord = sort { $$a[0] <=> $$b[0] or $$b[1] <=> $$a[1] } @q3;
   @q3_ord = sort { $$a[0] <=> $$b[0] or $$a[1] <=> $$b[1] } @q4;
 
-  push @lista_ordenada_antihorario, (@q1_ord, @q2_ord, @q3_ord, @q4_ord);
+  push @lista_ordenada, (@q1_ord, @q2_ord, @q3_ord, @q4_ord);
 
-  # Lista de referencias para arrays
-  return @lista_ordenada_antihorario;
+
+  # Criando uma lista ligada para melhorar a vida. Pq no happy hour rola um
+  # double
+  my %lista_ligada;
+
+  for my $i (0..$#lista_ordenada) {
+
+    my $rotulo = join ",", @{$lista_ordenada[$i]};
+    $lista_ligada{$rotulo} =
+      {
+        'ant'   => join(",", @{$lista_ordenada[$i-1]}),
+        'agora' => $i,
+        # Sabe pq o mod aqui no fim neh?
+        'prox'  => join(",", @{$lista_ordenada[($i+1)%$#lista_ordenada]})
+      };
+
+  }
+
+  return \%lista_ligada;
 } # /madeline
 
 # Le entrada:
@@ -150,8 +168,20 @@ sub jessica {
 
 jessica();
 
-print "@$_\n" for (@$vertices);
+$vertices_ordenados = madeline($vertices);
 
-for (keys %$arestas) {
-  print "Chave: $_\nValor: @{${$arestas}{$_}}\n";
+#print "@$_\n" for (@$vertices);
+#print "- - - \n";
+#print "@$_\n" for (@$vertices_ordenados);
+
+for my $k (keys %$vertices_ordenados) {
+
+  print "Chave1: $k\n";
+  print "Valor: '${$vertices_ordenados}{$k}'\n";
+  for my $j (keys ${$vertices_ordenados}{$k}) {
+
+    print "\tSub chave: $j\n";
+    print "\tValor: '${$vertices_ordenados}{$k}{$j}'\n\n";
+  }
 }
+
