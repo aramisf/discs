@@ -59,7 +59,10 @@ sub ashley {
                               'arestas'   =>  [
                                                 # Note que estou adicionando
                                                 # aqui os mesmos rotulos que
-                                                # adicionei na hash arestas
+                                                # adicionei na hash arestas.
+                                                # Note tb que a ordem em que
+                                                # sao adicionados eh a mesma
+                                                # proveniente da entrada
                                                 "$v1,$v2",
                                                 "$v2,$v3",
                                                 "$v3,$v1"
@@ -174,14 +177,13 @@ $vertices_ordenados = madeline($vertices);
 #print "- - - \n";
 #print "@$_\n" for (@$vertices_ordenados);
 
-for my $k (keys %$vertices_ordenados) {
+for my $k (keys %$triangulos) {
 
-  print "Chave1: $k\n";
-  print "Valor: '${$vertices_ordenados}{$k}'\n";
-  for my $j (keys ${$vertices_ordenados}{$k}) {
+  print "Chave: $k\n";
+  print "Valor: '${$triangulos}{$k}'\n";
+  for my $j (keys ${$triangulos}{$k}) {
 
     print "\tSub chave: $j\n";
-    print "\tValor: '${$vertices_ordenados}{$k}{$j}'\n\n";
+    print "\tValor: '@{${$triangulos}{$k}{$j}}'\n\n";
   }
 }
-
