@@ -165,6 +165,40 @@ sub jessica {
 
 } #/jessica
 
+#########
+## Lib ##
+#########
+
+# Monta a DCEL, a partir dos triangulos dados:
+sub noomi {
+
+  for my $id_triangulo (keys %$triangulos) {
+    # Agora vo montar a DCEL, considerando cara aresta como uma semi-aresta, q
+    # vai sendo montada aos poucos
+    print "Chave noomi: $id_triangulo\n";
+    my ($a1, $a2, $a3) = @{${$triangulos}{$id_triangulo}{'arestas'}};
+    my ($v1, $v2, $v3) = @{${$triangulos}{$id_triangulo}{'vertices'}};
+    my ($t1, $t2, $t3) = @{${$triangulos}{$id_triangulo}{'vizinhos'}};
+    print "\tarestas: a1: $a1, a2: $a2, a3: $a3\n";
+    print "\tvertices: v1: $v1, v2: $v2, v3: $v3\n";
+    print "arestas do meu vizinho No: $t3: @{${$triangulos}{$t3}{'arestas'}}\n";
+    ${$DCEL}{"$v1,$v2"} = {
+                            'v1'  =>  $v1,
+                            'v2'  =>  $v2,
+                            'f1'  =>  $id_triangulo,
+                            'f2'  =>  $t3,
+                            'p1'  =>  "$v3,$v1",
+                            'p2'  =>  ${$triangulos}{$t3}{"$v2,$v1"}
+                          };
+
+    #for my $k (keys ${$DCEL}{"$v1,$v2"}) {
+
+    #    print qq(Chave: $k, Valor: ${$DCEL}{"$v1,$v2"}{$k}\n);
+    #}
+
+  }
+} #/noomi
+
 ########################
 ## Programa principal ##
 ########################
@@ -177,13 +211,15 @@ $vertices_ordenados = madeline($vertices);
 #print "- - - \n";
 #print "@$_\n" for (@$vertices_ordenados);
 
-for my $k (keys %$triangulos) {
+#for my $k (keys %$triangulos) {
+#
+#  print "Chave: $k\n";
+#  print "Valor: '${$triangulos}{$k}'\n";
+#  for my $j (keys ${$triangulos}{$k}) {
+#
+#    print "\tSub chave: $j\n";
+#    print "\tValor: '@{${$triangulos}{$k}{$j}}'\n\n";
+#  }
+#}
 
-  print "Chave: $k\n";
-  print "Valor: '${$triangulos}{$k}'\n";
-  for my $j (keys ${$triangulos}{$k}) {
-
-    print "\tSub chave: $j\n";
-    print "\tValor: '@{${$triangulos}{$k}{$j}}'\n\n";
-  }
-}
+noomi();
