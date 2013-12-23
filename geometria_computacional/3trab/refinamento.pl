@@ -17,7 +17,8 @@ my $DCEL  = {}; # DCEL                      Tipo: referencia para uma hash de pa
 
 my $vertices;   # Adivinha..
 my $arestas;    # ^^
-my $triangulos;
+my $triangulos;     # Triangulos velhos;
+my $malha_refinada; # Triangulos novos;
 
 my $vertices_ordenados; # Antihorario       Tipo: hash q implementa uma lista
                         #                         duplamente ligada
@@ -134,12 +135,15 @@ sub madeline {
   for my $i (0..$#lista_ordenada) {
 
     my $rotulo = join ",", @{$lista_ordenada[$i]};
+    my $prox = ($i+1) % ($#lista_ordenada+1);   # $#array contem o ultimo indice
+                                                # do array, por isso +1
+    print "ind: $i; rotulo: '$rotulo'; tam: $#lista_ordenada\n";
     $lista_ligada{$rotulo} =
       {
         'ant'   => join(",", @{$lista_ordenada[$i-1]}),
         'agora' => $i,
         # Sabe pq o mod aqui no fim neh?
-        'prox'  => join(",", @{$lista_ordenada[($i+1)%$#lista_ordenada]})
+        'prox'  => join(",", @{$lista_ordenada[$prox]})
       };
 
   }
@@ -207,19 +211,16 @@ jessica();
 
 $vertices_ordenados = madeline($vertices);
 
-#print "@$_\n" for (@$vertices);
-#print "- - - \n";
-#print "@$_\n" for (@$vertices_ordenados);
 
-#for my $k (keys %$triangulos) {
-#
-#  print "Chave: $k\n";
-#  print "Valor: '${$triangulos}{$k}'\n";
-#  for my $j (keys ${$triangulos}{$k}) {
-#
-#    print "\tSub chave: $j\n";
-#    print "\tValor: '@{${$triangulos}{$k}{$j}}'\n\n";
-#  }
-#}
+for my $k (keys %$vertices_ordenados) {
 
-noomi();
+  print "Chave: $k\n";
+  print "Valor: '${$vertices_ordenados}{$k}'\n";
+  for my $j (keys ${$vertices_ordenados}{$k}) {
+
+    print "\tSub chave: $j\n";
+    print "\tValor: '${$vertices_ordenados}{$k}{$j}'\n\n";
+  }
+}
+
+#noomi();
