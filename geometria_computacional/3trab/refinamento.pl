@@ -137,7 +137,6 @@ sub madeline {
     my $rotulo = join ",", @{$lista_ordenada[$i]};
     my $prox = ($i+1) % ($#lista_ordenada+1);   # $#array contem o ultimo indice
                                                 # do array, por isso +1
-    print "ind: $i; rotulo: '$rotulo'; tam: $#lista_ordenada\n";
     $lista_ligada{$rotulo} =
       {
         'ant'   => join(",", @{$lista_ordenada[$i-1]}),
@@ -179,13 +178,9 @@ sub noomi {
   for my $id_triangulo (keys %$triangulos) {
     # Agora vo montar a DCEL, considerando cara aresta como uma semi-aresta, q
     # vai sendo montada aos poucos
-    print "Chave noomi: $id_triangulo\n";
     my ($a1, $a2, $a3) = @{${$triangulos}{$id_triangulo}{'arestas'}};
     my ($v1, $v2, $v3) = @{${$triangulos}{$id_triangulo}{'vertices'}};
     my ($t1, $t2, $t3) = @{${$triangulos}{$id_triangulo}{'vizinhos'}};
-    print "\tarestas: a1: $a1, a2: $a2, a3: $a3\n";
-    print "\tvertices: v1: $v1, v2: $v2, v3: $v3\n";
-    print "arestas do meu vizinho No: $t3: @{${$triangulos}{$t3}{'arestas'}}\n";
     ${$DCEL}{"$v1,$v2"} = {
                             'v1'  =>  $v1,
                             'v2'  =>  $v2,
@@ -211,16 +206,15 @@ jessica();
 
 $vertices_ordenados = madeline($vertices);
 
+#for my $k (keys %$vertices_ordenados) {
+#
+#  print "Chave: $k\n";
+#  print "Valor: '${$vertices_ordenados}{$k}'\n";
+#  for my $j (keys ${$vertices_ordenados}{$k}) {
+#
+#    print "\tSub chave: $j\n";
+#    print "\tValor: '${$vertices_ordenados}{$k}{$j}'\n\n";
+#  }
+#}
 
-for my $k (keys %$vertices_ordenados) {
-
-  print "Chave: $k\n";
-  print "Valor: '${$vertices_ordenados}{$k}'\n";
-  for my $j (keys ${$vertices_ordenados}{$k}) {
-
-    print "\tSub chave: $j\n";
-    print "\tValor: '${$vertices_ordenados}{$k}{$j}'\n\n";
-  }
-}
-
-#noomi();
+noomi();
