@@ -23,3 +23,7 @@ Monotonica de Andrew, um algoritmo de complexidade O(n log n).
 
 Depois disso, o programa imprime o resultado na tela, respeitando a padronizacao
 de duas casas decimais, conforme o especificado.
+
+Eh sabido que o metodo dual falha quando o ponto medio dos vertices se encontra
+fora do poligono, por isso, nestes casos o programa informara um resultado
+incorreto.
