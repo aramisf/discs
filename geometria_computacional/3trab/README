@@ -2,11 +2,38 @@ Implementacao de funcoes para a malha de triangulos
 
 Aramis Fernandes - CI756 - 2013/2
 
-Pressupostos:
+O programa assume que:
+- a entrada eh sempre valida;
+- toda ordem de vertices, arestas etc esta dada em sentido
+horario, portanto, caso um triangulo possua as arestas 0, 1, 2, ao percorre-las,
+estaremos passeando em sentido anti-horario no triangulo.
 
-- O programa assume que a ordem dos triangulos vizinhos ao triangulo de uma
-  determinada linha estao em sentido anti-horario, assim como foi dito (no
-  enunciado) que os vertices que compoe o triangulo daquela linha sao informados
-  no sentido anti-horario.
+A partir destes pressupostos, o program examina os dados da entrada e monta
+algumas estruturas auxiliares:
+
+ - Lista de vertices;
+ - Lista de arestas;
+ - Lista de triangulos, que eh uma estrutura que contem:
+   - As arestas e vertices que formam o triangulo corrente;
+   - Os triangulos vizinhos, ordenados conforme sua oposicao a um dado vertice
+     (ex: o primeiro vizinho da lista eh o vizinho cuja aresta se opoe ao
+     primeiro vertice da lista);
+ - Duas listas indexadas de duas vias para cada conjunto de vertices (vertices
+   lidos da entrada, e vertices ordenados);
+
+
+Preferi montar uma estrutura auxiliar para conter os triangulos, porque assim
+foi possivel montar a DCEL sem a necessidade de deixar os ponteiros para as
+proximas arestas por preencher.
+
+Depois de lidos, os vertices sao ordenados em sentido anti-horario, conforme o
+quadrante em que se encontram. No exemplo dado no enunciado, os vertices estao
+todos no 1o quadrante, o que resulta em uma ordenacao que considera antes o eixo
+x (do maior para o menor) e, em caso de empate no eixo x, considera-se o eixo
+y (do menor para o maior).
+
+Esta ordenacao forneceu um vetor de vertices, que foi utilizado para escolher os
+vertices 'proximo' e 'anterior' a um dado vertice, em sentido anti-horario
+(conforme consta na descricao da DCEL).
 
 
