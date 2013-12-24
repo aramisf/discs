@@ -178,25 +178,6 @@ sub connely {
 ## Lib ##
 #########
 
-# natascha
-# julia_voth
-# kristin_kreuk
-# kirsten_prout
-# amanda_crew
-
-# Funcao para subdividir um triangulo em outros 3, dado um novo vertice.
-# Parametros:
-# - um indice ou referencia para um triangulo;
-# - um indice de vertice (que sera obtido a partir de vertices jah existentes).
-sub milla {
-
-  my $triangulo_ref = shift;
-  my $novo_vertice  = shift;
-
-  # TODO: Adicionar uma nova entrada na hash
-  # TODO: verificar diferenca entre float e int em escalares
-} #/milla
-
 # Monta a DCEL, a partir dos triangulos dados:
 sub noomi {
 
