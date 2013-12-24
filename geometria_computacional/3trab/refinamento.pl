@@ -20,8 +20,16 @@ my $arestas;    # ^^
 my $triangulos;     # Triangulos velhos;
 my $malha_refinada; # Triangulos novos;
 
-my $vertices_ordenados; # Antihorario       Tipo: hash q implementa uma lista
-                        #                         duplamente ligada
+my $vOrds;          # Vertices ordenados em antihorario
+
+# Usando hashes em dois caminhos:
+# Vertices originais:
+my %vOrigIdx2Coord;       # indice -> coordenada
+my %vOrigCoord2Idx;       # coordenada -> indice
+
+# Vertices ordenados:
+my %vOrdsIdx2Coord;       # indice -> coordenada
+my %vOrdsCoord2Idx;       # coordenada -> indice
 
 
 ###########
@@ -127,27 +135,7 @@ sub madeline {
 
   push @lista_ordenada, (@q1_ord, @q2_ord, @q3_ord, @q4_ord);
 
-
-  # Criando uma lista ligada para melhorar a vida. Pq no happy hour rola um
-  # double
-  my %lista_ligada;
-
-  for my $i (0..$#lista_ordenada) {
-
-    my $rotulo = join ",", @{$lista_ordenada[$i]};
-    my $prox = ($i+1) % ($#lista_ordenada+1);   # $#array contem o ultimo indice
-                                                # do array, por isso +1
-    $lista_ligada{$rotulo} =
-      {
-        'ant'   => join(",", @{$lista_ordenada[$i-1]}),
-        'agora' => $i,
-        # Sabe pq o mod aqui no fim neh?
-        'prox'  => join(",", @{$lista_ordenada[$prox]})
-      };
-
-  }
-
-  return \%lista_ligada;
+  return \@lista_ordenada;
 } # /madeline
 
 # Le entrada:
@@ -168,33 +156,133 @@ sub jessica {
 
 } #/jessica
 
+# Cria as hashes indexadas:
+sub connely {
+
+  # Os originais sao indexados conforme posicao dada:
+  for (my $i=0; $i < @$vertices; $i++) {
+
+    $vOrigIdx2Coord{($i+1)} = @$vertices[$i];
+    $vOrigCoord2Idx{"@{@$vertices[$i]}"} = $i+1;
+  }
+
+  # Agora os ordenados:
+  for (my $i=0; $i < @$vOrds; $i++) {
+
+    $vOrdsIdx2Coord{($i+1)} = @$vOrds[$i];
+    $vOrdsCoord2Idx{"@{@$vOrds[$i]}"} = $i+1;
+  }
+} #/connely
+
 #########
 ## Lib ##
 #########
+
+# natascha
+# julia_voth
+# kristin_kreuk
+# kirsten_prout
+# amanda_crew
+
+# Funcao para subdividir um triangulo em outros 3, dado um novo vertice.
+# Parametros:
+# - um indice ou referencia para um triangulo;
+# - um indice de vertice (que sera obtido a partir de vertices jah existentes).
+sub milla {
+
+  my $triangulo_ref = shift;
+  my $novo_vertice  = shift;
+
+  # TODO: Adicionar uma nova entrada na hash
+  # TODO: verificar diferenca entre float e int em escalares
+} #/milla
 
 # Monta a DCEL, a partir dos triangulos dados:
 sub noomi {
 
   for my $id_triangulo (keys %$triangulos) {
+
     # Agora vo montar a DCEL, considerando cara aresta como uma semi-aresta, q
     # vai sendo montada aos poucos
+
     my ($a1, $a2, $a3) = @{${$triangulos}{$id_triangulo}{'arestas'}};
     my ($v1, $v2, $v3) = @{${$triangulos}{$id_triangulo}{'vertices'}};
     my ($t1, $t2, $t3) = @{${$triangulos}{$id_triangulo}{'vizinhos'}};
+
+
+    # Pegando os indices dos vertices 'anterior' e 'proximo' do vertice v1. Os
+    # resultados contidos aqui se referem aos indices do vetor ordenado. Lembra
+    # que temos os indices iniciando pelo 1
+    my $coord_v1 = "@{$vOrigIdx2Coord{$v1}}";
+    my $coord_v2 = "@{$vOrigIdx2Coord{$v2}}";
+    my $coord_v3 = "@{$vOrigIdx2Coord{$v3}}";
+
+    # Indices das coordenadas ordenadas:
+    my $idx_v1_ord = $vOrdsCoord2Idx{$coord_v1};
+    my $idx_v2_ord = $vOrdsCoord2Idx{$coord_v2};
+    my $idx_v3_ord = $vOrdsCoord2Idx{$coord_v3};
+
+    # Teste para acessar apenas indices validos em v1:
+    my $safe_idx1_ant  = $idx_v1_ord - 1 || $#{$vOrds}+1;
+    my $coord_v1_ant  = "@{$vOrdsIdx2Coord{$safe_idx1_ant}}";
+
+    my $safe_idx1_prox = $idx_v1_ord % ($#{$vOrds}+1) + 1;
+    my $coord_v1_prox = "@{$vOrdsIdx2Coord{$safe_idx1_prox}}";
+
+
+    # Teste para acessar apenas indices validos em v2:
+    my $safe_idx2_ant  = $idx_v2_ord - 1 || $#{$vOrds}+1;
+    my $coord_v2_ant  = "@{$vOrdsIdx2Coord{$safe_idx2_ant}}";
+
+    my $safe_idx2_prox = $idx_v2_ord % ($#{$vOrds}+1) + 1;
+    my $coord_v2_prox = "@{$vOrdsIdx2Coord{$safe_idx2_prox}}";
+
+
+    # Teste para acessar apenas indices validos em v3:
+    my $safe_idx3_ant  = $idx_v3_ord - 1 || $#{$vOrds}+1;
+    my $coord_v3_ant  = "@{$vOrdsIdx2Coord{$safe_idx3_ant}}";
+
+    my $safe_idx3_prox = $idx_v3_ord % ($#{$vOrds}+1) + 1;
+    my $coord_v3_prox = "@{$vOrdsIdx2Coord{$safe_idx3_prox}}";
+
+
+    # E finalmente acessando anteriores e proximos:
+    my $v1_ant  = $vOrigCoord2Idx{$coord_v1_ant};
+    my $v1_prox = $vOrigCoord2Idx{$coord_v1_prox};
+
+    my $v2_ant  = $vOrigCoord2Idx{$coord_v2_ant};
+    my $v2_prox = $vOrigCoord2Idx{$coord_v2_prox};
+
+    my $v3_ant  = $vOrigCoord2Idx{$coord_v3_ant};
+    my $v3_prox = $vOrigCoord2Idx{$coord_v3_prox};
+
+    # Montando a DCEL:
     ${$DCEL}{"$v1,$v2"} = {
                             'v1'  =>  $v1,
                             'v2'  =>  $v2,
                             'f1'  =>  $id_triangulo,
                             'f2'  =>  $t3,
-                            'p1'  =>  "$v3,$v1",
-                            'p2'  =>  ${$triangulos}{$t3}{"$v2,$v1"}
+                            'p1'  =>  "$v1_ant,$v1",
+                            'p2'  =>  "$v2,$v2_prox"
                           };
 
-    #for my $k (keys ${$DCEL}{"$v1,$v2"}) {
+    ${$DCEL}{"$v2,$v3"} = {
+                            'v1'  =>  $v2,
+                            'v2'  =>  $v3,
+                            'f1'  =>  $id_triangulo,
+                            'f2'  =>  $t1,
+                            'p1'  =>  "$v2_ant,$v2 =",
+                            'p2'  =>  "$v3,$v3_prox"
+                          };
 
-    #    print qq(Chave: $k, Valor: ${$DCEL}{"$v1,$v2"}{$k}\n);
-    #}
-
+    ${$DCEL}{"$v3,$v1"} = {
+                            'v1'  =>  $v3,
+                            'v2'  =>  $v1,
+                            'f1'  =>  $id_triangulo,
+                            'f2'  =>  $t2,
+                            'p1'  =>  "*$v3_ant,$v3",
+                            'p2'  =>  "$v1,$v1_prox"
+                          };
   }
 } #/noomi
 
@@ -203,18 +291,6 @@ sub noomi {
 ########################
 
 jessica();
-
-$vertices_ordenados = madeline($vertices);
-
-#for my $k (keys %$vertices_ordenados) {
-#
-#  print "Chave: $k\n";
-#  print "Valor: '${$vertices_ordenados}{$k}'\n";
-#  for my $j (keys ${$vertices_ordenados}{$k}) {
-#
-#    print "\tSub chave: $j\n";
-#    print "\tValor: '${$vertices_ordenados}{$k}{$j}'\n\n";
-#  }
-#}
-
+$vOrds = madeline($vertices);
+connely();
 noomi();
