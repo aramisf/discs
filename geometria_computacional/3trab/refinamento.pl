@@ -185,7 +185,6 @@ sub noomi {
 
     # Agora vo montar a DCEL, considerando cara aresta como uma semi-aresta, q
     # vai sendo montada aos poucos
-
     my ($a1, $a2, $a3) = @{${$triangulos}{$id_triangulo}{'arestas'}};
     my ($v1, $v2, $v3) = @{${$triangulos}{$id_triangulo}{'vertices'}};
     my ($t1, $t2, $t3) = @{${$triangulos}{$id_triangulo}{'vizinhos'}};
@@ -204,26 +203,26 @@ sub noomi {
     my $idx_v3_ord = $vOrdsCoord2Idx{$coord_v3};
 
     # Teste para acessar apenas indices validos em v1:
-    my $safe_idx1_ant   = $idx_v1_ord - 1 || $#{$vOrds}+1;
+    my $safe_idx1_ant   = $idx_v1_ord - 1 || $n;
     my $coord_v1_ant    = "@{$vOrdsIdx2Coord{$safe_idx1_ant}}";
 
-    my $safe_idx1_prox  = $idx_v1_ord % ($#{$vOrds}+1) + 1;
+    my $safe_idx1_prox  = $idx_v1_ord % $n + 1;
     my $coord_v1_prox   = "@{$vOrdsIdx2Coord{$safe_idx1_prox}}";
 
 
     # Teste para acessar apenas indices validos em v2:
-    my $safe_idx2_ant   = $idx_v2_ord - 1 || $#{$vOrds}+1;
+    my $safe_idx2_ant   = $idx_v2_ord - 1 || $n;
     my $coord_v2_ant    = "@{$vOrdsIdx2Coord{$safe_idx2_ant}}";
 
-    my $safe_idx2_prox  = $idx_v2_ord % ($#{$vOrds}+1) + 1;
+    my $safe_idx2_prox  = $idx_v2_ord % $n + 1;
     my $coord_v2_prox   = "@{$vOrdsIdx2Coord{$safe_idx2_prox}}";
 
 
     # Teste para acessar apenas indices validos em v3:
-    my $safe_idx3_ant   = $idx_v3_ord - 1 || $#{$vOrds}+1;
+    my $safe_idx3_ant   = $idx_v3_ord - 1 || $n;
     my $coord_v3_ant    = "@{$vOrdsIdx2Coord{$safe_idx3_ant}}";
 
-    my $safe_idx3_prox  = $idx_v3_ord % ($#{$vOrds}+1) + 1;
+    my $safe_idx3_prox  = $idx_v3_ord % $n + 1;
     my $coord_v3_prox   = "@{$vOrdsIdx2Coord{$safe_idx3_prox}}";
 
 
