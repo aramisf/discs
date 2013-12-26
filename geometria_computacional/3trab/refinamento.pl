@@ -36,64 +36,6 @@ my %vOrdsCoord2Idx;       # coordenada -> indice
 ## Utils ##
 ###########
 
-# Ordena vetores em sentido antihorario:
-sub madeline {
-
-  my $lista_de_pontos_ref = shift; # Lembrando que a fcao recebe uma referencia
-                                   # para um array
-
-  # Quadrantes:
-  my (@q1,@q2,@q3,@q4); # Dados
-  my (@q1_ord,@q2_ord,@q3_ord,@q4_ord); # Ordenados
-
-  # Resultado final fica aqui:
-  my @lista_ordenada;
-
-  # Percorro a lista de pontos dada e insiro cada ponto em seu respectivo
-  # quadrante:
-  for (@$lista_de_pontos_ref) {
-
-    if (@$_[0] >= 0) {
-
-      # 1o quadrante
-      if (@$_[1] >= 0) {
-        push @q1, [@$_];
-      }
-
-      # 4o quadrante
-      elsif (@$_[1] < 0) {
-        push @q4, [@$_];
-      }
-    }
-
-    elsif (@$_[0] < 0) {
-
-      # 2o quadrante
-      if (@$_[1] >= 0) {
-        push @q2, [@$_];
-      }
-
-      # 3o quadrante
-      elsif (@$_[1] < 0) {
-        push @q3, [@$_];
-      }
-    }
-  } # /for(@$lista_de_pontos_ref)
-
-
-  # De posse dos quadrantes ja formados, ordenamos primeiro em X, e, se houver
-  # empate, em Y. Note que para cada quadrante deve existir uma ordenacao
-  # caracteristica, pois queremos que esteja ordenado no sentido anti-horario
-  @q1_ord = sort { $$b[0] <=> $$a[0] or $$a[1] <=> $$b[1] } @q1;
-  @q2_ord = sort { $$b[0] <=> $$a[0] or $$b[1] <=> $$a[1] } @q2;
-  @q3_ord = sort { $$a[0] <=> $$b[0] or $$b[1] <=> $$a[1] } @q3;
-  @q3_ord = sort { $$a[0] <=> $$b[0] or $$a[1] <=> $$b[1] } @q4;
-
-  push @lista_ordenada, (@q1_ord, @q2_ord, @q3_ord, @q4_ord);
-
-  return \@lista_ordenada;
-} # /madeline
-
 # Le entrada:
 sub jessica {
 
@@ -252,6 +194,5 @@ sub milla {
 ########################
 
 jessica();
-#$vOrds = madeline($vertices);
 milla();
 natascha();
