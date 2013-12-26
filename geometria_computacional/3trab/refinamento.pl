@@ -136,14 +136,9 @@ sub julia {
   my $t = shift;
   my ($v1,$v2,$v3) = @{${$triangulos}{$t}{'vertices'}};
 
-
-  #print "JULIA v1: $v1\n";
   my ($x1,$y1) = @{${$vertices}{$v1}};
-  #print "JULIA v2: $v2\n";
   my ($x2,$y2) = @{${$vertices}{$v2}};
-  #print "JULIA v3: $v3\n";
   my ($x3,$y3) = @{${$vertices}{$v3}};
-  #print "JULIA: asdf\n";
 
   my $x = ($x1+$x2+$x3)/3;
   my $y = ($y1+$y2+$y3)/3;
@@ -157,7 +152,6 @@ sub kristin {
 
   my $str           = shift;
   my ($a1,$a2,$a3)  = split ',', $str;
-  #print "  KRISTIN: $a1,$a2 $a2,$a3 $a3,$a1\n";
 
   return  [
             "$a1,$a2",
@@ -243,7 +237,6 @@ sub milla {
 
   for my $id (sort keys %$triangulos) {
 
-    #print "ID: $id\n";
     # obter o novo vertice do centro do triangulo;
     my $vNovoCoord    = julia($id);
     my $vNovoId       = (keys %$vertices)+1;
@@ -256,15 +249,10 @@ sub milla {
     my $ult           = (keys %$malha)+1;
     my @novos_triangs = map { $_ .= ",$vNovoId" } @{${$triangulos}{$id}{'arestas'}};
 
-    #print "TRIANGS: @novos_triangs\n";
     ## Agora cria os 3 novos triangulos:
     ${$malha}{$ult}{'vertices'}  =  [split ',', $novos_triangs[0]];
     ${$malha}{$ult}{'arestas'}   =  kristin($novos_triangs[0]);
     ${$malha}{$ult}{'vizinhos'}  =  [$ult+1, $ult+2, $id];
-    for my $k (keys ${$malha}{$ult}) {
-
-      #print "MALHA $ult: C: $k V: @{${$malha}{$ult}{$k}}\n";
-    }
 
     ${$malha}{$ult+1}{'vertices'}  =  [split ',', $novos_triangs[1]];
     ${$malha}{$ult+1}{'arestas'}   =  kristin($novos_triangs[1]);
@@ -373,7 +361,5 @@ jessica();
 #$vOrds = madeline($vertices);
 #connely();
 #noomi();
-#my $num = keys %$malha;
-#print "triangulos: $num\n";
 milla();
 natascha();
