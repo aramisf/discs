@@ -17,10 +17,10 @@ my $DCEL  = {}; # DCEL                      Tipo: referencia para uma hash de pa
 
 my $vertices;   # Adivinha..
 my $arestas;    # ^^
-my $triangulos;     # Triangulos velhos;
-my $malha_refinada; # Triangulos novos;
+my $triangulos; # Triangulos velhos;
+my $malha;      # Triangulos novos;
 
-my $vOrds;          # Vertices ordenados em antihorario
+my $vOrds;      # Vertices ordenados em antihorario
 
 # Usando hashes em dois caminhos:
 # Vertices originais:
@@ -35,50 +35,6 @@ my %vOrdsCoord2Idx;       # coordenada -> indice
 ###########
 ## Utils ##
 ###########
-
-# Cria os triangulos e as monta a lista de arestas. Por enquanto estou num
-# dilema, pois se montar a lista de arestas e usar a DCEL, os triangulos e seus
-# vizinhos serao praticamente inuteis. No momento estou decidindo montar os
-# triangulos mesmo assim.
-sub ashley {
-
-  # Varia de 1 a $m
-  my $index = shift;
-
-  # Vertices do triangulo '$index':
-  my $v1 = shift;
-  my $v2 = shift;
-  my $v3 = shift;
-
-  # Vizinhos
-  my $t1 = shift;
-  my $t2 = shift;
-  my $t3 = shift;
-
-  # Pode dizer q parece feio, mas depois eh bem melhor p acessar e ver se jah
-  # existe uma aresta
-  ${$arestas}{"$v1,$v2"} = [$v1, $v2];
-  ${$arestas}{"$v2,$v3"} = [$v2, $v3];
-  ${$arestas}{"$v3,$v1"} = [$v3, $v1];
-
-  # Agora criando o triangulo da linha $index, que talvez nao seja utilizado no
-  # futuro.
-  ${$triangulos}{$index}  = {
-                              'vertices'  => [$v1, $v2, $v3],
-                              'arestas'   =>  [
-                                                # Note que estou adicionando
-                                                # aqui os mesmos rotulos que
-                                                # adicionei na hash arestas.
-                                                # Note tb que a ordem em que
-                                                # sao adicionados eh a mesma
-                                                # proveniente da entrada
-                                                "$v1,$v2",
-                                                "$v2,$v3",
-                                                "$v3,$v1"
-                                              ],
-                              'vizinhos'  => [$t1, $t2, $t3]
-                            };
-} # /ashley
 
 # Ordena vetores em sentido antihorario:
 sub madeline {
@@ -178,6 +134,48 @@ sub connely {
 ## Lib ##
 #########
 
+# Cria os triangulos e monta a lista de arestas. Decidi abandonar a DCEL.  Vou
+# usar os triangulos pq gastei mto tempo mexendo com a DCEL, e provavelmente
+# gastaria mais se insistisse.
+sub ashley {
+
+  # Varia de 1 a $m
+  my $index = shift;
+
+  # Vertices do triangulo '$index':
+  my $v1 = shift;
+  my $v2 = shift;
+  my $v3 = shift;
+
+  # Vizinhos
+  my $t1 = shift;
+  my $t2 = shift;
+  my $t3 = shift;
+
+  # Pode dizer q parece feio, mas depois eh bem melhor p acessar e ver se jah
+  # existe uma aresta
+  ${$arestas}{"$v1,$v2"} = [$v1, $v2];
+  ${$arestas}{"$v2,$v3"} = [$v2, $v3];
+  ${$arestas}{"$v3,$v1"} = [$v3, $v1];
+
+  # Agora criando o triangulo da linha $index:
+  ${$triangulos}{$index}  = {
+                              'vertices'  =>  [$v1, $v2, $v3],
+                              'arestas'   =>  [
+                                                # Note que estou adicionando
+                                                # aqui os mesmos rotulos que
+                                                # adicionei na hash arestas.
+                                                # Note tb que a ordem em que
+                                                # sao adicionados eh a mesma
+                                                # proveniente da entrada
+                                                "$v1,$v2",
+                                                "$v2,$v3",
+                                                "$v3,$v1"
+                                              ],
+                              'vizinhos'  =>  [$t1, $t2, $t3]
+                            };
+} # /ashley
+
 # Monta a DCEL, a partir dos triangulos dados:
 sub noomi {
 
@@ -271,6 +269,8 @@ sub noomi {
 ########################
 
 jessica();
-$vOrds = madeline($vertices);
-connely();
-noomi();
+#$vOrds = madeline($vertices);
+#connely();
+#noomi();
+#my $num = keys %$malha;
+#print "triangulos: $num\n";
