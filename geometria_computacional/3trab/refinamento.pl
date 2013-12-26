@@ -130,6 +130,42 @@ sub connely {
   }
 } #/connely
 
+# Retorna um vertice novo (ponto medio) para cada triangulo dado.
+sub julia {
+
+  my $t = shift;
+  my ($v1,$v2,$v3) = @{${$triangulos}{$t}{'vertices'}};
+
+
+  #print "JULIA v1: $v1\n";
+  my ($x1,$y1) = @{${$vertices}{$v1}};
+  #print "JULIA v2: $v2\n";
+  my ($x2,$y2) = @{${$vertices}{$v2}};
+  #print "JULIA v3: $v3\n";
+  my ($x3,$y3) = @{${$vertices}{$v3}};
+  #print "JULIA: asdf\n";
+
+  my $x = ($x1+$x2+$x3)/3;
+  my $y = ($y1+$y2+$y3)/3;
+
+  return [$x,$y];
+}#/julia
+
+# Recebe uma string com 3 numeros separados por virgula, e retorna um array
+# anonimo contendo 3 strings de dois numeros separados por virgula
+sub kristin {
+
+  my $str           = shift;
+  my ($a1,$a2,$a3)  = split ',', $str;
+  #print "  KRISTIN: $a1,$a2 $a2,$a3 $a3,$a1\n";
+
+  return  [
+            "$a1,$a2",
+            "$a2,$a3",
+            "$a3,$a1"
+          ];
+}#/kristin
+
 #########
 ## Lib ##
 #########
@@ -317,3 +353,4 @@ jessica();
 #noomi();
 #my $num = keys %$malha;
 #print "triangulos: $num\n";
+milla();
