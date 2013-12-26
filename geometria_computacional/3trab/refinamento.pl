@@ -265,94 +265,6 @@ sub milla {
   }
 } #/milla
 
-# Monta a DCEL, a partir dos triangulos dados:
-sub noomi {
-
-  for my $id_triangulo (keys %$triangulos) {
-
-    # Agora vo montar a DCEL, considerando cara aresta como uma semi-aresta, q
-    # vai sendo montada aos poucos
-    my ($a1, $a2, $a3) = @{${$triangulos}{$id_triangulo}{'arestas'}};
-    my ($v1, $v2, $v3) = @{${$triangulos}{$id_triangulo}{'vertices'}};
-    my ($t1, $t2, $t3) = @{${$triangulos}{$id_triangulo}{'vizinhos'}};
-
-
-    # Pegando os indices dos vertices 'anterior' e 'proximo' do vertice v1. Os
-    # resultados contidos aqui se referem aos indices do vetor ordenado. Lembra
-    # que temos os indices iniciando pelo 1
-    my $coord_v1 = "@{$vOrigIdx2Coord{$v1}}";
-    my $coord_v2 = "@{$vOrigIdx2Coord{$v2}}";
-    my $coord_v3 = "@{$vOrigIdx2Coord{$v3}}";
-
-    # Indices das coordenadas ordenadas:
-    my $idx_v1_ord = $vOrdsCoord2Idx{$coord_v1};
-    my $idx_v2_ord = $vOrdsCoord2Idx{$coord_v2};
-    my $idx_v3_ord = $vOrdsCoord2Idx{$coord_v3};
-
-    # Teste para acessar apenas indices validos em v1:
-    my $safe_idx1_ant   = $idx_v1_ord - 1 || $n;
-    my $coord_v1_ant    = "@{$vOrdsIdx2Coord{$safe_idx1_ant}}";
-
-    my $safe_idx1_prox  = $idx_v1_ord % $n + 1;
-    my $coord_v1_prox   = "@{$vOrdsIdx2Coord{$safe_idx1_prox}}";
-
-
-    # Teste para acessar apenas indices validos em v2:
-    my $safe_idx2_ant   = $idx_v2_ord - 1 || $n;
-    my $coord_v2_ant    = "@{$vOrdsIdx2Coord{$safe_idx2_ant}}";
-
-    my $safe_idx2_prox  = $idx_v2_ord % $n + 1;
-    my $coord_v2_prox   = "@{$vOrdsIdx2Coord{$safe_idx2_prox}}";
-
-
-    # Teste para acessar apenas indices validos em v3:
-    my $safe_idx3_ant   = $idx_v3_ord - 1 || $n;
-    my $coord_v3_ant    = "@{$vOrdsIdx2Coord{$safe_idx3_ant}}";
-
-    my $safe_idx3_prox  = $idx_v3_ord % $n + 1;
-    my $coord_v3_prox   = "@{$vOrdsIdx2Coord{$safe_idx3_prox}}";
-
-
-    # E finalmente acessando anteriores e proximos:
-    my $v1_ant  = $vOrigCoord2Idx{$coord_v1_ant};
-    my $v1_prox = $vOrigCoord2Idx{$coord_v1_prox};
-
-    my $v2_ant  = $vOrigCoord2Idx{$coord_v2_ant};
-    my $v2_prox = $vOrigCoord2Idx{$coord_v2_prox};
-
-    my $v3_ant  = $vOrigCoord2Idx{$coord_v3_ant};
-    my $v3_prox = $vOrigCoord2Idx{$coord_v3_prox};
-
-    # Montando a DCEL:
-    ${$DCEL}{"$v1,$v2"} = {
-                            'v1'  =>  $v1,
-                            'v2'  =>  $v2,
-                            'f1'  =>  $id_triangulo,
-                            'f2'  =>  $t3,
-                            'p1'  =>  "$v1_ant,$v1",
-                            'p2'  =>  "$v2,$v2_prox"
-                          };
-
-    ${$DCEL}{"$v2,$v3"} = {
-                            'v1'  =>  $v2,
-                            'v2'  =>  $v3,
-                            'f1'  =>  $id_triangulo,
-                            'f2'  =>  $t1,
-                            'p1'  =>  "$v2_ant,$v2 =",
-                            'p2'  =>  "$v3,$v3_prox"
-                          };
-
-    ${$DCEL}{"$v3,$v1"} = {
-                            'v1'  =>  $v3,
-                            'v2'  =>  $v1,
-                            'f1'  =>  $id_triangulo,
-                            'f2'  =>  $t2,
-                            'p1'  =>  "*$v3_ant,$v3",
-                            'p2'  =>  "$v1,$v1_prox"
-                          };
-  }
-} #/noomi
-
 ########################
 ## Programa principal ##
 ########################
@@ -360,6 +272,5 @@ sub noomi {
 jessica();
 #$vOrds = madeline($vertices);
 #connely();
-#noomi();
 milla();
 natascha();
