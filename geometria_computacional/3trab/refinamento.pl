@@ -8,13 +8,12 @@ use warnings;
 ## Variaveis Globais ##
 #######################
 
-my $n;  # Num de vertices da triangulacao   Tipo: inteiro
-my $m;  # Num de triangulos                 Tipo: inteiro
+my $n;          # Num de vertices da triangulacao   Tipo: inteiro
+my $m;          # Num de triangulos                 Tipo: inteiro
 
-my $vertices;   # Adivinha..
-my $arestas;    # ^^
-my $triangulos; # Triangulos velhos;
-my $malha;      # Triangulos novos;
+my $vertices;   # Hash indexando os vertices
+my $triangulos; # Hash indexando os triangulos dados;
+my $malha;      # Hash indexando os triangulos novos;
 
 ###########
 ## Utils ##
@@ -111,12 +110,6 @@ sub ashley {
   my $t1 = shift;
   my $t2 = shift;
   my $t3 = shift;
-
-  # Pode dizer q parece feio, mas depois eh bem melhor p acessar e ver se jah
-  # existe uma aresta
-  ${$arestas}{"$v1,$v2"} = [$v1, $v2];
-  ${$arestas}{"$v2,$v3"} = [$v2, $v3];
-  ${$arestas}{"$v3,$v1"} = [$v3, $v1];
 
   # Agora criando o triangulo da linha $index:
   ${$triangulos}{$index}  = {
