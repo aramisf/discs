@@ -176,6 +176,49 @@ sub ashley {
                             };
 } # /ashley
 
+# Funcao para subdividir um triangulo em outros 3. Percorre a lista global de
+# triangulos, adicionando os novos triangulos ao final da lista.
+sub milla {
+
+  # Percorrer a lista de triangulos;
+  %$malha = %$triangulos;
+
+  for my $id (sort keys %$triangulos) {
+
+    #print "ID: $id\n";
+    # obter o novo vertice do centro do triangulo;
+    my $vNovoCoord    = julia($id);
+    my $vNovoId       = (keys %$vertices)+1;
+
+    # Atualizando o novo vertice. Respeitando o padrao, estou usando
+    # referencias p array, e nao string, entao..
+    ${$vertices}{$vNovoId} = $vNovoCoord;
+
+    # Para cada aresta do triangulo existente, criar tres novos triangulos:
+    my $ult           = (keys %$malha)+1;
+    my @novos_triangs = map { $_ .= ",$vNovoId" } @{${$triangulos}{$id}{'arestas'}};
+
+    #print "TRIANGS: @novos_triangs\n";
+    ## Agora cria os 3 novos triangulos:
+    ${$malha}{$ult}{'vertices'}  =  [split ',', $novos_triangs[0]];
+    ${$malha}{$ult}{'arestas'}   =  kristin($novos_triangs[0]);
+    ${$malha}{$ult}{'vizinhos'}  =  [$ult+1, $ult+2, $id];
+    for my $k (keys ${$malha}{$ult}) {
+
+      #print "MALHA $ult: C: $k V: @{${$malha}{$ult}{$k}}\n";
+    }
+
+    ${$malha}{$ult+1}{'vertices'}  =  [split ',', $novos_triangs[1]];
+    ${$malha}{$ult+1}{'arestas'}   =  kristin($novos_triangs[1]);
+    ${$malha}{$ult+1}{'vizinhos'}  =  [$ult+2, $ult, $id];
+
+    ${$malha}{$ult+2}{'vertices'}  =  [split ',', $novos_triangs[2]];
+    ${$malha}{$ult+2}{'arestas'}   =  kristin($novos_triangs[2]);
+    ${$malha}{$ult+2}{'vizinhos'}  =  [$ult, $ult+1, $id];
+
+  }
+} #/milla
+
 # Monta a DCEL, a partir dos triangulos dados:
 sub noomi {
 
