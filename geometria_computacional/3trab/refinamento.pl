@@ -12,8 +12,7 @@ my $n;          # Num de vertices da triangulacao   Tipo: inteiro
 my $m;          # Num de triangulos                 Tipo: inteiro
 
 my $vertices;   # Hash indexando os vertices
-my $triangulos; # Hash indexando os triangulos dados;
-my $malha;      # Hash indexando os triangulos novos;
+my $triangulos; # Hash indexando os triangulos
 
 ###########
 ## Utils ##
@@ -71,7 +70,7 @@ sub kristin {
 sub natascha {
 
   my $n = keys %$vertices;
-  my $m = keys %$malha;
+  my $m = keys %$triangulos;
 
   print "$n $m\n";
 
@@ -82,10 +81,10 @@ sub natascha {
   }
 
   # De novo a mandinguinha do sort
-  for (sort {$a <=> $b} keys %$malha) {
+  for (sort {$a <=> $b} keys %$triangulos) {
 
-    print "@{${$malha}{$_}{'vertices'}} ";
-    print "@{${$malha}{$_}{'vizinhos'}}\n";
+    print "@{${$triangulos}{$_}{'vertices'}} ";
+    print "@{${$triangulos}{$_}{'vizinhos'}}\n";
   }
 }#/natascha
 
@@ -134,8 +133,6 @@ sub ashley {
 sub milla {
 
   # Percorrer a lista de triangulos;
-  %$malha = %$triangulos;
-
   for my $id (sort keys %$triangulos) {
 
     # obter o novo vertice do centro do triangulo;
@@ -147,21 +144,21 @@ sub milla {
     ${$vertices}{$vNovoId} = $vNovoCoord;
 
     # Para cada aresta do triangulo existente, criar tres novos triangulos:
-    my $ult           = (keys %$malha)+1;
+    my $ult           = (keys %$triangulos)+1;
     my @novos_triangs = map { $_ .= ",$vNovoId" } @{${$triangulos}{$id}{'arestas'}};
 
     ## Agora cria os 3 novos triangulos:
-    ${$malha}{$ult}{'vertices'}  =  [split ',', $novos_triangs[0]];
-    ${$malha}{$ult}{'arestas'}   =  kristin($novos_triangs[0]);
-    ${$malha}{$ult}{'vizinhos'}  =  [$ult+1, $ult+2, $id];
+    ${$triangulos}{$ult}{'vertices'}  =  [split ',', $novos_triangs[0]];
+    ${$triangulos}{$ult}{'arestas'}   =  kristin($novos_triangs[0]);
+    ${$triangulos}{$ult}{'vizinhos'}  =  [$ult+1, $ult+2, $id];
 
-    ${$malha}{$ult+1}{'vertices'}  =  [split ',', $novos_triangs[1]];
-    ${$malha}{$ult+1}{'arestas'}   =  kristin($novos_triangs[1]);
-    ${$malha}{$ult+1}{'vizinhos'}  =  [$ult+2, $ult, $id];
+    ${$triangulos}{$ult+1}{'vertices'}  =  [split ',', $novos_triangs[1]];
+    ${$triangulos}{$ult+1}{'arestas'}   =  kristin($novos_triangs[1]);
+    ${$triangulos}{$ult+1}{'vizinhos'}  =  [$ult+2, $ult, $id];
 
-    ${$malha}{$ult+2}{'vertices'}  =  [split ',', $novos_triangs[2]];
-    ${$malha}{$ult+2}{'arestas'}   =  kristin($novos_triangs[2]);
-    ${$malha}{$ult+2}{'vizinhos'}  =  [$ult, $ult+1, $id];
+    ${$triangulos}{$ult+2}{'vertices'}  =  [split ',', $novos_triangs[2]];
+    ${$triangulos}{$ult+2}{'arestas'}   =  kristin($novos_triangs[2]);
+    ${$triangulos}{$ult+2}{'vizinhos'}  =  [$ult, $ult+1, $id];
 
   }
 } #/milla
