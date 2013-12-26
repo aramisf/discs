@@ -11,26 +11,10 @@ use warnings;
 my $n;  # Num de vertices da triangulacao   Tipo: inteiro
 my $m;  # Num de triangulos                 Tipo: inteiro
 
-my $DCEL  = {}; # DCEL                      Tipo: referencia para uma hash de pares
-                #                                 ordenados (tamanho: $n),
-                #                                 indexada por inteiros
-
 my $vertices;   # Adivinha..
 my $arestas;    # ^^
 my $triangulos; # Triangulos velhos;
 my $malha;      # Triangulos novos;
-
-my $vOrds;      # Vertices ordenados em antihorario
-
-# Usando hashes em dois caminhos:
-# Vertices originais:
-my %vOrigIdx2Coord;       # indice -> coordenada
-my %vOrigCoord2Idx;       # coordenada -> indice
-
-# Vertices ordenados:
-my %vOrdsIdx2Coord;       # indice -> coordenada
-my %vOrdsCoord2Idx;       # coordenada -> indice
-
 
 ###########
 ## Utils ##
