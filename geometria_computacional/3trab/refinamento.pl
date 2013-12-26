@@ -166,6 +166,28 @@ sub kristin {
           ];
 }#/kristin
 
+# Imprime resultado
+sub natascha {
+
+  my $n = keys %$vertices;
+  my $m = keys %$malha;
+
+  print "$n $m\n";
+
+  # Mandinguinha p ordenar numericamente
+  for (sort {$a <=> $b} keys %$vertices) {
+
+    print sprintf "%.2f %.2f\n", @{${$vertices}{$_}};
+  }
+
+  # De novo a mandinguinha do sort
+  for (sort {$a <=> $b} keys %$malha) {
+
+    print "@{${$malha}{$_}{'vertices'}} ";
+    print "@{${$malha}{$_}{'vizinhos'}}\n";
+  }
+}#/natascha
+
 #########
 ## Lib ##
 #########
@@ -354,3 +376,4 @@ jessica();
 #my $num = keys %$malha;
 #print "triangulos: $num\n";
 milla();
+natascha();
