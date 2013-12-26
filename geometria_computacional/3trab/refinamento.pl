@@ -112,24 +112,6 @@ sub jessica {
 
 } #/jessica
 
-# Cria as hashes indexadas:
-sub connely {
-
-  # Os originais sao indexados conforme posicao dada:
-  for (my $i=0; $i < @$vertices; $i++) {
-
-    $vOrigIdx2Coord{($i+1)}               = @$vertices[$i];
-    $vOrigCoord2Idx{"@{@$vertices[$i]}"}  = $i+1;
-  }
-
-  # Agora os ordenados:
-  for (my $i=0; $i < @$vOrds; $i++) {
-
-    $vOrdsIdx2Coord{($i+1)}               = @$vOrds[$i];
-    $vOrdsCoord2Idx{"@{@$vOrds[$i]}"}     = $i+1;
-  }
-} #/connely
-
 # Retorna um vertice novo (ponto medio) para cada triangulo dado.
 sub julia {
 
@@ -271,6 +253,5 @@ sub milla {
 
 jessica();
 #$vOrds = madeline($vertices);
-#connely();
 milla();
 natascha();
