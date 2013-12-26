@@ -147,7 +147,7 @@ sub jessica {
 
   # Pra que gastar mais de uma linha de codigo para ler os vertices e empilhar
   # suas coordenadas em um vetor?
-  push @$vertices, [ split ' ', <> ] for (1..$n);
+  ${$vertices}{$_} = [ split ' ', <> ] for (1..$n);
 
 
   # Ashley vai montar os triangulos, e seus vizinhos *e tb as arestas (pelo
