@@ -50,7 +50,7 @@ sub julia {
   my $y = ($y1+$y2+$y3)/3;
 
   return [$x,$y];
-}#/julia
+} #/julia
 
 # Recebe uma string com 3 numeros separados por virgula, e retorna um array
 # anonimo contendo 3 strings de dois numeros separados por virgula
@@ -64,7 +64,7 @@ sub kristin {
             "$a2,$a3",
             "$a3,$a1"
           ];
-}#/kristin
+} #/kristin
 
 # Imprime resultado
 sub natascha {
@@ -86,7 +86,7 @@ sub natascha {
     print "@{${$triangulos}{$_}{'vertices'}} ";
     print "@{${$triangulos}{$_}{'vizinhos'}}\n";
   }
-}#/natascha
+} #/natascha
 
 #########
 ## Lib ##
