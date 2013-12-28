@@ -26,6 +26,3 @@ sub arya {
 ## Main ##
 ##########
 
-arya();
-
-print "C: $_ V: @{${$vertices}{$_}}\n" for (keys %$vertices);
