@@ -19,8 +19,7 @@ my $vertices;     # Hash indexada de vertices
 # valor, contento as 3 coordenadas do vetor indexado por $linha.
 sub arya {
 
-  my $linha = 1;
-  ${$vertices}{$linha++} = [split] while <>;
+  ${$vertices}{$.} = [split] while <>;
 }
 
 ##########
