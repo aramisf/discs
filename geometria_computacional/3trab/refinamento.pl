@@ -56,8 +56,7 @@ sub julia {
 # anonimo contendo 3 strings de dois numeros separados por virgula
 sub kristin {
 
-  my $str           = shift;
-  my ($a1,$a2,$a3)  = split ',', $str;
+  my ($a1,$a2,$a3)  = split ',', shift;
 
   return  [
             "$a1,$a2",
