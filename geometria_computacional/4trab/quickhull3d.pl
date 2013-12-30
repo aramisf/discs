@@ -8,18 +8,13 @@ use warnings;
 ## Globais ##
 #############
 
-my $vertices;     # Hash indexada de vertices
+my $BORDA = 999999999;  # Limite do espaco euclidiano
+my $vertices;           # Hash indexada de vertices
 
 # Valores mais distantes nos eixos. Estes serao os vertices candidatos para
-# montar o primeiro simplexo. Indexados pelo rotulo do vertice, contendo o
-# valor do eixo em questao
-my %maior_x;
-my %maior_y;
-my %maior_z;
-
-my %menor_x;
-my %menor_y;
-my %menor_z;
+# montar o primeiro simplexo. A variavel abaixo armazena a lista dos rotulos de
+# tais vertices.
+my $extremos;
 
 
 ###########
@@ -38,20 +33,19 @@ sub arya {
 # Seleciona vetores candidatos a extremos para o simplexo inicial:
 sub petyr {
 
-  # Considera que os pares abaixo serao pares 'chave->valor' ao final desta
-  # funcao
-  my @max_x = (0,0);
-  my @max_y = (0,0);
-  my @max_z = (0,0);
+  # Indice 0 -> rotulo do vertice;
+  # Indice 1 -> valor da coordenada; (local, apenas para comparacao)
+  my @max_x = (0,-$BORDA);
+  my @max_y = (0,-$BORDA);
+  my @max_z = (0,-$BORDA);
 
-  my @min_x = (0,999999999);
-  my @min_y = (0,999999999);
-  my @min_z = (0,999999999);
+  my @min_x = (0,$BORDA);
+  my @min_y = (0,$BORDA);
+  my @min_z = (0,$BORDA);
 
   # Ordenando as chaves numericamente pq quero q a busca seja conforme os dados
   # informados na entrada. Os primeiros valores serao os definidos, se houver
-  # mais de um ponto extremo com uma coordenada especifica em um eixo, ele nao
-  # sera considerado
+  # empate, o primeiro ponto encontrado sera o ponto q fica.
   for (sort {$a <=> $b} keys %$vertices) {
 
     # Busca maior e menor coordenadas em x:
@@ -91,14 +85,15 @@ sub petyr {
     }
   } #/for (keys %$vertices)
 
-  # Agora que os extremos foram encontrados, insiro-os nas hashes globais:
-  %maior_x = @max_x;
-  %maior_y = @max_y;
-  %maior_z = @max_z;
+  # Retornando os indices dos extremos encontrados, na sequencia:
+  # menor x, maior x,
+  # menor y, maior y,
+  # menor z, maior z.
 
-  %menor_x = @min_x;
-  %menor_y = @min_y;
-  %menor_z = @min_z;
+  return  [ $min_x[0],$max_x[0],
+            $min_y[0],$max_y[0],
+            $min_z[0],$max_z[0],
+          ];
 
 } #/petyr
 
