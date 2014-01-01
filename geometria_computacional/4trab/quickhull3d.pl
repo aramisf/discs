@@ -174,8 +174,7 @@ sub cersei {
   );
 } #/cersei
 
-# Encontra os dois vertices mais distantes entre si, considerando os eixos.
-# Retorna o par que fara parte do primeiro simplexo.
+# Encontra os vertices que farao parte do primeiro simplexo.
 sub tyrion {
 
   my $simplexo;           # Simplexo inicial
