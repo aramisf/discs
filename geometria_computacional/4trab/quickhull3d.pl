@@ -11,6 +11,10 @@ use warnings;
 my $BORDA = 999999999;  # Limite do espaco euclidiano
 my $vertices;           # Hash indexada de vertices
 
+# Estrutura que armazenara o fecho convexo, de inicio apenas o simplexo
+# inicial, e ao final da execucao, o fecho convexo.
+my        = $fecho;
+
 
 ###########
 ## Funcs ##
