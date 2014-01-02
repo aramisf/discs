@@ -241,11 +241,10 @@ sub tyrion {
   # testados no loop q segue
   @ab   = sansa(@ab);
 
-  # TODO: Refatorar colocando em uma funcao?
   # Agora um loop p buscar o vertice mais distante de A, diferente do vertice B
   # ja escolhido. Chamemos este vertice de $v, e seja ele diferente de B.
   my $maiorTam  = 0;
-  for my $v (keys %$vertices) {
+  for my $v  (keys %$vertices) {
 
     # Testando apenas nos vertices ainda nao selecionados:
     unless ($v ~~ @$simplexo) {
@@ -258,11 +257,12 @@ sub tyrion {
       # Calcula produto vetorial entre AB e AC:
       my @prod_ab_av  = shae(\@ab,\@av);
 
-      # E por fim a distancia (hipotenusa**2)
+      # E por fim o comprimento do vetor
       my $tam         = ros(@prod_ab_av);
 
-      # Se for maior, atualiza e elege o candidato (aqui referenciado apenas
-      # com o indice)
+      # Estou em busca do maior tamanho pq quero montar o maior paralelogramo
+      # possivel entre os vetores AB e AV, o $v que me der o maior tamanho sera
+      # eleito o ponto C.
       if ($tam > $maiorTam) {
 
         $maiorTam     = $tam;
@@ -298,12 +298,25 @@ sub tyrion {
     }
   } #/for my $v (keys %$vertices)
 
-  print "Eleitos ateh o momento: @$simplexo\n";
-
-  # TODO: Criar as faces
-
+  $simplexo;
 } #/tyrion
 
+# Cria o primeiro simplexo a partir dos vertices escolhidos por tyrion()
+sub tywin {
+
+  #my $n         = 3;    # Numero de vertices p compor cada face
+  my $simplexo  = tyrion();   # tyrion retorna uma referencia p um array
+  my $tam       = @$simplexo; # $tam guarda o tamanho do array
+
+  print "Simplexo @$simplexo com tamanho $tam.\n";
+
+  # TODO: criar os triangulos do simplexo, e ver se agora eh um momento
+  # interessante para verificar se os vertices estao ordenados em horario ou
+  # anti-horario
+  for (my $i = 0; $i < @$simplexo; $i++) {
+
+  }
+} # /tywin
 # Proximos passos:
 #
 # Percorrer as faces do simplexo, buscando vertices 'visiveis' pela face.
@@ -316,4 +329,4 @@ sub tyrion {
 ## Main ##
 ##########
 arya();
-tyrion();
+tywin();
