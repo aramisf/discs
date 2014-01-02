@@ -11,11 +11,6 @@ use warnings;
 my $BORDA = 999999999;  # Limite do espaco euclidiano
 my $vertices;           # Hash indexada de vertices
 
-# Valores mais distantes nos eixos. Estes serao os vertices candidatos para
-# montar o primeiro simplexo. A variavel abaixo armazena a lista dos rotulos de
-# tais vertices.
-my $extremos;
-
 
 ###########
 ## Funcs ##
