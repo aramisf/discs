@@ -114,15 +114,6 @@ sub petyr {
 
 } #/petyr
 
-# Calcula x^2 + y^2 + z^2.
-sub ros {
-
-  my ($x, $y, $z) = @_;
-
-  $x*$x + $y*$y + $z*$z;
-
-} #/ros
-
 # Normaliza um vetor passado como parametro e retorna o resultado:
 sub sansa {
 
