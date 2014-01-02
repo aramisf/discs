@@ -115,7 +115,7 @@ sub petyr {
 
 } #/petyr
 
-# Calcula a hipotenusa.
+# Calcula x^2 + y^2 + z^2.
 sub ros {
 
   my ($x, $y, $z) = @_;
@@ -127,9 +127,11 @@ sub ros {
 # Normaliza um vetor passado como parametro e retorna o resultado:
 sub sansa {
 
-  my ($x, $y, $z) = @_;
-  my $hip   = ros(@_);
-  my $sqrt  = sqrt $hip;
+  my @vet         = @_;
+  my ($x, $y, $z) = @vet;
+  #my $hip         = ros(@_);
+  my $hip         = podrick(\@vet, \@vet);
+  my $sqrt        = sqrt $hip;
 
   ($x/$sqrt, $y/$sqrt, $z/$sqrt);
 
@@ -258,7 +260,8 @@ sub tyrion {
       my @prod_ab_av  = shae(\@ab,\@av);
 
       # E por fim o comprimento do vetor
-      my $tam         = ros(@prod_ab_av);
+      #my $tam         = ros(@prod_ab_av);
+      my $tam         = podrick(\@prod_ab_av, \@prod_ab_av);
 
       # Estou em busca do maior tamanho pq quero montar o maior paralelogramo
       # possivel entre os vetores AB e AV, o $v que me der o maior tamanho sera
@@ -278,6 +281,8 @@ sub tyrion {
   # Agora partimos para a busca do ultimo vertice que fara parte do simplexo
   # inicial.
   my $maxDist = 0;
+
+  # NOTA: $simplexo eh indexado a partir do 0 e $vertices a partir do 1
   my $dist    = podrick(\@prod_ab_ac,${$vertices}{@$simplexo[2]});
 
   # Novamente percorremos a lista de vertices:
@@ -304,9 +309,21 @@ sub tyrion {
 # Cria o primeiro simplexo a partir dos vertices escolhidos por tyrion()
 sub tywin {
 
-  #my $n         = 3;    # Numero de vertices p compor cada face
   my $simplexo  = tyrion();   # tyrion retorna uma referencia p um array
-  my $tam       = @$simplexo; # $tam guarda o tamanho do array
+
+  
+  # Calculando N (ABxAC) NOTA: Lembra q $vertices eh indexado a partir de 1
+  my @ab        = cersei(${$vertices}{1}, ${$vertices}{2});
+  my @ac        = cersei(${$vertices}{1}, ${$vertices}{3});
+  my @N         = shae(\@ab, \@ac);
+
+  # Normaliza N:
+  @N            = sansa(@N);
+
+  # Calculando o produto de N com os vertices C e D, para definir se ABxAC esta
+  # no sentido antihorario
+  my $distCN    = podrick(\@N, ${$vertices}{3});
+  my $distDN    = podrick(\@N, ${$vertices}{4});
 
   print "Simplexo @$simplexo com tamanho $tam.\n";
 
