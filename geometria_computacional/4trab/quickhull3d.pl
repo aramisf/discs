@@ -4,6 +4,7 @@
 use strict;
 use warnings;
 
+
 #############
 ## Globais ##
 #############
@@ -13,7 +14,7 @@ my $vertices;           # Hash indexada de vertices
 
 # Estrutura que armazenara o fecho convexo, de inicio apenas o simplexo
 # inicial, e ao final da execucao, o fecho convexo.
-my        = $fecho;
+my $fecho;
 
 
 ###########
@@ -296,12 +297,47 @@ sub tyrion {
   $simplexo;
 } #/tyrion
 
+# Devolve um array de faces, onde cada face sera um array contendo os indices
+# dos vertices envolvidos
+sub ros {
+
+  my @rotulos = @{shift()};   # Rotulos dos vertices
+  my $faces;                  # Conjunto de arestas
+
+  for (my $i=0; $i < @rotulos; $i++) {
+
+    push @$faces, [
+                    $rotulos[$i%@rotulos],
+                    $rotulos[($i+1)%@rotulos],
+                    $rotulos[($i+2)%@rotulos],
+                  ];
+  }
+
+  $faces;
+
+} # /ros
+
 # Cria o primeiro simplexo a partir dos vertices escolhidos por tyrion()
 sub tywin {
 
   my $simplexo  = tyrion();   # tyrion retorna uma referencia p um array
+  print "[tywin] Simplexo: @$simplexo\n";
 
-  
+  # Criando os triangulos do simplexo inicial:
+  my $faces     = ros($simplexo);
+  print "[tywin] Faces: @$_\n" for (@$faces);
+
+
+  # Cada uma das faces acima representa um triangulo, agora vamos percorrer
+  # essa lista de faces e montar os planos, rotulos e o q mais possa ser
+  # interessante para construir o simplexo inicial.
+  for (@$faces) {
+
+    my ($v1, $v2, $v3)  = @$_;
+
+  } #/for (@$faces)
+
+
   # Calculando N (ABxAC) NOTA: Lembra q $vertices eh indexado a partir de 1
   my @ab        = cersei(${$vertices}{1}, ${$vertices}{2});
   my @ac        = cersei(${$vertices}{1}, ${$vertices}{3});
@@ -315,7 +351,6 @@ sub tywin {
   my $distCN    = podrick(\@N, ${$vertices}{3});
   my $distDN    = podrick(\@N, ${$vertices}{4});
 
-  print "Simplexo @$simplexo com tamanho $tam.\n";
 
   # TODO: criar os triangulos do simplexo, e ver se agora eh um momento
   # interessante para verificar se os vertices estao ordenados em horario ou
@@ -337,3 +372,5 @@ sub tywin {
 ##########
 arya();
 tywin();
+print "[main] C: $_ V: @{${$vertices}{$_}}\n" for (sort keys %$vertices);
+
