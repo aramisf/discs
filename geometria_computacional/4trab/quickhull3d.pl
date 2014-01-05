@@ -309,25 +309,85 @@ sub ros {
 
   for (my $i=0; $i < @rotulos; $i++) {
 
-    ${$faces}{$i+1} = [
-                        $rotulos[$i%@rotulos],
-                        $rotulos[($i+1)%@rotulos],
-                        $rotulos[($i+2)%@rotulos],
-                      ];
+    ${$faces}{$i+1} = {
+                        'triangulo' =>  [
+                                          $rotulos[$i%@rotulos],
+                                          $rotulos[($i+1)%@rotulos],
+                                          $rotulos[($i+2)%@rotulos],
+                                        ]
+                      };
   }
 
   $faces;
 
 } # /ros
 
-# Cria o primeiro simplexo a partir dos vertices escolhidos por tyrion()
+# Encontra a equacao do plano:
 sub tywin {
 
+  # Referencia da face:
+  my $face_ref        = shift;
+
+  # Extracao dos vertices:
+  my ($v1, $v2, $v3)  = @{${$face_ref}{'triangulo'}};
+
+  # Extracao das coordenadas dos vertices e consequente calculo de dois vetores
+  # que definem o plano que os 3 vertices definem:
+  my @ab              = cersei(${$vertices}{$v1}, ${$vertices}{$v2});
+  my @ac              = cersei(${$vertices}{$v1}, ${$vertices}{$v3});
+
+  my @N               = shae(\@ab, \@ac);
+
+
+  # Agora vamos encontrar a equacao do plano descrito pelos dois vetores acima.
+  # Primeiro, achamos o valor de 'd':
+  for my $i ($v1, $v2, $v3) {
+
+    my ($u, $v, $w)   = @{${$vertices}{$i}};
+    #print "i: $i|||UVW: $u,$v,$w  ABC:@N\n";
+
+    # Evitando o vetor nulo:
+    if ($u != 0 || $v != 0 || $w !=0) {
+
+      # Na eq do plano temos os indices da normal seguidos das coordenadas
+      # x,y,z de algum ponto no plano:
+      my $d               = -($N[0]*$u + $N[1]*$v + $N[2]*$w);
+      #print "$N[0].$u + $N[1].$v + $N[2].$w + $d\n\n";
+
+      # Equacao na forma: a.x + b.y + c.z + d
+      ${$face_ref}{'eq'}  = {
+                              'a' =>  $N[0],
+                              'b' =>  $N[1],
+                              'c' =>  $N[2],
+                              'd' =>  $d
+                            };
+      last;
+
+    } else { next; }
+
+  } #/for (v1,v2,v3)
+
+  # Nao eh necessario retornar valor algum, uma vez que a propria referencia
+  # foi usada, e portanto, a variavel jah esta atualizada
+  #$face_ref;
+
+} #/tywin
+
+# Cria o primeiro simplexo a partir dos vertices escolhidos por tyrion()
+sub alerie {
+
   my $simplexo  = tyrion();   # tyrion retorna uma referencia p um array
-  print "[tywin] Simplexo: @$simplexo\n";
+  print "[alerie] Simplexo: @$simplexo\n";
 
   # Criando os triangulos do simplexo inicial:
   my $faces     = ros($simplexo);
+
+  # Debug:
+  #for my $k1 (sort keys %$faces) {
+  #  for my $k2 (sort keys ${$faces}{$k1}) {
+  #    print "[alerie] C: $k2 -> V: ${$faces}{$k1}{$k2}\n";
+  #  }
+  #}
 
 
   # Cada uma das faces acima representa um triangulo, agora vamos percorrer
@@ -335,44 +395,51 @@ sub tywin {
   # interessante para construir o simplexo inicial.
   for (sort keys %$faces) {
 
-    my ($v1, $v2, $v3)  = @{${$faces}{$_}};
+    #my ($v1, $v2, $v3)  = @{${$faces}{$_}{'triangulo'}};
+
+    # Encontro dois vetores no plano
+    # Calcula a equacao do plano. Note que basta passar a referencia, e tywin
+    # atualiza a estrutura deste contexto
+    tywin(${$faces}{$_});
+
+    # Debug:
+    #for my $k1 (keys %$faces) {
+
+    #  print "C1: $k1 -> V1: ${$faces}{$k1}\n";
+    #  for my $k2 (keys ${$faces}{$k1}) {
+
+    #    print "C2: $k2 -> V2: @{${$faces}{$k1}{$k2}}\n" if $k2 eq 'triangulo';
+    #    print "C2: $k2 -> V2: ",keys ${$faces}{$k1}{$k2},values ${$faces}{$k1}{$k2},"\n" if $k2 eq 'eq';
+    #  }
+    #}
+
+    # TODO: Para terminar o simplexo, eh necessario definir os triangulos
+    # vizinhos, penso em aproveitar e calcular o conjunto de pontos visiveis
+    # por cada face (mas isso ainda eh algo a ser revisto)
 
   } #/for (@$faces)
 
-
-  # Calculando N (ABxAC) NOTA: Lembra q $vertices eh indexado a partir de 1
-  my @ab        = cersei(${$vertices}{1}, ${$vertices}{2});
-  my @ac        = cersei(${$vertices}{1}, ${$vertices}{3});
-  my @N         = shae(\@ab, \@ac);
-
-  # Normaliza N:
-  @N            = sansa(@N);
-
-  # Calculando o produto de N com os vertices C e D, para definir se ABxAC esta
-  # no sentido antihorario
-  my $distCN    = podrick(\@N, ${$vertices}{3});
-  my $distDN    = podrick(\@N, ${$vertices}{4});
-
-
-  # TODO: criar os triangulos do simplexo, e ver se agora eh um momento
-  # interessante para verificar se os vertices estao ordenados em horario ou
-  # anti-horario
-  for (my $i = 0; $i < @$simplexo; $i++) {
-
-  }
-} # /tywin
+} # /alerie
 # Proximos passos:
 #
-# Percorrer as faces do simplexo, buscando vertices 'visiveis' pela face.
+# Guardar os triangulos vizinhos dos triangulos atuais.
+# Fazer um calculo para saber em que direcao do plano ficam os vertices
+# visiveis por tal plano.
+# Percorrer as faces do simplexo, buscando o vertice 'visivel' mais distante e
+# inseri-lo no fecho.
 # Remover a face corrente, e criar outras tres, entre o vertice inserido e os 3
 # vertices que compunham a face recem excluida.
 # Fazer isso enquanto houverem vertices fora do poliedro.
+# Achar um jeito de verificar se o poligono continua convexo depois de
+# adicionar um vertice.
 
 
 ##########
 ## Main ##
 ##########
 arya();
-tywin();
-print "[main] C: $_ V: @{${$vertices}{$_}}\n" for (sort keys %$vertices);
+alerie();
+
+# debug
+#print "[main] C: $_ V: @{${$vertices}{$_}}\n" for (sort keys %$vertices);
 
