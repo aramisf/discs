@@ -309,11 +309,11 @@ sub ros {
 
   for (my $i=0; $i < @rotulos; $i++) {
 
-    push @$faces, [
-                    $rotulos[$i%@rotulos],
-                    $rotulos[($i+1)%@rotulos],
-                    $rotulos[($i+2)%@rotulos],
-                  ];
+    ${$faces}{$i+1} = [
+                        $rotulos[$i%@rotulos],
+                        $rotulos[($i+1)%@rotulos],
+                        $rotulos[($i+2)%@rotulos],
+                      ];
   }
 
   $faces;
@@ -328,15 +328,14 @@ sub tywin {
 
   # Criando os triangulos do simplexo inicial:
   my $faces     = ros($simplexo);
-  print "[tywin] Faces: @$_\n" for (@$faces);
 
 
   # Cada uma das faces acima representa um triangulo, agora vamos percorrer
   # essa lista de faces e montar os planos, rotulos e o q mais possa ser
   # interessante para construir o simplexo inicial.
-  for (@$faces) {
+  for (sort keys %$faces) {
 
-    my ($v1, $v2, $v3)  = @$_;
+    my ($v1, $v2, $v3)  = @{${$faces}{$_}};
 
   } #/for (@$faces)
 
