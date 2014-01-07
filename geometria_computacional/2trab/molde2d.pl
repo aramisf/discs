@@ -95,9 +95,13 @@ sub percorre_faces {
       # rotacionar o vetor corrente 90 graus no sentido horario.
       if ($cos < 0) {
 
+        # Rotacionando v 90 no sentido horario:
         my @v_rot = ($v[1],-$v[0]);
+
+        # Calcula mais uma vez o cosseno:
         my $cos2  = cosseno_de_teta(\@u, \@v_rot);
 
+        # Agora sim, se os dois testes falharem entao devo sair do laco
         if ($cos2 <= 0) {
           $deu_boa  = 0;
           last;
