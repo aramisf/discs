@@ -68,10 +68,10 @@ sub kristin {
 # Imprime resultado
 sub natascha {
 
-  my $n = keys %$vertices;
-  my $m = keys %$triangulos;
+  my $n   = keys %$vertices;
+  my $m2  = keys %$triangulos;
 
-  print "$n $m\n";
+  print "$n ",$m2-$m,"\n";
 
   # Mandinguinha p ordenar numericamente
   for (sort {$a <=> $b} keys %$vertices) {
@@ -82,6 +82,7 @@ sub natascha {
   # De novo a mandinguinha do sort
   for (sort {$a <=> $b} keys %$triangulos) {
 
+    next if $_ <= $m;
     print "@{${$triangulos}{$_}{'vertices'}} ";
     print "@{${$triangulos}{$_}{'vizinhos'}}\n";
   }
