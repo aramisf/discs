@@ -54,7 +54,7 @@ sub calcula_vetores { # e seus respectivos vetores normais
     # lidos no sentido antihorario, entao (y,-x) aponta para o centro do
     # poligono, pois queremos rotacionar os vetores no sentido antihorario
     # (-90o) http://pt.wikipedia.org/wiki/Matriz_de_rota%C3%A7%C3%A3o
-    push @$normais, [$y, -$x];
+    push @$normais, [-$y, $x];
   }
 
   # Esse aqui eh o ultimo, por exemplo, se fossem pontos A, B, C e D, este aqui
@@ -63,7 +63,7 @@ sub calcula_vetores { # e seus respectivos vetores normais
   my $y = $$pontos[0][1] - $$pontos[-1][1];
 
   push @$vetores, [$x, $y];
-  push @$normais, [$y, -$x];
+  push @$normais, [-$y, $x]
 
 } # /calcula_vetores
 
@@ -81,17 +81,27 @@ sub percorre_faces {
     my $deu_boa = 1;  # assumo que vai dar boa
 
     # Testa se ele tem no maximo 90 graus de angulo com as outras faces:
-    for (my $j = $i+1; $j < @$normais; $j++) {
+    for (my $j = 0; $j < @$normais; $j++) {
+
+      # Evita testar um lado consigo mesmo:
+      next if $i == $j;
 
       # cos(teta) = u.v/|u|.|v|
       my @v = @{$$normais[$j]};
       my $cos = cosseno_de_teta(\@u, \@v);
 
-      # Se der erro com o vetor atual, interrompe os testes para a face corrente.
+      # Se o angulo for menor q 90, testa 'os outros 90 graus'. Aqui eu podia
+      # rotacionar tanto a normal quanto o vetor corrente, entao optei por
+      # rotacionar o vetor corrente 90 graus no sentido horario.
       if ($cos < 0) {
 
-        $deu_boa = 0;
-        last;
+        my @v_rot = ($v[1],-$v[0]);
+        my $cos2  = cosseno_de_teta(\@u, \@v_rot);
+
+        if ($cos2 <= 0) {
+          $deu_boa  = 0;
+          last;
+        }
       }
     }
 
@@ -108,14 +118,9 @@ sub percorre_faces {
 ## Programa principal: ##
 #########################
 
-chomp ($n = <STDIN>);             # Numero de pontos
-
-for (my $i = 0; $i < $n; $i++) {  # Pontos com duas coordenadas
-
-  chomp($_ = <STDIN>);
-  push @$pontos, [split];
-}
+chomp ($n = <STDIN>);                     # Numero de pontos
+push @$pontos, [split ' ', <>] for 1..$n; # Pontos com duas coordenadas
 
 calcula_vetores();
-print percorre_faces();
+print percorre_faces(),"\n";
 exit 0;
