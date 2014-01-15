@@ -16,11 +16,6 @@ my $vertices;           # Hash indexada de vertices
 # inicial, e ao final da execucao, o fecho convexo.
 my $fecho;
 
-
-###########
-## Funcs ##
-###########
-
 # Le os dados da entrada padrao e monta a lista indexada de vertices. As chaves
 # sao inteiros q indexam a lista, e cada chave possui um array anonimo como
 # valor, contento as 3 coordenadas do vetor indexado pelo numero da linha sendo
@@ -306,6 +301,7 @@ sub ros {
 
   my @rotulos = @{shift()};   # Rotulos dos vertices
   my $faces;                  # Conjunto de arestas
+  my @viz     = 1..4;         # pq um simplexo possui 4 faces
 
   for (my $i=0; $i < @rotulos; $i++) {
 
@@ -314,6 +310,22 @@ sub ros {
                                           $rotulos[$i%@rotulos],
                                           $rotulos[($i+1)%@rotulos],
                                           $rotulos[($i+2)%@rotulos],
+                                        ],
+
+                        'oposto'    =>  $rotulos[($i+3)%@rotulos],
+
+                        # nos vizinhos do primeiro simplexo essa regra eh
+                        # valida, mais adiante teremos que organizar conforme a
+                        # adicao de novas faces. Parece hardcoded, mas se vc
+                        # desenhar no papel vai ver q esta certo. Usei a
+                        # relacao do trabalho anterior, onde o indice da face
+                        # corresponde ao indice do vertice que nao participa da
+                        # aresta que a face vizinha tem em comum com a face
+                        # atual
+                        'vizinhos'  =>  [
+                                          $viz[($i+1)%@viz],
+                                          $viz[($i+2)%@viz],
+                                          $viz[($i+3)%@viz]
                                         ]
                       };
   }
@@ -377,15 +389,19 @@ sub tywin {
 sub alerie {
 
   my $simplexo  = tyrion();   # tyrion retorna uma referencia p um array
-  print "[alerie] Simplexo: @$simplexo\n";
 
   # Criando os triangulos do simplexo inicial:
   my $faces     = ros($simplexo);
 
   # Debug:
   #for my $k1 (sort keys %$faces) {
+  # print "[alerie] k1: $k1\n";
   #  for my $k2 (sort keys ${$faces}{$k1}) {
-  #    print "[alerie] C: $k2 -> V: ${$faces}{$k1}{$k2}\n";
+  #    if (ref(${$faces}{$k1}{$k2})) {
+  #      print "[alerie] C: $k2 -> V: @{${$faces}{$k1}{$k2}}\n";
+  #    }else {
+  #      print "[alerie] C: $k2 -> V: ${$faces}{$k1}{$k2}\n";
+  #    }
   #  }
   #}
 
@@ -397,19 +413,21 @@ sub alerie {
 
     #my ($v1, $v2, $v3)  = @{${$faces}{$_}{'triangulo'}};
 
-    # Encontro dois vetores no plano
     # Calcula a equacao do plano. Note que basta passar a referencia, e tywin
-    # atualiza a estrutura deste contexto
+    # atualiza a estrutura a partir do contexto aqui
     tywin(${$faces}{$_});
+
+    # Feito isso, vamos encontrar o ponto mais distante de cada uma das faces
+    # do simplexo, mas antes vamos obter o 'lado de fora' do simplexo.
 
     # Debug:
     #for my $k1 (keys %$faces) {
-
-    #  print "C1: $k1 -> V1: ${$faces}{$k1}\n";
+    #my $k1  = $_;
+    #  print "\n[alerie]C1: $k1 -> V1: ${$faces}{$k1}\n";
     #  for my $k2 (keys ${$faces}{$k1}) {
 
-    #    print "C2: $k2 -> V2: @{${$faces}{$k1}{$k2}}\n" if $k2 eq 'triangulo';
-    #    print "C2: $k2 -> V2: ",keys ${$faces}{$k1}{$k2},values ${$faces}{$k1}{$k2},"\n" if $k2 eq 'eq';
+    #    print "[alerie]C2: $k2 -> V2: @{${$faces}{$k1}{$k2}}\n" if $k2 eq 'triangulo';
+    #    print "[alerie]C2: $k2 -> V2: ",keys ${$faces}{$k1}{$k2},values ${$faces}{$k1}{$k2},"\n" if $k2 eq 'eq';
     #  }
     #}
 
@@ -422,7 +440,6 @@ sub alerie {
 } # /alerie
 # Proximos passos:
 #
-# Guardar os triangulos vizinhos dos triangulos atuais.
 # Fazer um calculo para saber em que direcao do plano ficam os vertices
 # visiveis por tal plano.
 # Percorrer as faces do simplexo, buscando o vertice 'visivel' mais distante e
