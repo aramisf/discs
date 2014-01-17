@@ -265,14 +265,17 @@ sub tyrion {
   } #/for my $v (%$vertices)
 
   # Normaliza para encontrar o 4o vertice:
-  @prod_ab_ac = sansa(@prod_ab_ac);
+  @prod_ab_ac   = sansa(@prod_ab_ac);
 
   # Agora partimos para a busca do ultimo vertice que fara parte do simplexo
   # inicial.
-  my $maxDist = 0;
+  my $maxDist   = 0;
 
+  # Calculando o cosseno do angulo entre a normal
   # NOTA: $simplexo eh indexado a partir do 0 e $vertices a partir do 1
-  my $dist    = podrick(\@prod_ab_ac,${$vertices}{@$simplexo[2]});
+  # NOTA2: podrick calcula o produto escalar entre os dois vetores passados
+  # como parametro
+  my $ang_an_ac = podrick(\@prod_ab_ac,${$vertices}{@$simplexo[2]});
 
   # Novamente percorremos a lista de vertices:
   for my $v (keys %$vertices) {
@@ -282,7 +285,7 @@ sub tyrion {
       # calcula o produto escalar do vertice corrente com @prod_ab_ac, e
       # subtrai de $dist
       my $candidato   = ${$vertices}{$v};
-      my $distNova    = podrick(\@prod_ab_ac,$candidato) - $dist;
+      my $distNova    = podrick(\@prod_ab_ac,$candidato) - $ang_an_ac;
 
       if ($distNova > $maxDist) {
 
@@ -296,7 +299,10 @@ sub tyrion {
 } #/tyrion
 
 # Devolve um array de faces, onde cada face sera um array contendo os indices
-# dos vertices envolvidos
+# dos vertices envolvidos. Adiciona tambem o vertice oposto a cada face, que
+# sera usado para calcular o sentido da reta normal ao plano da face. Ainda,
+# cria-se aqui os vizinhos do simplexo inicial, que podem ser encontrados de
+# forma relativamente simples nesta fase do processamento.
 sub ros {
 
   my @rotulos = @{shift()};   # Rotulos dos vertices
@@ -334,6 +340,18 @@ sub ros {
 
 } # /ros
 
+# Testa se a normal aponta para fora do poligono, e inverte caso ela aponte
+# para dentro.
+sub joffrey {
+
+  my $N     = shift;
+  my $op    = shift;
+
+  if (podrick($N,$op) < 0) { @$N; }
+  else { (-$$N[0], -$$N[1], -$$N[2]); }
+
+} #/joffrey
+
 # Encontra a equacao do plano:
 sub tywin {
 
@@ -350,6 +368,13 @@ sub tywin {
 
   my @N               = shae(\@ab, \@ac);
 
+  # Aqui vamos aproveitar para calcular o sentido da normal, usando o vertice
+  # oposto aa face
+  my $oposto          = ${$face_ref}{'oposto'};   # Definido em ros()
+
+  my @oposto          = cersei(${$vertices}{$v1}, ${$vertices}{$oposto});
+  @N                  = joffrey(\@N, \@oposto);
+
 
   # Agora vamos encontrar a equacao do plano descrito pelos dois vetores acima.
   # Primeiro, achamos o valor de 'd':
@@ -359,7 +384,7 @@ sub tywin {
     #print "i: $i|||UVW: $u,$v,$w  ABC:@N\n";
 
     # Evitando o vetor nulo:
-    if ($u != 0 || $v != 0 || $w !=0) {
+    unless ($u == 0 && $v == 0 && $w ==0) {
 
       # Na eq do plano temos os indices da normal seguidos das coordenadas
       # x,y,z de algum ponto no plano:
@@ -380,7 +405,8 @@ sub tywin {
   } #/for (v1,v2,v3)
 
   # Nao eh necessario retornar valor algum, uma vez que a propria referencia
-  # foi usada, e portanto, a variavel jah esta atualizada
+  # foi usada, e portanto, a variavel jah esta atualizada. Esse comentario esta
+  # aqui por motivos historicos
   #$face_ref;
 
 } #/tywin
@@ -411,29 +437,14 @@ sub alerie {
   # interessante para construir o simplexo inicial.
   for (sort keys %$faces) {
 
-    #my ($v1, $v2, $v3)  = @{${$faces}{$_}{'triangulo'}};
-
     # Calcula a equacao do plano. Note que basta passar a referencia, e tywin
     # atualiza a estrutura a partir do contexto aqui
     tywin(${$faces}{$_});
 
     # Feito isso, vamos encontrar o ponto mais distante de cada uma das faces
-    # do simplexo, mas antes vamos obter o 'lado de fora' do simplexo.
+    # do simplexo, este sera o campo de busca da face.
+    daario_naharis(${$faces}{$_});
 
-    # Debug:
-    #for my $k1 (keys %$faces) {
-    #my $k1  = $_;
-    #  print "\n[alerie]C1: $k1 -> V1: ${$faces}{$k1}\n";
-    #  for my $k2 (keys ${$faces}{$k1}) {
-
-    #    print "[alerie]C2: $k2 -> V2: @{${$faces}{$k1}{$k2}}\n" if $k2 eq 'triangulo';
-    #    print "[alerie]C2: $k2 -> V2: ",keys ${$faces}{$k1}{$k2},values ${$faces}{$k1}{$k2},"\n" if $k2 eq 'eq';
-    #  }
-    #}
-
-    # TODO: Para terminar o simplexo, eh necessario definir os triangulos
-    # vizinhos, penso em aproveitar e calcular o conjunto de pontos visiveis
-    # por cada face (mas isso ainda eh algo a ser revisto)
 
   } #/for (@$faces)
 
