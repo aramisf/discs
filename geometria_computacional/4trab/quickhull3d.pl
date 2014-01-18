@@ -11,10 +11,13 @@ use warnings;
 
 my $BORDA = 999999999;  # Limite do espaco euclidiano
 my $vertices;           # Hash indexada de vertices
+my $faces;              # Estrutura que contera os dados do poliedro final
+my $visiveis;           # Estrutura para conter as faces que enxergam um
+                        # determinado vertice, indexado por um inteiro
 
-# Estrutura que armazenara o fecho convexo, de inicio apenas o simplexo
-# inicial, e ao final da execucao, o fecho convexo.
-my $fecho;
+my $fecho;              # Conjunto de vertices que compoe o fecho convexo
+                        # (comeca com o simplexo, e vai aumentando ao longo do
+                        # processamento)
 
 # Le os dados da entrada padrao e monta a lista indexada de vertices. As chaves
 # sao inteiros q indexam a lista, e cada chave possui um array anonimo como
@@ -296,6 +299,7 @@ sub tyrion {
   } #/for my $v (keys %$vertices)
 
   $simplexo;
+
 } #/tyrion
 
 # Devolve um array de faces, onde cada face sera um array contendo os indices
@@ -352,14 +356,27 @@ sub joffrey {
 
 } #/joffrey
 
+# Calcula o centroide
+sub bran {
+
+  my ($v1, $v2, $v3)    = @_;
+
+  (
+    $$v1[0] + $$v2[0] + $$v3[0],
+    $$v1[1] + $$v2[1] + $$v3[1],
+    $$v1[2] + $$v2[2] + $$v3[2]
+  )
+
+} #/bran
+
 # Encontra a equacao do plano:
 sub tywin {
 
   # Referencia da face:
-  my $face_ref        = shift;
+  my $index           = shift;
 
   # Extracao dos vertices:
-  my ($v1, $v2, $v3)  = @{${$face_ref}{'triangulo'}};
+  my ($v1, $v2, $v3)  = @{${$faces}{$index}{'triangulo'}};
 
   # Extracao das coordenadas dos vertices e consequente calculo de dois vetores
   # que definem o plano que os 3 vertices definem:
@@ -370,7 +387,7 @@ sub tywin {
 
   # Aqui vamos aproveitar para calcular o sentido da normal, usando o vertice
   # oposto aa face
-  my $oposto          = ${$face_ref}{'oposto'};   # Definido em ros()
+  my $oposto          = ${$faces}{$index}{'oposto'};   # Definido em ros()
 
   my @oposto          = cersei(${$vertices}{$v1}, ${$vertices}{$oposto});
   @N                  = joffrey(\@N, \@oposto);
@@ -384,7 +401,7 @@ sub tywin {
     #print "i: $i|||UVW: $u,$v,$w  ABC:@N\n";
 
     # Evitando o vetor nulo:
-    unless ($u == 0 && $v == 0 && $w ==0) {
+    unless ($u == 0 && $v == 0 && $w == 0) {
 
       # Na eq do plano temos os indices da normal seguidos das coordenadas
       # x,y,z de algum ponto no plano:
@@ -392,7 +409,7 @@ sub tywin {
       #print "$N[0].$u + $N[1].$v + $N[2].$w + $d\n\n";
 
       # Equacao na forma: a.x + b.y + c.z + d
-      ${$face_ref}{'eq'}  = {
+      ${$faces}{$index}{'eq'}  = {
                               'a' =>  $N[0],
                               'b' =>  $N[1],
                               'c' =>  $N[2],
@@ -404,20 +421,79 @@ sub tywin {
 
   } #/for (v1,v2,v3)
 
-  # Nao eh necessario retornar valor algum, uma vez que a propria referencia
-  # foi usada, e portanto, a variavel jah esta atualizada. Esse comentario esta
-  # aqui por motivos historicos
-  #$face_ref;
+  # Aproveitando que tenho aqui os 3 vertices que definem o plano, vou calcular
+  # o centroide:
+  @{${$faces}{$index}{'centroide'}} = bran  (
+                                              ${$vertices}{$v1},
+                                              ${$vertices}{$v2},
+                                              ${$vertices}{$v3}
+                                            );
 
 } #/tywin
 
-# Cria o primeiro simplexo a partir dos vertices escolhidos por tyrion()
+# Calcula os vertices visiveis por uma face, e atualiza o conjunto de faces que
+# podem ver cada um dos vertices. Como o conjunto de faces que pode ver um
+# determinado vertice varia de acordo com o poliedro, a estrutura que armazena
+# esta lista tera q ser constantemente atualizada. O importante eh que o numero
+# de vertices sempre diminui
+sub daario_naharis {
+
+  my $index     = shift;
+
+  my @normal    = (
+                    ${$faces}{$index}{'eq'}{'a'},
+                    ${$faces}{$index}{'eq'}{'b'},
+                    ${$faces}{$index}{'eq'}{'c'}
+                  );
+  #print "[daario] Normal: @normal\n";
+
+  # Monta os vetores, um aqui e o outro dentro do laco a seguir
+  my $indice    = ${$faces}{$index}{'triangulo'}[0];
+  my @a         = @{${$vertices}{$indice}};
+  my @an        = cersei(\@a,\@normal);
+
+  #print "[daario] a: @a | N: @normal | AN: @an\n";
+  undef ${$faces}{$index}{'visiveis'} if defined ${$faces}{$index}{'visiveis'};
+
+  for my $v (keys %$vertices) {
+
+    # Nao quero testar quem ja faz parte do poliedro
+    next if $v ~~ @$fecho;
+
+    my @v       = @{${$vertices}{$v}};
+    my @av      = cersei(\@a,\@v);
+
+    # E nao quero processar vertices que nao sao visiveis pela face $index
+    next if podrick(\@an,\@av) < 0;
+
+    # Agora vou calcular a distancia do ponto ao plano:
+    my $dist    = 0;
+    #if (podrick(\@an,\@av) >= 0) {
+
+      print "[daario] $v eh visivel pela face $index\n";
+      #push @{${$faces}{$index}{'visiveis'}}, $v;
+      #push @{${$visiveis}{$v}}, $index;
+      # TODO: Calcula a distancia deste ponto ao plano.
+
+    #}
+
+  }
+
+} #/daario_naharis
+
+# Cria o primeiro simplexo:
 sub alerie {
 
-  my $simplexo  = tyrion();   # tyrion retorna uma referencia p um array
+  $fecho        = tyrion();   # tyrion retorna uma referencia p um array de
+                              # inteiros, que referenciam os vertices
+                              # participantes do fecho convexo dentro desta
+                              # funcao, esse fecho eh apenas o simplexo
+                              # inicial, mas estou usando uma variavel global
+                              # porque depois q esta funcao terminar, outras
+                              # aproveitam para continuar o processamento
 
   # Criando os triangulos do simplexo inicial:
-  my $faces     = ros($simplexo);
+  $faces     = ros($fecho);
 
   # Debug:
   #for my $k1 (sort keys %$faces) {
@@ -431,7 +507,6 @@ sub alerie {
   #  }
   #}
 
-
   # Cada uma das faces acima representa um triangulo, agora vamos percorrer
   # essa lista de faces e montar os planos, rotulos e o q mais possa ser
   # interessante para construir o simplexo inicial.
@@ -439,16 +514,21 @@ sub alerie {
 
     # Calcula a equacao do plano. Note que basta passar a referencia, e tywin
     # atualiza a estrutura a partir do contexto aqui
-    tywin(${$faces}{$_});
+    #tywin(${$faces}{$_});
+    tywin($_);
 
     # Feito isso, vamos encontrar o ponto mais distante de cada uma das faces
     # do simplexo, este sera o campo de busca da face.
-    daario_naharis(${$faces}{$_});
+    #daario_naharis(${$faces}{$_});
+    daario_naharis($_);
 
+    #XXX
 
   } #/for (@$faces)
 
 } # /alerie
+
+
 # Proximos passos:
 #
 # Fazer um calculo para saber em que direcao do plano ficam os vertices
@@ -471,3 +551,4 @@ alerie();
 # debug
 #print "[main] C: $_ V: @{${$vertices}{$_}}\n" for (sort keys %$vertices);
 
+print "@{${$faces}{$_}{'centroide'}}\n" for keys %$faces;
