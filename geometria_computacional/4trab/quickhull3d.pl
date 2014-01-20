@@ -362,9 +362,9 @@ sub bran {
   my ($v1, $v2, $v3)    = @_;
 
   (
-    $$v1[0] + $$v2[0] + $$v3[0],
-    $$v1[1] + $$v2[1] + $$v3[1],
-    $$v1[2] + $$v2[2] + $$v3[2]
+    ($$v1[0] + $$v2[0] + $$v3[0])/3,
+    ($$v1[1] + $$v2[1] + $$v3[1])/3,
+    ($$v1[2] + $$v2[2] + $$v3[2])/3
   )
 
 } #/bran
@@ -431,53 +431,86 @@ sub tywin {
 
 } #/tywin
 
+# Calcula distancia de um ponto dado a um plano. O primeiro parametro eh a eq
+# do plano e o segundo eh o ponto cuja distancia deseja-se calcular.
+sub loras {
+
+  my @eq      = @{shift()};
+  my @v       = @{shift()};
+
+  print "[loras] eq: @eq\nv: @v\n";
+  abs
+  (
+    $eq[0]*$v[0] +
+    $eq[1]*$v[1] +
+    $eq[2]*$v[2] +
+    $eq[3]
+  )
+  /
+  (
+    sqrt $eq[0]*$eq[0] +
+         $eq[1]*$eq[1] +
+         $eq[2]*$eq[2]
+  )
+
+} #/loras
+
 # Calcula os vertices visiveis por uma face, e atualiza o conjunto de faces que
 # podem ver cada um dos vertices. Como o conjunto de faces que pode ver um
 # determinado vertice varia de acordo com o poliedro, a estrutura que armazena
 # esta lista tera q ser constantemente atualizada. O importante eh que o numero
-# de vertices sempre diminui
+# de vertices diminui conforme novas faces sao criadas
 sub daario_naharis {
 
-  my $index     = shift;
+  # Indice da face q procuro:
+  my $index       = shift;
 
-  my @normal    = (
-                    ${$faces}{$index}{'eq'}{'a'},
-                    ${$faces}{$index}{'eq'}{'b'},
-                    ${$faces}{$index}{'eq'}{'c'}
-                  );
-  #print "[daario] Normal: @normal\n";
+  # Extraindo a equacao e a normal do plano (vo identa aqui p vc enxergar
+  # melhor):
+  my @eq          = @{  ${$faces}
+                          {$index}
+                            {'eq'}
+                    }
+                        {'a','b','c','d'};
 
-  # Monta os vetores, um aqui e o outro dentro do laco a seguir
-  my $indice    = ${$faces}{$index}{'triangulo'}[0];
-  my @a         = @{${$vertices}{$indice}};
-  my @an        = cersei(\@a,\@normal);
+  my @normal      = @eq[0,1,2];
 
-  #print "[daario] a: @a | N: @normal | AN: @an\n";
+
+  # Monta os vetores, um aqui e o outro dentro do laco a seguir. Vou usa-los
+  # para saber se o ponto eh visivel pela face corrente
+  my $indice      = ${$faces}{$index}{'triangulo'}[0];
+  my @a           = @{${$vertices}{$indice}};
+  my @an          = cersei(\@a,\@normal);
+
   undef ${$faces}{$index}{'visiveis'} if defined ${$faces}{$index}{'visiveis'};
 
+  # Iniciando a distancia do ponto ao plano
+  my $dist        = 0;
   for my $v (keys %$vertices) {
 
     # Nao quero testar quem ja faz parte do poliedro
     next if $v ~~ @$fecho;
 
-    my @v       = @{${$vertices}{$v}};
-    my @av      = cersei(\@a,\@v);
+    my @v         = @{${$vertices}{$v}};
+    my @av        = cersei(\@a,\@v);
 
     # E nao quero processar vertices que nao sao visiveis pela face $index
     next if podrick(\@an,\@av) < 0;
 
     # Agora vou calcular a distancia do ponto ao plano:
-    my $dist    = 0;
-    #if (podrick(\@an,\@av) >= 0) {
+    # d(P, plano) = (|ax + by + cz + d|) / (sqrt (a*a + b*b + c*c))
+    my $distNova  = loras(\@eq,\@v);
 
-      print "[daario] $v eh visivel pela face $index\n";
-      #push @{${$faces}{$index}{'visiveis'}}, $v;
-      #push @{${$visiveis}{$v}}, $index;
-      # TODO: Calcula a distancia deste ponto ao plano.
+    next if $distNova < $dist;
 
-    #}
+    $dist         = $distNova;
 
-  }
+    print "[daario] $v eh visivel pela face $index\n";
+    push @{${$faces}{$index}{'visiveis'}}, $v;
+    push @{${$visiveis}{$v}}, $index;
+
+
+  } #/ for my $v (keys %$vertices)
 
 } #/daario_naharis
 
@@ -519,11 +552,12 @@ sub alerie {
 
     # Feito isso, vamos encontrar o ponto mais distante de cada uma das faces
     # do simplexo, este sera o campo de busca da face.
+    # d(P, plano) = (|ax + by + cz + d|)/ (sqrt (a*a + b*b + c*c))
     #daario_naharis(${$faces}{$_});
     daario_naharis($_);
 
-    #XXX
-
+    # TODO: Inserir o vertice mais distante no poliedro, recalcular vizinhos,
+    # verificar convexidade.
   } #/for (@$faces)
 
 } # /alerie
