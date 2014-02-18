@@ -1,3 +1,30 @@
 Arquivos com conteudo da disciplina de criptografia, ministrada pelo professor
 Albini (em 2014-1).
 
+Segue o conteudo da pagina da disciplina:
+
+Conteúdo:
+       - Cifra de Cesar                            - RC4
+       - Cifras Monoalfabéticas                    - RSA
+       - Cifra Playfair                            - Gerenciamento de Chaves
+       - Cifra de Hill                             - Acordo de chaves Diffie-Hellman
+       - Cifras Polialfabéticas                    - Criptografia de Curvas Elípticas
+       - One-Time Pad                              - SHA - Secure Hash Algorithm
+       - Transposição                              - MAC - Message Authentication Code
+       - Máquina de Rotor                          - Assinatura Digital
+       - Cifra de Feistel                          - Aplicação de Criptografia em Transmissão de Dados
+       - DES - Data Encryption Standard
+       - 3DES
+       - AES - Advanced Encryption Standard
+
+
+Bibliografia:
+        - William Stallings - Criptografia e Segurança de Redes - Princípios e Práticas - Pearson 2012
+        - Niels Ferguson e Bruce Schneier - Practical Cryptography - Wiley - 2003
+        - Bruce Schneier - Applied Cryptography - Wiley - 1996
+
+
+Trabalhos:
+        1 - Quebrar cifra playfair com chaves de até 6 caracteres por força bruta
+        2 - Cifrador / Decifrador Máquina de Rotor
+
