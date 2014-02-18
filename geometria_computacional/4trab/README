@@ -1,0 +1,53 @@
+Implementacao do algoritmo Quick-Hull para fecho convexo em 3D
+
+Aramis S. H. Fernandes
+
+O programa assume que a entrada eh sempre valida.
+
+O espaco euclidiano assumido pelo programa varia de -999999999 a 999999999 (9
+noves), em cada um dos eixos. O programa aceita valores fora desse intervalo,
+mas nao funcinara corretamente caso nao seja feito um ajuste na variavel $BORDA.
+
+Para iniciar o processo do fecho convexo, é montado um simplexo inicial, e para
+tanto, encontra-se os vertices com as coordenadas maiores e menores em cada
+eixo, e baseado nestes valores, encontra-se os vertices mais distantes entre si,
+com relacao a um dado eixo. A maior distancia revelara os dois primeiros
+vertices que compoe o simplexo. Em caso de empate, a prioridade na escolha dos
+2 vertices mais distantes entre si eh a seguinte:
+  - Vertices do eixo X;
+  - Vertices do eixo Y;
+  - Vertices do eixo Z.
+
+Para facilitar a compreensao, chamemos os 4 primeiros vertices de A, B, C e D.
+
+Depois de encontrados os vertices A e B, para encontrar o vertice C, o programa
+percorre novamente a lista de vertices, em busca do segundo vertice mais
+distante do vertice A (sem a necessidade deste vertice estar tambem no mesmo
+eixo que A.
+
+Depois de encontrado o vertice C, o programa calcula o vetor normal aos vetores
+AB e AC e armazena seu tamanho normalizado. Este valor sera utilizado para
+encontrar o vertice D, que sera o vertice que tiver o maior angulo com o vetor normal ao
+plano definido pelos pontos A, B e C.
+
+Usando os 4 vertices iniciais, o programa monta uma estrutura indexada de
+triangulos, cada um formado por uma combinacao de 3 dos 4 vertices iniciais.
+Nesta mesma estrutura sao armazenados:
+
+ - o vertice oposto a cada face;
+ - os vizinhos de cada face;
+ - o conjunto de vertices visiveis por cada triangulo;
+ - a equacao do plano definido pelos 3 vertices que compoe o triangulo;
+ - o ponto mais distante da face atual.
+
+Os vertices opostos serao utilizados para encontrar a direcao correta da reta
+normal de cada face, para que o programa possa encontrar o conjunto de vertices
+visiveis a partir daquela face.
+
+Esse conjunto de vertices sera chamado de campo de busca, e cada face tera o seu
+campo de busca. Ainda optei por fazer uma imagem desse conjunto, deixando que
+cada vertice tenha sua lista das faces que o enxergam. Obviamente este conjunto
+imagem estara em constante atualizacao, pois o conjunto de faces tambem se
+altera ao longo do processamento.
+
+
