@@ -1,0 +1,24 @@
+Trabalho 2
+
+Implementacao de algoritmo para moldes 2D
+
+Este trabalho responde se eh possivel construir um molde de peca unica para um
+poligono dado.
+
+Assume-se que:
+
+- A entrada eh sempre valida;
+- Nao existe colinearidade entre quaisquer 3 pontos dados;
+- Os pontos sao informados em ordem anti-horaria;
+
+O programa utiliza um algoritmo simples, que consiste em:
+
+- Encontrar as retas a partir dos pontos dados;
+- Calcular as normais de cada reta;
+- Testar os angulos das normais entre si;
+- Se for encontrado um angulo maior que 90 entre pelo menos uma das retas da
+  lista atual, saia;
+- Se nao for encontrado tal angulo, retorne o numero da face sendo testada, pois
+  ela eh uma face valida;
+- Caso nao exista tal ponto, retorne 0, indicando que nao eh possivel criar um
+  molde de peca unica para o poligono.

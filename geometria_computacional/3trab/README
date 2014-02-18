@@ -1,0 +1,42 @@
+Implementacao de funcoes para a malha de triangulos
+
+Aramis Fernandes - CI756 - 2013/2
+
+O programa assume que:
+- a entrada eh sempre valida;
+- toda ordem de vertices, arestas etc esta dada em sentido
+horario, portanto, caso um triangulo possua as arestas 0, 1, 2, ao percorre-las,
+estaremos passeando em sentido anti-horario no triangulo.
+
+A partir destes pressupostos, o program examina os dados da entrada e monta
+as seguintes estruturas:
+
+ - Lista indexada de vertices;
+ - Lista indexada de triangulos, que eh uma estrutura que contem:
+   - As arestas e vertices que formam o triangulo corrente;
+   - Os triangulos vizinhos, ordenados conforme sua oposicao a um dado vertice
+     (ex: o primeiro vizinho da lista eh o vizinho cuja aresta se opoe ao
+     primeiro vertice da lista).
+
+A partir dessas informacoes, o programa vai construir uma nova lista indexada de
+triangulos, contendo os triangulos dados na entrada e os novos triangulos
+obtidos a partir da inclusao dos novos vertices, que por sua vez serao inseridos
+na lista indexada de vertices.
+
+O programa nao faz verificacoes de colisao de vertices. Por exemplo, na entrada
+dada pelo professor, existem os vertices (0,0), (10,0) e (0,10) cujo ponto
+central eh (3.33,3.33), quase o mesmo ponto do vertice 4 (3,3). Isso nao chega
+exatamente a ser uma colisao, pois usamos numeros com ponto flutuante com
+precisao de duas casas decimais. Caso o vertice 4 tivesse as coordenadas
+(3.33,3.33), haveriam duas entrada na lista indexada (o vertice 5, que seria o
+ponto central dos vertices 1, 2 e 3 e o vertice 4, dado na entrada.
+
+Por fim, o programa imprime na saida padrao os dados requeridos no enunciado:
+
+Na 1a linha:
+- Numero de vertices(N) e numero de triangulos -> dois inteiros separados por um
+  espaco;
+
+Em seguida, os N vertices;
+Em seguida, as M linhas dos triangulos, com seus vertices e vizinhos.
+

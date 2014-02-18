@@ -1,0 +1,59 @@
+Segundo Trabalho Prático CI338 - 2013/2 André Guedes Implementação de algoritmo
+para moldes 2D
+
+O objetivo do trabalho é a implementação de um algoritmo que resolva o problema
+de decidir se existe um molde 2D para um polígono no plano. Caso exista também
+deve encontrar uma orientação para o molde.  O de deve ser feito:
+
+O problema de ser resolvido e implementado. A entrada e a saída de dados devem
+ser padronizadas. O nome do executável deve ser molde2d.
+
+Um polígono P admite molde pela face f se ele pode ser movido em alguma direção
+com ângulo menor que 180 graus em relação a normal de f sem que nenhuma outra
+face seja movida contra a parede do molde.  Entrada:
+
+O arquivo de entrada deve ser lida da entrada padrão (stdin).
+
+A primeira linha é formada pelo número de vértices do polígono. Depois temos as
+coordenadas (ponto flutuante) dos vértices do polígono. Os vértices estão em
+ordem anti-horária. Considere as arestas do polígono numeradas de 1 em diante na
+ordem em que aparecem na entrada.
+
+Exemplo:
+
+  3
+  0 0
+  10 0
+  5 5.5
+
+Saída:
+
+A saída deve ser escrita na saída padrão (stdout) e deve conter somente um
+número em uma linha (com fim de linha). Este número será 0 se o polígono não
+admite molde ou o número de uma aresta que pode ser a aresta superior do molde.
+Requisitos mínimos:
+
+O trabalho deve ser feito de forma que possa ser compilado e executado nas
+servidoras de computação do Departamento de Informática.
+
+Não deve ter nenhuma opção de linha comando. O arquivo será lido da entrada
+padrão (stdin).  O que deve ser entregue:
+
+Além dos arquivos fonte, deve acompanhar um makefile e um arquivo README
+explicando o que foi feito e com o nome dos autores. Qualquer particularidade
+deve estar descrita neste texto.
+
+Para compilar vou usar os comandos make clean (para limpar compilações
+anteriores) e make, portanto preparem o makefile para fazer isso. O resultado do
+make deverá ficar no mesmo diretório onde está o makefile.  Forma de entrega:
+
+O trabalho deve ser empacotado em um arquivo id.tar.gz, onde id é uma string que
+identifique o autor (sem espaços). Pode ser só o sobrenome, o login, GRR ou o
+que quiser. Ao descompactar este arquivo deverá ser criado um diretório de nome
+id que conterá todos os demais arquivos. O make deverá funcionar dentro deste
+diretório (não em subdiretórios).
+
+Este arquivo deve ser enviado por e-mail ao endereço do professor (andre) com o
+assunto "CI338-trab2" (exatamente).  Equipe:
+
+O trabalho é individual.

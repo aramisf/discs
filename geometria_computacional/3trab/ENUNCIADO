@@ -1,0 +1,89 @@
+Terceiro Trabalho Prático
+
+CI338 - 2013/2
+André Guedes
+Implementação de funções para malha de triângulos
+
+O objetivo do trabalho é a implementação de funções para manipulação de malhas
+de triângulos. A estrutura pode ser a de triângulos (simplexos) vizinhos ou a
+DCEL. Tais funções serão utilizadas em um programa exemplo.
+
+O de deve ser feito:
+
+Uma biblioteca com as funções de criação e manipulação da estrutura de dados
+deve ser implementada. Pelo menos uma função para subdividir um triângulo em
+outros 3, dado um vértice novo deve ser definida.
+
+Dado uma malha de triângulos, para cada triângulo inicial, um novo vértice deve
+ser criado (ponto médio dos 3 vértices) e o triângulo deve ser dividido em três
+novos sendo este vértice criado como o novo vértice interno.
+
+A entrada e a saída de dados devem ser padronizadas. O nome do executável deve
+ser refinamento.
+
+Entrada:
+
+O arquivo de entrada deve ser lida da entrada padrão (stdin).
+
+A primeira linha é formada pelo número de vértices da triangulação, n, e pelo
+número de triângulos (incluindo o triângulo externo), m, separados por um
+espaço. Depois temos as coordenadas (ponto flutuante) dos vértices da
+triangulação (dois números), separadas por espaço, um vértice por linha. Cada
+vértice será referenciado por um número de 1 a n, na ordem em que aparecem na
+entrada. Depois dos vértices temos os triângulos, descritos com 6 números
+inteiros indicando os índices dos 3 vértices em ordem anti-horária e os índices
+dos 3 triângulos vizinhos. Cada triângulo será numerado de 1 a m, na ordem em
+que aparecem na entrada.
+
+Exemplo:
+
+  4 4
+  0 0
+  10 0
+  0 10
+  3 3
+  1 3 2 3 4 2
+  1 4 3 3 1 4
+  3 4 2 4 1 2
+  1 2 4 3 2 1
+Saída:
+
+A saída deve ser escrita na saída padrão (stdout) e deve ser no mesmo formato da
+entrada (vértices e triângulos) da triangulação subdividida (refinada).
+
+Os números em ponto flutuante devem ser escritos com 2 casas decimais
+(truncados) e cada par de números deve ser separado por somente um espaço. Em
+nenhuma linha deve ter espaços antes ou depois do conteúdo.
+
+Requisitos mínimos:
+
+O trabalho deve ser feito de forma que possa ser compilado e executado nas
+servidoras de computação do Departamento de Informática.
+
+Não deve ter nenhuma opção de linha comando. O arquivo será lido da entrada
+padrão (stdin).
+
+O que deve ser entregue:
+
+Além dos arquivos fonte, deve acompanhar um makefile e um arquivo README
+explicando o que foi feito e com o nome dos autores. Qualquer particularidade
+deve estar descrita neste texto.
+
+Para compilar vou usar os comandos make clean (para limpar compilações
+anteriores) e make, portanto preparem o makefile para fazer isso. O resultado do
+make deverá ficar no mesmo diretório onde está o makefile.
+
+Forma de entrega:
+
+O trabalho deve ser empacotado em um arquivo id.tar.gz, onde id é uma string que
+identifique o autor (sem espaços). Pode ser só o sobrenome, o login, GRR ou o
+que quiser. Ao descompactar este arquivo deverá ser criado um diretório de nome
+id que conterá todos os demais arquivos. O make deverá funcionar dentro deste
+diretório (não em subdiretórios).
+
+Este arquivo deve ser enviado por e-mail ao endereço do professor (andre) com o
+assunto "CI338-trab3" (exatamente).
+
+Equipe:
+
+O trabalho é individual.

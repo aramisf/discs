@@ -1,0 +1,29 @@
+Intersecao entre Poligonos
+
+Aramis S. H. Fernandes
+
+O programa calcula uma intersecao entre dois poligonos dados.
+O formato de entrada é descrito no arquivo ENUNCIADO e tambem em comentarios
+dentro do codigo. Alias, dentro do codigo tem bastante comentario, por isso
+optei por resumir este README para evitar ser redundante.
+
+Assume-se que a entrada eh sempre valida e que os poligonos dados na entrada sao
+convexos.
+
+O programa utiliza o metodo do calculo dual para encontrar a intersecao. O metodo
+foi discutido em sala e pode ser resumido assim:
+
+- Calcula-se o ponto dual de cada um dos segmentos que formam os poligonos;
+- Monta-se o fechamento convexo da uniao desses pontos;
+- Calcula-se o dual do fechamento convexo;
+- O dual do fechamento eh a intersecao entre os dois poligonos dados.
+
+O fechamento convexo, por sua vez, eh calculado atraves do algoritmo da Cadeia
+Monotonica de Andrew, um algoritmo de complexidade O(n log n).
+
+Depois disso, o programa imprime o resultado na tela, respeitando a padronizacao
+de duas casas decimais, conforme o especificado.
+
+Eh sabido que o metodo dual falha quando o ponto medio dos vertices se encontra
+fora do poligono, por isso, nestes casos o programa informara um resultado
+incorreto.
