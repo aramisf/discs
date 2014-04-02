@@ -1,0 +1,6 @@
+IMPLEMENTACAO DA MAQUINA DE ROTOR:
+
+  - 3 rotores;
+  - A parte interna eh conectada pelo aluno, mas a forma de conectar as partes
+    deve estar clara para ser alterada;
+  - Parametro de entrada: a posicao inicial dos rotores.
