@@ -1,0 +1,6 @@
+- Fazer um programa em C para cifrar e decifrar textos com a cifra de Hill;
+- A entrada da matriz deve ser feita de um jeito facil;
+- Entrega-se o codigo fonte, o professor faz as alteracoes e devolve o
+  executavel;
+- Aplicar o ataque do texto claro para obter a chave.
+
