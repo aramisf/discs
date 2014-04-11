@@ -36,6 +36,7 @@ all:
 
 lista:
 	@echo "Criando lista de palavras..."
+	@mkdir $(WD) 2> /dev/null
 	@iconv $(ICONV_OPTS) $(BR) -o $(MY_BR)
 	@iconv $(ICONV_OPTS) $(PT) -o $(MY_PT)
 	@grep $(GREP_OPTS)  $(MY_BR) > $(PT_BR)
