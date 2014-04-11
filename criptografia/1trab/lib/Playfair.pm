@@ -8,6 +8,8 @@ use warnings;
 #
 package Playfair;
 
+our $matriz;    # Matriz do playfair, montada pelo gera_matriz, e utilizada
+                # por algumas funcoes auxiliares.
 
 # Gera o conjunto de intervalos de caracteres para gerar as chaves por forca
 # bruta. Os intervalos vao de 'a' a 'z', de 'aa' a 'zz' e assim por diante,
@@ -66,7 +68,7 @@ sub gera_chaves {
 # Gera uma matriz de decriptografia, dada uma string como chave
 #
 # Parametros: uma string que sera considerada a chave de decriptografia
-# Saida: uma matriz => referencia para uma lista.
+# Saida: uma matriz representada na forma de uma string.
 #
 sub gera_matriz {
 
@@ -80,14 +82,13 @@ sub gera_matriz {
   # todos os j's por i's, para economizar alguns if's no futuro:
   $chave        =~ s/j/i/g;
 
-  my $matriz    = $chave;
+  $matriz    = $chave;
 
   # Remove da lista de caracteres os caracteres jah presentes na chave:
   $alfabeto     =~ s/\[$chave\]//g;
   $matriz       .= $alfabeto;
 
-  my @matriz    = split '', $matriz;
-  \@matriz;
+  #$matriz;
 }
 
 # Decifra um texto global, usando uma chave passada como parametro.
@@ -105,11 +106,45 @@ sub decrypt {
       $texto_cifrado,
       $arquivo_de_saida)      = @_;
 
+  print "Dentro de decrypt: \$chave: $chave\ntexto: $texto_cifrado\n";
+
+  #$matriz                  = gera_matriz($chave);
+  gera_matriz($chave);
+
 
   # - Subdividir a string dois a dois caracteres, tratando os casos de
   #   duplicidade;
+  $_                          = $texto_cifrado;
+
+  while (/(.)(.)/g) {
+
+    my ($um, $dois) = ($1,$2);
+
+    # Examinando $um e $dois:
+    #
+    # x -> linha
+    # y -> coluna
+    my ($x1,$y1,$x2,$y2)  =
+      (
+        (index $matriz,$um) / 5,
+        (index $matriz,$um) % 5,
+        (index $matriz,$dois) / 5,
+        (index $matriz,$dois) % 5,
+      );
 
   # - fazer a decriptografia baseando-se na matriz de decriptografia atual;
+    # Mesma linha
+    if ($x1 == $x2) {
+      move_esquerda($um,$dois);
+    }
+    elsif ($y1 == $y2) {
+      move_acima($um,$dois);
+    }
+    else {
+      troca_ambos($um,$dois);
+    }
+  }
+
 
   # Imprimir o resultado em um arquivo:
   "Dae\n";
