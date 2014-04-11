@@ -1,2 +1,12 @@
-Quebrar cifra playfair com chaves de ateh 6 caracteres por forca bruta
+PLAYFAIR:
 
+- Quebrar cifra playfair com chaves de ateh 6 caracteres por forca bruta.
+
+
+
+Premissas:
+
+  - Todos os caracteres da entrada nao sao acentuados;
+  - Nao aparecem numeros na entrada. Se aparecerem serao ignorados;
+  - No momento da criacao do texto cifrado, quando um par for composto por
+    dois caracteres iguais, o caractere a ser adicionado eh o 'x';
