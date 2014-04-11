@@ -10,3 +10,26 @@ Premissas:
   - Nao aparecem numeros na entrada. Se aparecerem serao ignorados;
   - No momento da criacao do texto cifrado, quando um par for composto por
     dois caracteres iguais, o caractere a ser adicionado eh o 'x';
+
+
+Instrucoes de uso:
+
+  - Para executar os testes:
+    `make teste';
+
+  - Para criar um dicionario com palavras validas da lingua portuguesa:
+    `make lista';
+
+  - Para criar o arquivo executavel:
+    `make';
+
+  - Para remover os arquivos criados:
+    `make clean';
+
+  Depois de criado o executavel, execute-o assim:
+    `./playfair <ARQ1> <ARQ2>'
+
+    Onde:
+      - <ARQ1> eh o arquivo contendo o texto a ser decifrado;
+      - <ARQ2> eh o arquivo contendo a lista de possiveis chaves para decifrar
+        o texto contido em <ARQ1>;
