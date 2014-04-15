@@ -43,17 +43,19 @@ while (<$texto_cifrado>) {
   $texto_cifrado_str .= $_;
 }
 
+# Caso nao exista um diretorio para conter os resultados:
+mkdir "resultados" unless -d "resultados";
+
 # Agora percorre a lista de chaves
 while (my $chave  = <$dicionario>) {
 
   # Removendo espacos em branco
   $chave  =~ s/\s+//g;
-  open(my $arq, ">", "resultados/".$chave);
+  my $arq = "resultados/$chave";
 
   # Menos processamento e mais memoria
   Playfair::decrypt($chave,$texto_cifrado_str,$arq);
 
-  close $arq;
 }
 
 exit 0;

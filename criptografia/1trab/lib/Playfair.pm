@@ -83,10 +83,10 @@ sub gera_matriz {
   $matriz    = $chave;
 
   # Remove da lista de caracteres os caracteres jah presentes na chave:
-  $alfabeto     =~ s/\[$chave\]//g;
+  $alfabeto     =~ s/[$chave]//g;
   $matriz       .= $alfabeto;
 
-  #$matriz;
+  #$matriz;   # Como ela eh uma variavel global, posso omitir daqui.
 }
 
 # Decifra um texto global, usando uma chave passada como parametro.
@@ -106,6 +106,8 @@ sub decrypt {
 
   gera_matriz($chave);
 
+  open(my $arq, ">", "$arquivo_de_saida") or
+    die "Erro ao abrir $arquivo_de_saida: $!";
 
   # - Subdividir a string dois a dois caracteres, tratando os casos de
   #   duplicidade;
@@ -114,34 +116,54 @@ sub decrypt {
   while (/(.)(.)/g) {
 
     my ($um, $dois) = ($1,$2);
+    my $cont         = 1;      # Contador de linhas, p formatacao da saida.
 
     # Examinando $um e $dois:
     #
     # x -> linha
     # y -> coluna
+    my ($pos1,$pos2);
     my ($x1,$y1,$x2,$y2)  =
       (
-        (index $matriz,$um) / 5,
-        (index $matriz,$um) % 5,
-        (index $matriz,$dois) / 5,
-        (index $matriz,$dois) % 5,
+        int((index $matriz,$um)   / 5),
+            (index $matriz,$um)   % 5,
+        int((index $matriz,$dois) / 5),
+            (index $matriz,$dois) % 5,
       );
 
-  # - fazer a decriptografia baseando-se na matriz de decriptografia atual;
+    # - fazer a decriptografia baseando-se na matriz de decriptografia atual;
     # Mesma linha
     if ($x1 == $x2) {
-      move_esquerda($um,$dois);
+
+      # move aa esquerda
+      $y1   = --$y1 % 5;
+      $y2   = --$y2 % 5;
+      $pos1 = ($x1*5 + $y1);
+      $pos2 = ($x2*5 + $y2);
     }
     elsif ($y1 == $y2) {
-      move_acima($um,$dois);
+      # move acima
+      $x1   = --$x1 % 5;
+      $x2   = --$x2 % 5;
+      $pos1 = ($x1*5 + $y1);
+      $pos2 = ($x2*5 + $y2);
     }
     else {
-      troca_ambos($um,$dois);
+      #troca ambos
+      $pos1 = ($x1*5 + $y2);
+      $pos2 = ($x2*5 + $y1);
     }
+
+    $um   = substr $matriz,$pos1,1;
+    $dois = substr $matriz,$pos2,1;
+
+    # Imprimir o resultado em um arquivo:
+    print $arq "$um$dois ";
+    print $arq "\n" if $cont++ == 80;
   }
 
-
-  # Imprimir o resultado em um arquivo:
+  print $arq "\n";
+  close $arq;
   "Dae\n";
 }
 
