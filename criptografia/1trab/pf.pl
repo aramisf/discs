@@ -46,7 +46,7 @@ while (<$texto_cifrado>) {
 # Agora percorre a lista de chaves
 while (my $chave  = <$dicionario>) {
 
-  # TODO: Removendo espacos em branco, mas tem um jeito melhor de fazer isso
+  # Removendo espacos em branco
   $chave  =~ s/\s+//g;
   open(my $arq, ">", "resultados/".$chave);
 
