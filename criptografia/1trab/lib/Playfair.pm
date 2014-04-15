@@ -51,8 +51,6 @@ sub gera_chaves {
     my $inicio  = $$ref[0];
     my $fim     = $$ref[1];
 
-    #print $saida "$_\n" for $inicio..$fim;
-
     # Adicionando tratamento de chaves, omitindo palavras com caracteres
     # repetidos, para uma lista menor e para evitar a necessidade de tratar
     # caracteres recorrentes (no caso especifico do playfair):
@@ -106,9 +104,6 @@ sub decrypt {
       $texto_cifrado,
       $arquivo_de_saida)      = @_;
 
-  print "Dentro de decrypt: \$chave: $chave\ntexto: $texto_cifrado\n";
-
-  #$matriz                  = gera_matriz($chave);
   gera_matriz($chave);
 
 
