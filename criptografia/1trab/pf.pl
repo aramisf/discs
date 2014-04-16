@@ -59,6 +59,6 @@ while (my $chave  = <$dicionario>) {
 
 # Neste ponto do programa teremos uma lista com as 5 chaves mais provaveis
 # (sendo o primeiro eh o mais provavel)
-Playfair::resultados($texto_cifrado);
+Playfair::resultados($texto_cifrado_str);
 
 exit 0;
