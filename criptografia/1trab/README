@@ -7,9 +7,7 @@ PLAYFAIR:
 Premissas:
 
   - Todos os caracteres da entrada nao sao acentuados;
-  - Nao aparecem numeros na entrada. Se aparecerem serao tratados como se
-    fossem caracteres, ou seja, ocorrera um erro de decifragem no par onde
-    aparecerem;
+  - Os unicos caracteres validos para a entrada sao [A-Za-z]
   - i's e j's serao todos substituidos por i;
 
 
@@ -27,7 +25,7 @@ Instrucoes de uso:
   - Para remover os arquivos criados:
     `make clean';
 
-  Depois de criado o executavel, execute-o assim:
+  Depois de criado o executavel, voce pode executa-lo assim:
     `./playfair <ARQ1> <ARQ2>'
 
     Onde:
