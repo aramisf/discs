@@ -96,8 +96,8 @@ sub gera_matriz {
 # Faz uma analise das frequencias de aparicao das letras, e gera um ranking.
 sub analisa {
 
-  my $texto_decifrado = shift;
   my $chave           = shift;
+  my $texto_decifrado = shift;
 
   my @vogais          = qw(a e o);    
   my @digrafos        = qw(de da oz se ao qu en te);
@@ -176,16 +176,11 @@ sub decrypt {
     my ($pos1,$pos2);
     my ($x1,$y1,$x2,$y2)  =
       (
-        #int((index $matriz,$um)   / 5),
-        #    (index $matriz,$um)   % 5,
-        sprintf( "%d", (index $matriz,$um) / 5),
-        sprintf( "%d", (index $matriz,$um) % 5),
+        int((index $matriz,$um)   / 5),
+            (index $matriz,$um)   % 5,
 
-        sprintf( "%d", (index $matriz,$dois) / 5),
-        sprintf( "%d", (index $matriz,$dois) % 5),
-
-        #int((index $matriz,$dois) / 5),
-        #    (index $matriz,$dois) % 5,
+        int((index $matriz,$dois) / 5),
+            (index $matriz,$dois) % 5,
       );
 
     # Mesma linha
@@ -222,14 +217,14 @@ sub decrypt {
     # Imprimir o resultado em um arquivo, caso ele tenha sido passado como
     # parametro:
     if ($imprimir) {
-      print $arq "$prox_um$prox_dois ";
+      print $arq "$prox_um $prox_dois ";
       print $arq "\n" if $cont++ == 78;
     }
-    $texto_decifrado  .= "$prox_um$prox_dois ";
+    $texto_decifrado  .= "$prox_um $prox_dois ";
     $texto_decifrado  .= "\n" if $cont++ == 78;
   }
 
-  analisa($texto_decifrado,$chave);
+  analisa($chave,$texto_decifrado) if not $imprimir;
 
   if ($imprimir) {
     print $arq "\n";
