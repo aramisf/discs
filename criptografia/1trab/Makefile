@@ -29,12 +29,6 @@ all:
 	@echo "Criando diretorio para os resultados.."
 	@mkdir $(RESULTADOS) 2>/dev/null
 	@echo "Criando diretorio para listas de palavras..."
-	@mkdir $(WD) 2> /dev/null
-	@echo -n "\nExecute o programa com:\n\n\t./playfair "
-	@echo "<arquivo com texto cifrado> <arquivo com chaves para decifrar>\n"
-
-
-lista:
 	@echo "Criando lista de palavras..."
 	@mkdir $(WD) 2> /dev/null
 	@iconv $(ICONV_OPTS) $(BR) -o $(MY_BR)
@@ -42,7 +36,8 @@ lista:
 	@grep $(GREP_OPTS)  $(MY_BR) > $(PT_BR)
 	@grep $(GREP_OPTS)  $(MY_PT) >> $(PT_BR)
 	@sort -u $(PT_BR) -o $(FINAL)
-	@echo "Feito"
+	@echo -n "\nExecute o programa com:\n\n\t./playfair "
+	@echo "<arquivo com texto cifrado> <arquivo com chaves para decifrar>\n"
 
 
 clean:

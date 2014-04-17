@@ -16,9 +16,6 @@ Instrucoes de uso:
   - Para executar os testes:
     `make teste';
 
-  - Para criar um dicionario com palavras validas da lingua portuguesa:
-    `make lista';
-
   - Para criar o arquivo executavel:
     `make';
 
@@ -32,3 +29,7 @@ Instrucoes de uso:
       - <ARQ1> eh o arquivo contendo o texto a ser decifrado;
       - <ARQ2> eh o arquivo contendo a lista de possiveis chaves para decifrar
         o texto contido em <ARQ1>;
+
+
+O programa gera automaticamente uma lista sugerida contendo palavras da lingua
+portuguesa. Mudei a opcao do comando `make lista', e agora basta rodar `make'.
