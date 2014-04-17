@@ -218,10 +218,10 @@ sub decrypt {
     # parametro:
     if ($imprimir) {
       print $arq "$prox_um $prox_dois ";
-      print $arq "\n" if $cont++ == 78;
+      print $arq "\n" if $cont++ == 40;
     }
     $texto_decifrado  .= "$prox_um $prox_dois ";
-    $texto_decifrado  .= "\n" if $cont++ == 78;
+    $texto_decifrado  .= "\n" if $cont++ == 40;
   }
 
   analisa($chave,$texto_decifrado) if not $imprimir;
