@@ -146,6 +146,7 @@ sub decrypt {
       $texto_cifrado,     
       $imprimir)      = @_;
 
+  my $cont            = 1;    # Contador de linhas, p formatacao da saida.
   my $texto_decifrado = '';
   my $arq;
 
@@ -167,7 +168,6 @@ sub decrypt {
   while (/(.)(.)/g) {
 
     my ($um, $dois) = ($1,$2);
-    my $cont         = 1;      # Contador de linhas, p formatacao da saida.
 
     # Examinando $um e $dois:
     #
@@ -218,10 +218,10 @@ sub decrypt {
     # parametro:
     if ($imprimir) {
       print $arq "$prox_um $prox_dois ";
-      print $arq "\n" if $cont++ == 40;
+      print $arq "\n" if $cont++ % 20 == 0;   # Quebra a linha na coluna 80?
     }
+
     $texto_decifrado  .= "$prox_um $prox_dois ";
-    $texto_decifrado  .= "\n" if $cont++ == 40;
   }
 
   analisa($chave,$texto_decifrado) if not $imprimir;
