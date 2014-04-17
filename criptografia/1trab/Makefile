@@ -37,7 +37,7 @@ all:
 	@grep $(GREP_OPTS)  $(MY_PT) >> $(PT_BR)
 	@sort -u $(PT_BR) -o $(FINAL)
 	@echo -n "\nExecute o programa com:\n\n\t./playfair "
-	@echo "<arquivo com texto cifrado> <arquivo com chaves para decifrar>\n"
+	@echo "<arquivo com texto cifrado> <arquivo com chaves para decifrar (por ex: lista)>\n"
 
 
 clean:
