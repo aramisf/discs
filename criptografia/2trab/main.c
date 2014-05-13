@@ -3,7 +3,7 @@
 /*  O programa assume que:
  *  1. As matrizes sao de ordem 3;
  *  2. A matriz informada no codigo possui inversa;
- *  3. O texto cifrado sera informado pela stdin, e nao pelo *argv[1];
+ *  3. O texto claro sera informado pelo argv[1];
  *  4. O programa funciona direito com letras minusculas.
  */
 
