@@ -4,7 +4,7 @@
  *  1. As matrizes sao de ordem 3;
  *  2. A matriz informada no codigo possui inversa;
  *  3. O texto claro sera informado pelo argv[1];
- *  4. O programa funciona direito com letras minusculas.
+ *  4. O programa soh aceita letras minusculas.
  */
 
 /* Matriz de ordem 3, seguem os elementos */
@@ -45,15 +45,11 @@ int main (int argc, char **argv, char **envp) {
 
   arq   = fopen(argv[1],"r");
 
-  while (fscanf(arq,"%3c[a-z]",s) > 0) {
-    if (s[0] != '\n' &&
-        s[1] != '\n' &&
-        s[2] != '\n') {
+  while (fscanf(arq,"%3[a-z]",s) > 0) {
 
       //printf("s: %c %c %c\n",s[0],s[1],s[2]);
       cifra(s[0]-97,s[1]-97,s[2]-97);
 
-    } // /if
   }
 
   return(0);
