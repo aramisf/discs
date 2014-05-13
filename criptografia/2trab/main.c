@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
 
 /*  O programa assume que:
  *  1. As matrizes sao de ordem 3;
@@ -58,5 +56,5 @@ int main (int argc, char **argv, char **envp) {
     } // /if
   }
 
-  exit(0);
+  return(0);
 }
