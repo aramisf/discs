@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use Getopt::Std;
 
 ################################################################################
 # Os parametros tem o seguinte formato:                                        #
@@ -15,17 +16,38 @@ use warnings;
 
 use Rotor;
 
-#sub uso {
-#
-#  print "Uso:\n\t$0 z1..zn <arquivo texto>\n";
-#  exit 1;
-#}
-#
-#uso() if not @ARGV;
-#uso() if $ARGV[-1] and not -f $ARGV[-1];
+my %opts;                 # Armazena os arquivos com texto claro e cifrado
+my $rotores;              # Numero de rotores
+my @rotores;              # Lista de referencias para os rotores a serem
+                          # criados
 
+getopts("c:d:", \%opts);  # Instancia as chaves da hash conforme os parametros
+                          # passados ao programa
 
-my $rotor = Rotor->sumona(2);
-$rotor->cifra("abc def");
+sub uso {
 
-print $rotor->{CIFRADO},"\n";
+  print "\nUso:\n\t$0 -c <arq1> -d <arq2> z1..zn\n";
+  print "onde:\n<arq1>: arquivo com texto claro\n";
+  print "<arq2>: arquivo com texto cifrado\n";
+  print "z1..zn: inteiros indicando os deslocamentos de cada rotor\n\n";
+  exit 1;
+}
+
+uso() if not @ARGV or (not defined $opts{c} and not defined $opts{d});
+
+$rotores = @ARGV;
+#@rotores = @ARGV;
+
+#print sprintf "passados %d parametros\n", scalar @ARGV;
+print "ARGV: @ARGV\n";
+print "Cifrar arq $opts{c}\n" if defined $opts{c};
+print "Decifrar arq $opts{d}\n" if defined $opts{d};
+print "criarei $rotores rotores com os respectivos deslocamentos: @ARGV\n";
+
+foreach (@ARGV) {
+
+  push @rotores, Rotor->sumona($_);
+}
+
+print "Rotores: @rotores\n";
+print "Rotor: $_->{DESLOCAMENTO}\n" for @rotores;
