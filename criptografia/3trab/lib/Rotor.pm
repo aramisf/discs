@@ -28,6 +28,7 @@ package Rotor;
     if ($deslocamento eq '+') {
       for (split //, $txt) {
 
+        # TODO: corrigir conforme novas especificacoes
         $deslocado  .= chr ((ord) + $eu->{DESLOCAMENTO});
       }
 
@@ -39,12 +40,14 @@ package Rotor;
 
       for (split //, $txt) {
 
+        # TODO: corrigir conforme novas especificacoes
         $deslocado  .= chr ((ord) - $eu->{DESLOCAMENTO});
       }
 
       $eu->{DECIFRADO}  = $deslocado;
     }
 
+    # TODO: inserir rotacao
   };  #/my $desloca
 
 
@@ -52,12 +55,27 @@ package Rotor;
 
   sub sumona {
 
-    my ($classe,$deslocamento) = @_;
+    # o 3o parametro deve ser uma referencia
+    my ($classe,$deslocamento,$pinos_saida_ref) = @_;
+
+    # O objeto em si
     my %hash;
 
-    # Caso nao seja passado um parametro de instanciacao, o rotor move apenas
-    # uma posicao
-    $hash{DESLOCAMENTO} = $deslocamento || 1;
+    # um mapeamento de teclado
+    my %teclado;
+
+    my @pinos_entrada   = 1..26;
+
+    $teclado{$_}        = (ord $_) - 97 for 'a'..'z';
+
+    $hash{DESLOCAMENTO} = $deslocamento;
+    $hash{TECLADO}      = %teclado;
+
+    # Sempre tem q ter ao menos uma linha foda ;)
+    unshift @pinos_entrada, pop @pinos_entrada for (1..$deslocamento);
+
+    @{$hash{PINOS_ENTRADA}} = @pinos_entrada;
+    @{$hash{PINOS_SAIDA}}   = @$pinos_saida_ref;
 
     # Depois desta linha $hash sera um objeto da classe $classe :)
     bless \%hash  => $classe;
