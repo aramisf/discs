@@ -6,12 +6,17 @@ use Getopt::Std;
 
 ################################################################################
 # Os parametros tem o seguinte formato:                                        #
-# ./$0 z1..z5 arq.txt                                                          #
+# ./$0 -c <arq1> -d <arq2> -s <arq3> z1..z5                                    #
 #                                                                              #
 # Onde:                                                                        #
 # - z[1-5] sao numeros inteiros;                                               #
-# - arq.txt eh o arquivo texto a ser cifrado/decifrado pela maquina de         #
-#   rotores.                                                                   #
+# - arq1 eh o arquivo texto a ser cifrado                                      #
+# - arq2 eh o arquivo texto a ser decifrado                                    #
+#   rotores;                                                                   #
+# - arq3 eh o arquivo com os valores dos pinos de saida de cada rotor.         #
+#                                                                              #
+# arq3 eh opcional, mas ao menos uma dentre as opcoes c e d devem ser          #
+# utilizadas.                                                                  #
 ################################################################################
 
 use Rotor;
@@ -30,9 +35,10 @@ getopts("c:d:s:", \%opts);# Instancia as chaves da hash conforme os parametros
 
 sub uso {
 
-  print "\nUso:\n\t$0 -c <arq1> -d <arq2> z1..zn\n";
+  print "\nUso:\n\t$0 [ -c <arq1>|-d <arq2>] [[-s <arq3>]] z1..zn\n";
   print "onde:\n<arq1>: arquivo com texto claro\n";
   print "<arq2>: arquivo com texto cifrado\n";
+  print "<arq3>: arquivo com os valores dos pinos de saida de cada rotor\n";
   print "z1..zn: inteiros indicando os deslocamentos de cada rotor\n\n";
   exit 1;
 }
@@ -56,25 +62,31 @@ if (@saida_rotores != @ARGV) {
   print "Erro ao instanciar os pinos de saida dos rotores.\n";
   exit 1;
 }
+
 $rotores = @ARGV;
 #@rotores = @ARGV;
 
 #print sprintf "passados %d parametros\n", scalar @ARGV;
-print "ARGV: @ARGV\n";
-print "Cifrar arq $opts{c}\n" if defined $opts{c};
-print "Decifrar arq $opts{d}\n" if defined $opts{d};
-print "criarei $rotores rotores com os respectivos deslocamentos: @ARGV\n";
+#print "ARGV: @ARGV\n";
+#print "Cifrar arq $opts{c}\n" if defined $opts{c};
+#print "Decifrar arq $opts{d}\n" if defined $opts{d};
+#print "criarei $rotores rotores com os respectivos deslocamentos: @ARGV\n";
 
 foreach (my $i=0; $i<@ARGV; $i++) {
 
   push @rotores, Rotor->sumona($ARGV[$i],$saida_rotores[$i]);
+
+  # Soh rola de aproveitar o loop para ligar os objetos jah criados
+  next if $i == 0;
+  $rotores[$i-1]->{PROXIMO} = $rotores[$i];
+  $rotores[$i]->{ANTERIOR}  = $rotores[$i-1];
 }
 
 print "Rotores: @rotores\n";
-print "Rotor: $_->{DESLOCAMENTO}\nENTRADA: @{$_->{PINOS_ENTRADA}}\nSAIDA: @{$_->{PINOS_SAIDA}}\n" for @rotores;
+print "Rotor: $_->{DESLOCAMENTO}\nENTRADA: @{$_->{PINOS_ENTRADA}}\nSAIDA: @{$_->{PINOS_SAIDA}}\nPROX: '$_->{PROXIMO}'\nANT: '$_->{ANTERIOR}'\n" for @rotores;
 
-print "\nDATA:\n";
-print "@$_\n" for @saida_rotores;
+#print "\nDATA:\n";
+#print "@$_\n" for @saida_rotores;
 
 __DATA__
 21 3 15 1 19 10 14 26 20 8 16 7 22 4 11 5 17 9 12 23 18 2 25 6 24 13
