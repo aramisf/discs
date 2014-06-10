@@ -77,6 +77,9 @@ package Rotor;
     @{$hash{PINOS_ENTRADA}} = @pinos_entrada;
     @{$hash{PINOS_SAIDA}}   = @$pinos_saida_ref;
 
+    # Todos os rotores sao iniciados com rodada == 0
+    $hash{RODADA}           = 0;
+
     # Depois desta linha $hash sera um objeto da classe $classe :)
     bless \%hash  => $classe;
   }
