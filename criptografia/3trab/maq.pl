@@ -45,6 +45,13 @@ sub uso {
 
 uso() if not @ARGV or (not defined $opts{c} and not defined $opts{d});
 
+
+if (not ($opts{c} xor $opts{d})) {
+
+  print "Escolha apenas UMA dentre [cifrar,decifrar].\n";
+  exit 1;
+}
+
 if (defined $opts{s}) {
 
   open (my $fh, "<", $opts{s}) or die "Erro ao abrir $opts{s}: $!\n";
