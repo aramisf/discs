@@ -63,14 +63,16 @@ if (@pinos_saida_rotores != @ARGV) {
   exit 1;
 }
 
-$rotores = @ARGV;
-#@rotores = @ARGV;
+###
+# Ok, se tudo deu certo ateh aqui, entao podemos comecar o programa
+###
 
-#print sprintf "passados %d parametros\n", scalar @ARGV;
-#print "ARGV: @ARGV\n";
-#print "Cifrar arq $opts{c}\n" if defined $opts{c};
-#print "Decifrar arq $opts{d}\n" if defined $opts{d};
-#print "criarei $rotores rotores com os respectivos deslocamentos: @ARGV\n";
+# um mapeamento de teclado, que eh usado apenas na entrada do usuario, a
+# partir do momento em que entra-se nos circuitos das catracas, nao faz mais
+# diferenca. O teclado sera usado novamente ao final da execucao.
+my %teclado;
+$teclado{$_}  = (ord $_) - 97 for 'a'..'z';
+
 
 foreach (my $i=0; $i<@ARGV; $i++) {
 
@@ -82,7 +84,35 @@ foreach (my $i=0; $i<@ARGV; $i++) {
   $rotores[$i]->{ANTERIOR}  = $rotores[$i-1];
 }
 
+if (defined $opts{c}) {
 
+  open(my $cifrar, "<", $opts{c}) or die "Erro ao abrir arquivo $opts{c}: $!\n";
+  while (<$cifrar>) {
+
+    chomp;
+    foreach (split //) {
+
+      $rotores[0]->cifrar($teclado{$_}) if defined $teclado{$_};
+    }
+
+  }
+  close $cifrar;
+}
+
+if (defined $opts{d}) {
+
+  open(my $decifrar, "<", $opts{d}) or die "Erro ao abrir arquivo $opts{d}: $!\n";
+  while (<$decifrar>) {
+
+    chomp;
+    my @linha = split //;
+    $rotores[-1]->decifrar($_) foreach @linha;
+
+  }
+  close $decifrar;
+}
+
+print "\n";
 __DATA__
 21 3 15 1 19 10 14 26 20 8 16 7 22 4 11 5 17 9 12 23 18 2 25 6 24 13
 20 1 6 4 15 3 14 12 23 5 16 2 22 19 11 18 25 24 13 7 10 8 21 9 26 17
