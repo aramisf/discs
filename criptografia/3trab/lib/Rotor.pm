@@ -31,7 +31,8 @@ package Rotor;
 
     # Sempre tem q ter ao menos uma linha foda ;)
     # Uma linha como esta sera executada tambem toda vez que um caractere for
-    # lido da entrada. Conforme metodo 'gira_catraca'
+    # lido da entrada. Conforme metodo 'gira_catraca'. Entao tem mais do que
+    # uma linha foda :P
     unshift @pinos_entrada, pop @pinos_entrada for (1..$deslocamento);
 
     @{$hash{PINOS_ENTRADA_LISTA}}                 = @pinos_entrada;
@@ -102,6 +103,9 @@ package Rotor;
       $eu->{RODADA} = 0;
       $eu->{PROXIMO}->gira_catraca() if defined $eu->{PROXIMO};
     }
+
+    # Retornando o char, apenas p validar os testes
+    chr $p2+97;
   }
 
   sub decifrar {
@@ -130,5 +134,8 @@ package Rotor;
       $eu->{RODADA} = 0;
       $eu->{PROXIMO}->gira_catraca() if defined $eu->{PROXIMO};
     }
+
+    # Retornando o char, apenas p validar os testes
+    chr $p2+97;
   }
 1;
