@@ -88,7 +88,7 @@ package Rotor;
     $eu->{PROXIMO}->cifrar($p2) if defined $eu->{PROXIMO};
 
     # Soh imprime o resultado final quando for a ultima catraca
-    print chr $p2+97," " if not defined $eu->{PROXIMO};
+    print chr $p2+97 if not defined $eu->{PROXIMO};
 
     # A primeira catraca gira ao final do processamento de cada caractere Caso
     # esta linha seja comentada, a saida ficara parecida com o exemplo do
@@ -120,7 +120,7 @@ package Rotor;
     # rodadas e giramos o que for necessario.
     if (not defined $eu->{ANTERIOR}) {
 
-      print chr $p2+97," ";
+      print chr $p2+97;
       $eu->gira_catraca();
     }
 
