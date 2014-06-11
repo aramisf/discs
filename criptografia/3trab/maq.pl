@@ -71,7 +71,7 @@ if (@pinos_saida_rotores != @ARGV) {
 }
 
 ###
-# Ok, se tudo deu certo ateh aqui, entao podemos dar criar a maquina de rotor
+# Ok, se tudo deu certo ateh aqui, entao podemos criar a maquina de rotor
 ###
 
 # um mapeamento de teclado, que eh usado apenas na entrada do usuario, a
