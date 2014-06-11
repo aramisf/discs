@@ -25,7 +25,7 @@ my %opts;                 # Armazena os arquivos com texto claro e cifrado
 my $rotores;              # Numero de rotores
 my @rotores;              # Lista de referencias para os rotores a serem
                           # criados
-my @pinos_saida_rotores;        # Lista de numeros contendo a saida de cada rotor,
+my @pinos_saida_rotores;  # Lista de numeros contendo a saida de cada rotor,
                           # ou seja, os pinos de saida aos quais cada pino de
                           # entrada esta ligado. O indice eh o indice do rotor
                           # ao qual cada sequencia pertence.

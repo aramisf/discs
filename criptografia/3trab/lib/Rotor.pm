@@ -14,44 +14,6 @@ use warnings;
 
 package Rotor;
 
-  # Por convencao, a galera coloca _ antes dos nomes, mas o metodo aqui se
-  # torna privado porque esta sendo referenciado na variavel $desloca, que eh
-  # visivel apenas dentro do escopo local, ou seja, apenas pelos metodos
-  # internos da Classe.
-  # TODO: 'our'?
-  my $desloca = sub {
-
-    my ($eu,$deslocamento,$txt)  = @_;
-    my $deslocado;
-
-    if ($deslocamento eq '+') {
-      for (split //, $txt) {
-
-        # TODO: corrigir conforme novas especificacoes
-        $deslocado  .= chr ((ord) + $eu->{DESLOCAMENTO});
-      }
-
-      $eu->{CIFRADO}  = $deslocado;
-    }
-
-    # XXX: Quando isso aqui for ativado, tem que inverter a ordem dos rotores.
-    elsif ($deslocamento eq '-') {
-
-      for (split //, $txt) {
-
-        # TODO: corrigir conforme novas especificacoes
-        $deslocado  .= chr ((ord) - $eu->{DESLOCAMENTO});
-      }
-
-      $eu->{DECIFRADO}  = $deslocado;
-    }
-
-    # TODO: inserir rotacao
-  };  #/my $desloca
-
-
-  # Ae, metodos publicos;
-
   sub sumona {
 
     # o 3o parametro deve ser uma referencia
@@ -99,7 +61,7 @@ package Rotor;
 
   sub gira_catraca {
 
-    my ($eu)  = @_;
+    my ($eu)                                                    = @_;
 
     # conta rodada
     $eu->{RODADA}++;
@@ -110,46 +72,16 @@ package Rotor;
 
     # e uma vez os pinos de saida
     unshift @{$eu->{PINOS_SAIDA_LISTA}}, pop @{$eu->{PINOS_SAIDA_LISTA}};
-    @{$eu->{PINOS_SAIDA_HASH}}{@{$eu->{PINOS_SAIDA_LISTA}}} = 0..25;
-  }
-
-  sub desgira_catraca {
-
-    my ($eu)  = @_;
-
-    # gira uma vez os pinos de entrada
-    push @{$eu->{PINOS_ENTRADA_LISTA}}, shift @{$eu->{PINOS_ENTRADA_LISTA}};
-    @{$eu->{PINOS_ENTRADA_HASH}}{@{$eu->{PINOS_ENTRADA_LISTA}}} = 0..25;
-
-    # e uma vez os pinos de saida
-    push @{$eu->{PINOS_SAIDA_LISTA}}, shift @{$eu->{PINOS_SAIDA_LISTA}};
-    @{$eu->{PINOS_SAIDA_HASH}}{@{$eu->{PINOS_SAIDA_LISTA}}} = 0..25;
-
-    # conta rodada ao final do processamento
-    $eu->{RODADA}++;
-
-    # Contando giros completos
-    if ($eu->{RODADA} == 26) {
-
-      $eu->{RODADA} = 0;
-      $eu->{PROXIMO}->desgira_catraca() if defined $eu->{PROXIMO};
-    }
+    @{$eu->{PINOS_SAIDA_HASH}}{@{$eu->{PINOS_SAIDA_LISTA}}}     = 0..25;
   }
 
   sub cifrar {
 
-    my ($eu, $pino)  = @_;
-
-    # Contando giros completos
-    if ($eu->{RODADA} == 26) {
-
-      $eu->{RODADA} = 0;
-      $eu->{PROXIMO}->gira_catraca() if defined $eu->{PROXIMO};
-    }
+    my ($eu, $pino) = @_;
 
     # Aqui comeca a cifragem em si
-    my $p1    = $eu->{PINOS_ENTRADA_LISTA}[$pino];
-    my $p2    = $eu->{PINOS_SAIDA_HASH}{$p1};
+    my $p1          = $eu->{PINOS_ENTRADA_LISTA}[$pino];
+    my $p2          = $eu->{PINOS_SAIDA_HASH}{$p1};
 
     # Deu boa, agora eh soh enviar o sinal para o pino de entrada do proximo
     # rotor
@@ -163,15 +95,22 @@ package Rotor;
     # livro, onde os 3 primeiros caracteres sao inseridos sem q a 1a catraca
     # gire
     $eu->gira_catraca() if not defined $eu->{ANTERIOR};
+
+    # Contando giros completos
+    if ($eu->{RODADA} == 26) {
+
+      $eu->{RODADA} = 0;
+      $eu->{PROXIMO}->gira_catraca() if defined $eu->{PROXIMO};
+    }
   }
 
   sub decifrar {
 
-    my ($eu, $pino)  = @_;
+    my ($eu, $pino) = @_;
 
-    # comeca a decifragem em si
-    my $p1    = $eu->{PINOS_SAIDA_LISTA}[$pino];
-    my $p2    = $eu->{PINOS_ENTRADA_HASH}{$p1};
+    # Comeca a decifragem em si
+    my $p1          = $eu->{PINOS_SAIDA_LISTA}[$pino];
+    my $p2          = $eu->{PINOS_ENTRADA_HASH}{$p1};
 
     # Deu boa, agora eh soh enviar o sinal para o pino de entrada do proximo
     # rotor
@@ -181,12 +120,15 @@ package Rotor;
     # rodadas e giramos o que for necessario.
     if (not defined $eu->{ANTERIOR}) {
 
-      print chr $p2+97," " if not defined $eu->{ANTERIOR};
-
-      # O desgira_catraca tem a funcao de verificar as rotacoes de cada
-      # catraca
+      print chr $p2+97," ";
       $eu->gira_catraca();
     }
-  }
 
+    # Contando giros completos
+    if ($eu->{RODADA} == 26) {
+
+      $eu->{RODADA} = 0;
+      $eu->{PROXIMO}->gira_catraca() if defined $eu->{PROXIMO};
+    }
+  }
 1;
