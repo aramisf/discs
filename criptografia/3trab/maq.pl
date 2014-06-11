@@ -25,7 +25,7 @@ my %opts;                 # Armazena os arquivos com texto claro e cifrado
 my $rotores;              # Numero de rotores
 my @rotores;              # Lista de referencias para os rotores a serem
                           # criados
-my @saida_rotores;        # Lista de numeros contendo a saida de cada rotor,
+my @pinos_saida_rotores;        # Lista de numeros contendo a saida de cada rotor,
                           # ou seja, os pinos de saida aos quais cada pino de
                           # entrada esta ligado. O indice eh o indice do rotor
                           # ao qual cada sequencia pertence.
@@ -48,16 +48,16 @@ uso() if not @ARGV or (not defined $opts{c} and not defined $opts{d});
 if (defined $opts{s}) {
 
   open (my $fh, "<", $opts{s}) or die "Erro ao abrir $opts{s}: $!\n";
-  push @saida_rotores, [split] while <$fh>;
+  push @pinos_saida_rotores, [split] while <$fh>;
   close $fh;
 }
 else {
 
-  push @saida_rotores, [split] while <DATA>;
+  push @pinos_saida_rotores, [split] while <DATA>;
 }
 
 # Com tamanhos diferentes, nao eh possivel instanciar todos os rotores
-if (@saida_rotores != @ARGV) {
+if (@pinos_saida_rotores != @ARGV) {
 
   print "Erro ao instanciar os pinos de saida dos rotores.\n";
   exit 1;
@@ -74,19 +74,14 @@ $rotores = @ARGV;
 
 foreach (my $i=0; $i<@ARGV; $i++) {
 
-  push @rotores, Rotor->sumona($ARGV[$i],$saida_rotores[$i]);
+  push @rotores, Rotor->sumona($ARGV[$i],$pinos_saida_rotores[$i]);
 
-  # Soh rola de aproveitar o loop para ligar os objetos jah criados
+  # Aproveitando o laco para ligar os objetos (somente os jah criados)
   next if $i == 0;
   $rotores[$i-1]->{PROXIMO} = $rotores[$i];
   $rotores[$i]->{ANTERIOR}  = $rotores[$i-1];
 }
 
-print "Rotores: @rotores\n";
-print "Rotor: $_->{DESLOCAMENTO}\nENTRADA: @{$_->{PINOS_ENTRADA}}\nSAIDA: @{$_->{PINOS_SAIDA}}\nPROX: '$_->{PROXIMO}'\nANT: '$_->{ANTERIOR}'\n" for @rotores;
-
-#print "\nDATA:\n";
-#print "@$_\n" for @saida_rotores;
 
 __DATA__
 21 3 15 1 19 10 14 26 20 8 16 7 22 4 11 5 17 9 12 23 18 2 25 6 24 13
