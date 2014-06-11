@@ -9,12 +9,15 @@ IMPLEMENTACAO DA MAQUINA DE ROTOR:
 
 DOCUMENTACAO
 
-Para usar o programa para cifrar um texto, digite
+Para criar o programa executavel, digite make. Para limpar o diretorio, digite
+make clean.
+
+Uma vez criado o executavel, para cifrar um texto, digite
 
 ./rotores -c <arq1> [-s <arq3>] z1..zn
 
 
-Para usar o programa para decifrar um texto, digite
+E para usar o programa para decifrar um texto, digite
 
 ./rotores -d <arq2> [-s <arq3>] z1..zn
 
@@ -54,5 +57,5 @@ SOBRE:
   O fluxo de execucao dos processos de cifragem e decifragem sao inversamente
   proporcionais.
 
-  O programa ignora caracteres que nao estejam no intervalo [a..z].
+  O programa ignora caracteres que nao estejam no intervalo [a-z].
 
