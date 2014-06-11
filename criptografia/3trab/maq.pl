@@ -87,6 +87,7 @@ foreach (my $i=0; $i<@ARGV; $i++) {
 if (defined $opts{c}) {
 
   open(my $cifrar, "<", $opts{c}) or die "Erro ao abrir arquivo $opts{c}: $!\n";
+  print "### Cifrando texto do arquivo '$opts{c}'\n\n-->\t";
   while (<$cifrar>) {
 
     chomp;
@@ -94,25 +95,27 @@ if (defined $opts{c}) {
 
       $rotores[0]->cifrar($teclado{$_}) if defined $teclado{$_};
     }
-
   }
   close $cifrar;
+  print "\n\n### Feito\n";
 }
 
 if (defined $opts{d}) {
 
   open(my $decifrar, "<", $opts{d}) or die "Erro ao abrir arquivo $opts{d}: $!\n";
+  print "\n### Decifrando texto do arquivo '$opts{d}'\n\n-->\t";
   while (<$decifrar>) {
 
     chomp;
-    my @linha = split //;
-    $rotores[-1]->decifrar($_) foreach @linha;
+    foreach (split //) {
 
+      $rotores[-1]->decifrar($teclado{$_}) if defined $teclado{$_};
+    }
   }
   close $decifrar;
+  print "\n\n### Feito\n";
 }
 
-print "\n";
 __DATA__
 21 3 15 1 19 10 14 26 20 8 16 7 22 4 11 5 17 9 12 23 18 2 25 6 24 13
 20 1 6 4 15 3 14 12 23 5 16 2 22 19 11 18 25 24 13 7 10 8 21 9 26 17
