@@ -1,0 +1,54 @@
+A avaliação da pós segue a seguinte equação:
+
+Média Final = 0.75 * Média Parcial + 0.25 * Trabalho,
+
+onde a Média Parcial está definida na página da disciplina, e o Trabalho será como descrito abaixo.
+
+============================================================
+TRABALHO
+
+-> São uma ou duas apresentações (dependendo do tempo que o aluno julgar necessário), com duração de no máximo 1:30 cada
+-> As datas e horários devem ser marcados **diretamente com o professor**
+-> Pode ser escolhida qualquer data do semestre letivo, com data limite dada pelo último dia do semestre letivo (excluindo a semana de finais dos alunos de graduação)
+-> Não haverá apresentações de tópicos duplicados. Assim que escolher o tema, mande **email** ao professor com o tópico preferido. Os que mandarem antes têm prioridade.
+-> Individual ou em dupla. No caso de dupla, indique os nomes ao professor por email.
+
+O que deve ser feito: 
+
+1 - Texto escrito **em LaTeX** com o material do tópico escolhido (min 10 páginas, máx 20 páginas)
+2 - Apresentação para o professor (a apresentação é pública, ou seja, qualquer pessoa interessada pode ver)
+
+
+Os tópicos podem ser os seguintes:
+
+
+Aritmética básica e modular  (DPV 1.1 e 1.2)
+Teste de Primalidade (DPV 1.3)
+Hash Universal (DPV 1.4)
+Multiplicação. Medianas, e Multiplicação de Matrizes (DPV 2.1, 2.4 e 2.5)
+Estrutura de Dados para Conjuntos Disjuntos, Codificação de Huffman e Formulas de Horn - DPV (5.1.4, 5.2, 5.3)
+Distância de Edição e Conjuntos Independentes em Árvores (DPV 6.3, 6.7)
+Jogos de Soma Zero (DPV 7.5)
+Algoritmos Simplex (DPV 7.6) 
+Estrutura de Dados Aumentantes (CLRS 14)
+Fluxo Máximo - Algoritmos de Push-Relabel (CLRS 26.4 e 26.5)
+Algoritmos de Matrizes (CLRS 28)
+Cache Ótimo e Arborecências Mínimas (KT 4.3 e 4.9)
+Cobertura por Vértices pequena e Problemas Difíceis em Árvore (KT 10.1 e 10.2)
+Decomposições de Grafos em Árvores (KT 10.4)
+Classificação usando Busca Local (KT 12.6)
+Hashing Aleatorizado (KT 13.6)
+
+
+OBS1: CLRS é 3a Edição 
+OBS2: Alguns tópicos necessitam de um pré-requisito de algum assunto, portanto escolham  com atenção o tópico.  
+OBS3: Possivelmente não haverá tempo suficiente para apresentar o tópico completo. Faz parte da avaliação o aluno escolher as partes interessantes de cada tópico, que caibam nas duas apresentações a serem feitas.
+
+
+O que será avaliado:
+
+1 - Qualidade do Texto Escrito: formatação correta em LaTeX (10%), clareza na explicação (25%) 
+2 - Qualidade da Apresentação: clareza na explicação (25%), entendimento da assunto pelo aluno (40%)
+
+DICA: Faça uma prévia da sua apresentação para um amigo (se ele gostar e entender, é um bom indicativo)
+ 
