@@ -40,6 +40,8 @@ sub uso {
   print "<arq2>: arquivo com texto cifrado\n";
   print "<arq3>: arquivo com os valores dos pinos de saida de cada rotor\n";
   print "z1..zn: inteiros indicando os deslocamentos de cada rotor\n\n";
+  print "\@ARGV: @ARGV\n";
+  print "\$opts{d}: $opts{d}\n\$opts{c}: $opts{c}\n";
   exit 1;
 }
 
@@ -48,8 +50,8 @@ uso() if not @ARGV or (not defined $opts{c} and not defined $opts{d});
 
 if (not ($opts{c} xor $opts{d})) {
 
-  print "Escolha apenas UMA dentre [cifrar,decifrar].\n";
-  exit 1;
+  print STDERR "Escolha obrigatoriamente UMA dentre [cifrar,decifrar].\n";
+  exit 2;
 }
 
 if (defined $opts{s}) {
@@ -66,8 +68,8 @@ else {
 # Com tamanhos diferentes, nao eh possivel instanciar todos os rotores
 if (@pinos_saida_rotores != @ARGV) {
 
-  print "Erro ao instanciar os pinos de saida dos rotores.\n";
-  exit 1;
+  print STDERR "Erro ao instanciar os pinos de saida dos rotores.\n";
+  exit 3;
 }
 
 ###

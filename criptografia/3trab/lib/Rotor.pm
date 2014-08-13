@@ -52,7 +52,7 @@ package Rotor;
 
     # Esta hash aqui servira para a decifracao
     @{$hash{PINOS_ENTRADA_HASH}}{@pinos_entrada}  = 0..25;
-    
+
     # Todos os rotores sao iniciados com rodada == 0
     $hash{RODADA}                                 = 0;
 
@@ -103,9 +103,6 @@ package Rotor;
       $eu->{RODADA} = 0;
       $eu->{PROXIMO}->gira_catraca() if defined $eu->{PROXIMO};
     }
-
-    # Retornando o char, apenas p validar os testes
-    chr $p2+97;
   }
 
   sub decifrar {
@@ -134,8 +131,5 @@ package Rotor;
       $eu->{RODADA} = 0;
       $eu->{PROXIMO}->gira_catraca() if defined $eu->{PROXIMO};
     }
-
-    # Retornando o char, apenas p validar os testes
-    chr $p2+97;
   }
 1;
