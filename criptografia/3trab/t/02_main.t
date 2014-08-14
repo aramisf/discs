@@ -25,6 +25,7 @@ my @saida_erro_1c = ("-d feii", 0, 0);
 my @saida_erro_1d = (2, 4, 5);
 
 my @saida_erro_2  = ("-c teste1", "-d teste2");
+my @saida_erro_2a = ("-c teste1", "-d teste2", 1, 2, 3);
 my @saida_erro_3  = ("-c teste_cifra", 1, 2);
 
 ($stdout, $stderr, $exit) = capture { system ($executavel, $saida_erro_1a); };
@@ -56,6 +57,11 @@ is $exit, 1, "Saida de erro 1d correta";
 $exit >>= 8;
 like $stdout, qr/uso/i, "Trata erro 2 corretamente";
 is $exit, 1, "Saida de erro 2 correta";
+
+($stdout, $stderr, $exit) = capture { system ($executavel, @saida_erro_2a); };
+$exit >>= 8;
+like $stderr, qr/Escolha obrigatoriamente UMA/i, "Trata erro 2a corretamente";
+is $exit, 2, "Saida de erro 2a correta";
 
 ($stdout, $stderr, $exit) = capture { system ($executavel, @saida_erro_3); };
 $exit >>= 8;
