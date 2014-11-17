@@ -1,0 +1,30 @@
+\section{Aritmética Modular}
+\vspace{1.5em}
+
+\subsection{O que é}
+
+Aritmética Modular é um sistema que nos permite manipular números inteiros de
+forma que sempre estejam dispostos em um intervalo finito.
+Define-se \textit{x módulo N} como o resto da divisão de $x$ por $N$. Se $r$ é
+tal valor, então $0 \leq r < N$.
+
+Podemos usar esta noção para definir uma relação de equivalência entre
+números: $x$ e $y$ são ditos \textit{congruentes módulo N} se $x-y$ é múltiplo
+de $N$:
+
+$x \equiv y \pmod N \iff N$ divide $(x-y)$
+%$x \equiv y \pmod N \Leftrightarrow N divide (x-y)$
+\\
+
+\textit{Exemplo:}
+$53 \equiv 5 \pmod{12}$, pois $53-5 = 48$, que é múltiplo de 12. Em outras
+palavras, 53 meses equivalem a 4 anos e 5 meses, pois 12 divide $(53-5)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection{Classes de equivalência}
+
+Utilizando artimética modular, podemos dividir os inteiros em intervalos cuja
+forma segue um padrão:\\
+
+\quad $\{i + kN \; | \; kN \in \mathbb{Z}\}$
