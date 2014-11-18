@@ -1,7 +1,4 @@
-\section{Aritmética Modular}
-\vspace{1.5em}
-
-\subsection{O que é}
+\section*{Aritmética Modular}
 
 Aritmética Modular é um sistema que nos permite manipular números inteiros de
 forma que sempre estejam dispostos em um intervalo finito.
@@ -10,36 +7,179 @@ tal valor, então $0 \leq r < N$.
 
 Podemos usar esta noção para definir uma relação de equivalência entre
 números: $x$ e $y$ são ditos \textit{congruentes módulo N} se $x-y$ é múltiplo
-de $N$:
+de $N$. Formalmente:
 
-$x \equiv y \pmod N \iff N$ divide $(x-y)$
-%$x \equiv y \pmod N \Leftrightarrow N divide (x-y)$
-\\
+$x \equiv y \pmod N \iff N$ divide $(x-y)$\\
 
-\textit{Exemplo:}
-$53 \equiv 5 \pmod{12}$, pois $53-5 = 48$, que é múltiplo de 12. Em outras
-palavras, 53 meses equivalem a 4 anos e 5 meses, pois 12 divide $(53-5)$.
+\textit{Exemplo:} $53 \equiv 5 \pmod{12}$, pois $53-5 = 48$, que é múltiplo de
+12. Em outras palavras, 53 meses equivalem a 4 anos e 5 meses, pois 12 divide
+$(53-5)$.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1.5em}
-\subsection{Classes de equivalência}
+\subsection*{Classes de equivalência}
 
 Utilizando artimética modular, podemos dividir os inteiros em intervalos cuja
-forma segue um padrão:\\
+forma segue um padrão:
 
 \quad $\{i + kN \; | \; kN \in \mathbb{Z}\}$
 
-Podemos chamar tais padrões de \textit{Classes de equivalência}, no caso, para
-algum $i$ entre $0$ e $N-1$. Por exemplo, há duas classes de equivalência
-módulo 3:\\
+Podemos chamar tais padrões de \textit{classes de equivalência}. Isso
+significa que todos os números serão limitados a um intervalo pré-definido
+(por $i$) entre $0$ e $N-1$. Por exemplo, há três classes de equivalência
+módulo 3:
 
-$\quad ... -9 -6 -3 0 3 6 9 ...$\\
-$\quad ... -8 -5 -2 1 4 7 10 ...$\\
-$\quad ... -7 -4 -1 2 5 8 11 ...$\\
+\quad ... -9 -6 -3 0 3 6 9 ...
 
-Considerando cada uma das classes de equivalência, temos que os números que
-delas participam são iguais, ou seja, 3 e 6 não apresentam qualquer diferença.
+\quad ... -8 -5 -2 1 4 7 10 ...
 
-\subsection{Regra da Substituição Modular}
-\subsection{Regra da Adição Modular}
-\subsection{Regra da Multiplicação Modular}
+\quad ... -7 -4 -1 2 5 8 11 ...
+
+Considerando cada uma delas, temos que os números contidos em cada classe são
+iguais. Por exemplo, 3 e 6 não apresentam qualquer diferença, pois,
+calculando seu valor em módulo 3, ambos são resultam em zero.
+
+
+\subsection*{Regra da Substituição Modular}
+
+Considere $x$ e $x'$, ambos \textit{congruentes módulo N}, e $y$ e
+$y'$, também \textit{congruentes módulo N}. Graças ao fato de ambos
+pertencerem à mesma classe de equivalência, podemos dizer que:
+
+$x+y \equiv x'+y' \pmod N$ e $xy \equiv x'y' \pmod N$
+
+pois
+
+$x \equiv x' \pmod N$ e $y \equiv y' \pmod N$
+
+\vspace{1em}
+Continuam válidas as propriedades associativa, comutativa e distributiva entre
+os operandos em aritmética modular:
+
+$x+(y+z) \equiv (x+y)+z \pmod N$
+
+$xy \equiv yx \pmod N$
+
+$x(y+z) \equiv xy+xz \pmod N$
+
+\vspace{1em}
+Por exemplo, considere uma disciplina de $90h$ por semestre, onde cada aula
+tem duração de $2h$. Se fosse necessário fazer um curso intensivo, e a
+disciplina fosse ministrada continuamente, com início às $12h$ de uma
+segunda-feira, ela terminaria às $(45 \times 2)\pmod{24}$ horas do último dia.
+Como $(45 \equiv 21) \pmod{24}$, então, do último período de $24h$ seriam
+ocupadas $21h$, e como o início foi às $12h$, então $21h$ equivalem às $9h$ da
+manhã.
+
+Aplicando-se a regra da substituição, pode-se perceber que é possível
+simplificar bastante alguns cálculos aritméticos, reduzindo resultados
+intermediários a seus restos módulo N. Veja um exemplo de como tais
+simplificações podem ser de grande ajuda para cálculos grandes:
+
+$2^{345} \equiv (2^5)^{69} \equiv 32^{69} \equiv 1^{69} \equiv 1 \pmod{31}$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection*{Regra da Adição Modular}
+
+Considere a adição regular de dois números $x$ e $y$ quaisquer. Como estamos
+tratando de dois números módulo N, então a resposta se encontra no intervalo
+$\{0..2(N-1)\}$. Mais precisamente, se a soma excede $N-1$, subtraímos N do total
+para trazer o resultado novamente para o intervalo requerido.
+
+Como você pode ver, o custo computacional desta operação é de uma soma e
+eventualmente uma subtração, de número que nunca excedem $2N$. Portanto, o
+custo é linear no tamanho dos números.
+
+Usando notação assintótica, escrevemos o custo da Adição Modular como
+$\mathcal{O}(n)$, sendo $n$ o tamanho da representação do número e $N$ o
+número propriamente dito, ou seja, $n = \lceil\log{} N\rceil$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection*{Regra da Multiplicação Modular}
+
+Continuando com o mesmo raciocínio da seção anterior, podemos perceber que uma
+multiplicação entre dois números quaisquer $x$ e $y$, ambos em módulo N, terá
+como resultado um número dentro do intervalo $\{0..(N-1)^2\}$, que continua
+tendo no máximo um comprimento igual a $2n$ bits:\\
+
+$\log{(N-1)}^2 = 2\log{(N-1)} \leq 2n$\\
+
+Para reduzir a resposta ao módulo N, computamos o resto dividindo-o por N,
+usando o seguinte algoritmo (de tempo quadrático) para a divisão:
+
+\begin{verbatim}
+função divide (x,y)
+
+Entrada: Dois inteiros de n bits x e y, onde y >= 1
+Saída: O quociente e o resto de x dividido por y
+
+se x=0:
+  retorna (q,r) = (0,0)
+
+(q,r) = divide(x/2,y)
+
+q = 2q
+r = 2r
+
+se x é ímpar:
+  r += 1
+
+se r >= y:
+  r -= y
+  q += 1
+
+retorna (q,r)
+\end{verbatim}
+
+A divisão modular é um pouco mais complicada que a divisão ordinária, no
+entanto, sempre que ela é possível, pode ser resolvida em tempo
+$\mathcal{O}(n)$. Mais adiante este tópico será tratado em detalhes.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection*{Regra da Exponenciação Modular}
+
+Suponha $x, y \textrm{ e } N$ com comprimento de várias centenas de bits. É
+possível calcular $x^y \pmod N$ rapidamente?
+
+Sabemos que o resultado será um número módulo N, e por isso ele próprio terá
+um comprimento de N bits (o que significa algumas centenas de bits!). Contudo,
+o valor de $x^y$ pode ser muitas vezes maior que isso.
+
+Uma vez que estamos falando sobre aritmética modular, seria interessante
+tentarmos aplicar a idéia de módulo às operações que estamos tentando fazer.
+Uma sugestão inicial é calcular $x^y$ através de sucessivas multiplicações por
+$x$ módulo $N$.
+
+Porque estas multiplicações são sempre em módulo $N$, elas não tomam muito
+tempo. Mas caso $y$ possua algumas centenas de bits de tamanho de
+representação, então o custo total será exponencial no tamanho de $y$. Ou
+seja, precisamos encontrar um meio menos custoso computacionalmente.
+
+Por sorte, existe um meio!
+
+Se ao invés de multiplicarmos por $x \textrm{ módulo } N$, elevarmos ao quadrado a
+cada passo, então teremos $x^y$ calculado usando apenas $\log y$
+multiplicações:\\
+
+$x \bmod N \to x^2 \bmod N \to x^4 \bmod N \to\cdots\to x^{2^{\lfloor\log
+y\rfloor}} \bmod N$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection*{Regra da Divisão Modular}
+
+\vspace{1.3em}
+\subsubsection*{Algoritmo de Euclides para o Máximo Divisor Comum}
+
+\vspace{1.3em}
+\subsubsection*{Uma extensão do Algoritmo de Euclides}
+
+\vspace{1.3em}
+\subsubsection*{Divisão Modular}
