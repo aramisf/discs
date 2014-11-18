@@ -159,17 +159,62 @@ $x$ módulo $N$.
 
 Porque estas multiplicações são sempre em módulo $N$, elas não tomam muito
 tempo. Mas caso $y$ possua algumas centenas de bits de tamanho de
-representação, então o custo total será exponencial no tamanho de $y$. Ou
-seja, precisamos encontrar um meio menos custoso computacionalmente.
+representação, então o custo total será exponencial com relação ao tamanho de
+$y$. Ou seja, precisamos encontrar um meio menos custoso computacionalmente.
 
 Por sorte, existe um meio!
 
-Se ao invés de multiplicarmos por $x \textrm{ módulo } N$, elevarmos ao quadrado a
-cada passo, então teremos $x^y$ calculado usando apenas $\log y$
-multiplicações:\\
+Se ao invés de multiplicarmos por $x \textrm{ módulo } N$, elevarmos ao
+quadrado a cada passo, então teremos o valor de $x^y$ calculado usando apenas
+$\log y$ multiplicações:\\
 
 $x \bmod N \to x^2 \bmod N \to x^4 \bmod N \to\cdots\to x^{2^{\lfloor\log
-y\rfloor}} \bmod N$
+y\rfloor}} \bmod N$\\
+
+Para determinarmos $x^y \bmod N$, basta multiplicar o subconjunto das
+potências de 2 que compõem sua representação, em particular aqueles que fazem
+parte da representação binária de $y$. Se $y$ fosse o número $13$, teria $4$
+bits, e sua representação seria algo como:\\
+
+$\quad x^{13} = x^{1101_2} = x^{1000_2} \cdot x^{100_2} \cdot x^{1_2}$
+
+\vspace{1.2em}
+Um algoritmo de tempo polinomial é possível.
+
+\begin{verbatim}
+função exponenciacao_modular (x, y, N)
+
+Entrada: 2 número inteiros de n bits x e N, um expoente inteiro y
+Saída: x**y mod N
+
+se y = 0:
+  retorna 1
+
+z = exponenciacao_modular(x, y/2, N)
+
+se y é par:
+  retorna z*z mod N
+
+senão:
+  retorna x * (z*z mod N)
+
+\end{verbatim}
+
+Formulando a idéia do algoritmo recursivo acima, temos:
+\[ x^y =
+  \left \{
+    \begin{array}{l l}
+      (x^{\lfloor y/2 \rfloor})^2 & \quad \textrm{se $y$ é par}\\
+      x\cdot(x^{\lfloor y/2 \rfloor})^2 & \quad \textrm{se $y$ é ímpar}
+    \end{array}
+  \right.
+\]
+
+Considerando $n$ como a quantidade de bits necessária para representar $x, y$
+e $N$, o algoritmo vai parar após no máximo $n$ chamadas recursivas, e durante
+cada chamada ele multiplica números de $n$ bits. Como a multiplicação é feita usando aritmética modular, 
+seu custo é $\mathcal{O}(n^2)$, e como são feitas $n$ dessas multiplicações, o
+custo total do algoritmo é de $\mathcal{O}(n^3)$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1.5em}
