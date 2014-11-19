@@ -356,15 +356,15 @@ Na aritmética comum, todo número $a \neq 0$ possui um inverso, $\frac{1}{a}$,
 e dividir por $a$ é o mesmo que multiplicar pelo inverso. Dentro da aritmética
 modular, uma definição similar é possível:\\
 
-\textit{Dizemos que $x$ é o inverso multiplicativo de $a$, módulo N, se $ax
-\equiv 1 \pmod N$.}\\
+\textit{$x$ é o inverso multiplicativo de $a$, módulo N, se $ax \equiv 1 \pmod
+N$.}\\
 
 Pode haver no máximo um tal $x$ módulo N, e o denotaremos por $a^{-1}$ (ou
-seja $aa^{-1} \equiv 1 \pmod N$).
-Entretanto, esse inverso nem sempre existe. Por exemplo, 2 não é inversível
-módulo 6: quer dizer, $2x \not\equiv 1 \bmod 6$ para qualquer escolha de $x$.
-Nesse caso, $a$ e $N$ são ambos pares e assim $a$ mod $N$ é sempre par, porque
-$a$ mod $N = a - kN$ para algum $k$.
+seja $aa^{-1} \equiv 1 \pmod N$).  Mas não é sempre que esse inverso
+muliplicativo pode ser encontrado, pois ele nem sempre existe. Veja por
+exemplo o número 2. Ele não é inversível módulo 6, ou seja, $\not\exists x |
+2x \not\equiv 1 \bmod 6$.  Nesse caso, $a$ e $N$ são ambos pares e assim $a$
+mod $N$ é sempre par, porque $a$ mod $N = a - kN$ para algum $k$.
 
 Ainda, podemos ter certeza de que $mdc(a,N)$ divide $ax \bmod N$, pois esta
 última expressão pode ser escrita na forma $ax + kN$. Assim, se $mdc(a,N) >
@@ -381,4 +381,8 @@ ou seja, $x$ é o inverso de $a$.
 possui um inverso multiplicativo módulo $N$ se e somente se ele é primo
 relativo de $N$. Se existir, este inverso pode ser encontrado em tempo
 $\mathcal{O}(n^3)$ executando o algoritmo estendido de Euclides.}
+
+Assim fica resolvida a questão da Divisão Modular. Trabalhando com números
+módulo $N$, podemos dividir por números primos relativos de $N$ (somente),
+depois, para efetivar a divisão, basta multiplicar pelo seu inverso.
 
