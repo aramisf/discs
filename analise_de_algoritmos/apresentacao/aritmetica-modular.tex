@@ -216,15 +216,169 @@ cada chamada ele multiplica números de $n$ bits. Como a multiplicação é feit
 seu custo é $\mathcal{O}(n^2)$, e como são feitas $n$ dessas multiplicações, o
 custo total do algoritmo é de $\mathcal{O}(n^3)$.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1.5em}
 \subsection*{Regra da Divisão Modular}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1.3em}
 \subsubsection*{Algoritmo de Euclides para o Máximo Divisor Comum}
 
+Euclides foi um matemático grego, que viveu há mais de 2 mil anos atrás.
+Dentre suas descobertas está um algoritmo que calcula o máximo divisor comum
+entre dois inteiros $a$ e $b$.
+
+A abordagem que aprendemos na escola, é fatorar ambos e multiplicar os
+elementos comuns, encontrando assim o \textit{mdc}. Contudo, esta abordagem é
+pouco eficiente.
+
+O algoritmo de Euclides utiliza uma regra bastante simples.\\
+\textbf{Regra de Euclides}: \textit{Se x e y são inteiros positivos com $x
+\geq y$, então mdc(x,y) = mdc($x \bmod y, y$).}
+
+A demonstração é simples e consiste basicamente na compreensão de uma regra
+ainda mais simples que a de Euclides:\\
+
+$\quad mdc(x,y) = mdc(x-y, y)$\\
+
+Pode-se chegar a essa simplificação subtraindo-se $y$ de $x$ sucessivas vezes.
+
+A prova segue diretamente: por um lado, se um inteiro divide $x$ e $y$, então este inteiro
+também divide $x-y$, portanto $mdc(x,y) \leq mdc(x-y,y)$. Por outro lado, se
+um inteiro divide tanto $x-y$ quanto $y$, então este inteiro também deve
+dividir tanto $x$ quanto $y$, portanto $mdc(x,y) \geq mdc(x-y,y)$.
+
+Segue um algoritmo recursivo que utiliza a regra de Euclides para calcular o
+\textit{mdc}:
+
+\begin{verbatim}
+função Euclides(a,b)
+
+Entrada: 2 inteiros a e b com a >= b >= 0
+Saída: mdc(a,b)
+
+se b = 0:
+  retorna a
+
+retorna Euclides(b, a mod b)
+
+\end{verbatim}
+
+Para calcular o tempo de execução deste algoritmo, é necessário entender a
+velocidade de decrescimento dos argumentos a cada uma das chamadas recursivas.
+Com uma chamada, os argumentos $(a,b)$ tornam-se $(b,a\bmod b)$: troca-se a
+ordem e o tamanho de $a$ é reduzido substancialmente.
+
+\textbf{Lema}: \textit{Se $a \geq b$, então $a \bmod b < a/2$.}
+
+\textit{Prova}: Vamos dividir as possibilidades em dois casos distintos: ou $b
+\leq a/2$ ou $b > a/2$.\\
+Caso $b \leq a/2$, então $a \bmod b < b \leq a/2$.\\
+Caso $b > a/2$, então $a \bmod b = a-b < a/2$.\\
+
+Isso demonstra como, depois duas rodadas consecutivas quaisquer, tanto $a$
+quanto $b$ foram reduzidos, no mínimo, pela metade de seu valor inicial - seu
+tamanho decresce pelo menos 1 bit a cada rodada. Se ambos são inteiros com $n$
+bits de tamanho, então o caso base será alcaçado em $2n$ rodadas. Assim como
+temos visto ao longo desse estudo, nossa divisão modular possui tempo
+quadrático, e como são efetuadas $2n$ chamadas, o tempo total do algoritmo é
+$\mathcal{O}(n^3)$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1.3em}
 \subsubsection*{Uma extensão do Algoritmo de Euclides}
 
+Nesta seção faremos uma análise de uma extensão no algoritmo de Euclides que
+nos permitirá calcular o \textit{mdc}.
+
+\textbf{Lema} \textit{Se $d$ divide tanto $a$ quanto $b$ e $d = ax + by$ para
+inteiros $x$ e $y$, então, necessariamente, $d = mdc(a,b)$}.
+
+\textit{Prova}: Por um lado, considerando-se as duas primeiras condições, $d$
+é divisor comum de $a$ e de $b$ e, portanto, não pode exceder o \textit{mdc},
+ou seja $d \leq mdc(a,b)$. Por outro lado, como o $mdc(a,b)$ é comum a $a$ e a
+$b$, ele deve necessariamente dividir $ax + by = d$, o que significa que
+$mdc(a,b) \leq d$. Portanto, $d = mdc(a,b)$.
+
+Os coeficientes $x$ e $y$ podem ser encontrados com uma extensão do algoritmo
+de Euclides:
+
+\begin{verbatim}
+função euclides_estendido(a,b)
+
+Entrada: 2 inteiros a e b com a >= b >= 0
+Saída: Inteiros x, y e d tais que d = mdc(a,b) e ax + by = d
+
+se b == 0:
+  retorna (1,0,a)
+
+(x',y',d) = euclides_estendido(b, a mod b)
+
+retorna (y', x' - (a/b)*y, d)
+
+\end{verbatim}
+
+\textbf{Lema}: \textit{Para quaisquer inteiros positivos $a$ e $b$, o
+algoritmo estendido de Euclides retorna inteiros $x, y e d$ tais que $mdc(a,b)
+= d = ax + by$.}
+
+\textit{Prova} Se forem ignorados $x$ e $y$, o algoritmo se comporta como o
+original. Então, no mínimo, estaremos calculando $d = mdc(a,b)$.
+
+A recursão termina quando $b=0$, portanto é interessante fazermos a indução no
+valor de $b$. O caso base pode ser verificado diretamente, pois quando $b = 0$
+o algoritmo retorna imediatamente o valor contido em $a$.
+
+Para valores de $b$ maiores que zero, o algoritmo encontra o $mdc(a,b)$
+chamando $mdc(b, a \bmod b)$. Como $a \bmod b < b$ podemos concluir, aplicando
+a hipótese de indução e concluir que os $x'$ e $y'$ retornados estão
+corretos:\\
+
+$\quad mdc(b, a\bmod b) = bx' + (a \bmod b)y'$.\\
+
+Escrevendo $(a \bmod b)$ como $(a - \lfloor a/b \rfloor b)$, encontramos:\\
+
+$\quad d = mdc(a,b) = mdc(b, a\bmod b) = bx' + (a \bmod b)y' = bx' + (a -
+\lfloor a/b \rfloor b)y' = ay' + b(x' - \lfloor a/b \rfloor y')$.\\
+
+Desse modo, $d = ax + by$ com $x = y'$ e $y = x' - \lfloor a/b \rfloor y'$,
+validando assim o comportamento do algoritmo sobre a entrada $(a,b)$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1.3em}
 \subsubsection*{Divisão Modular}
+
+Na aritmética comum, todo número $a \neq 0$ possui um inverso, $\frac{1}{a}$,
+e dividir por $a$ é o mesmo que multiplicar pelo inverso. Dentro da aritmética
+modular, uma definição similar é possível:\\
+
+\textit{Dizemos que $x$ é o inverso multiplicativo de $a$, módulo N, se $ax
+\equiv 1 \pmod N$.}\\
+
+Pode haver no máximo um tal $x$ módulo N, e o denotaremos por $a^{-1}$ (ou
+seja $aa^{-1} \equiv 1 \pmod N$).
+Entretanto, esse inverso nem sempre existe. Por exemplo, 2 não é inversível
+módulo 6: quer dizer, $2x \not\equiv 1 \bmod 6$ para qualquer escolha de $x$.
+Nesse caso, $a$ e $N$ são ambos pares e assim $a$ mod $N$ é sempre par, porque
+$a$ mod $N = a - kN$ para algum $k$.
+
+Ainda, podemos ter certeza de que $mdc(a,N)$ divide $ax \bmod N$, pois esta
+última expressão pode ser escrita na forma $ax + kN$. Assim, se $mdc(a,N) >
+1$, então $ax \not\equiv 1 \bmod N$, não importa quem seja $x$ e, portanto,
+$a$ não pode ter um inverso multiplicativo módulo $N$.
+
+Este é o único caso onde $a$ não é inversível. Quando o $mdc(a,N) = 1$,
+dizemos que $a$ e $N$ são \textit{primos relativos}. Quando temos dois números
+que são primos relativos, o algoritmo estendido de Euclides nos dá inteiros
+$x$ e $y$ tais que $ax + Ny = 1$, o que significa que $ax \equiv 1 \pmod N$,
+ou seja, $x$ é o inverso de $a$.
+
+\textbf{Teorema da Divisão Modular} \textit{Para qualquer $a$ mod $N$, a
+possui um inverso multiplicativo módulo $N$ se e somente se ele é primo
+relativo de $N$. Se existir, este inverso pode ser encontrado em tempo
+$\mathcal{O}(n^3)$ executando o algoritmo estendido de Euclides.}
+
