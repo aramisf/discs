@@ -1,3 +1,206 @@
 \section*{Teste de Primalidade}
 
-\subsection*{Primeira Seção}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection*{Fatoração}
+
+O processo da fatoração é um processo bastante simples de ser compreendido,
+contudo, apesar de existirem algumas otimizações possíveis, ele continua sendo
+um procedimento computacionalmente custoso. A melhor otimização para este
+procedimento é seguir o algoritmo de Eratóstenes, que consiste basicamente em
+testar todos os números primos menores que a raiz quadrada do número a ser
+testado.
+
+O algoritmo começa com uma lista de todos os naturais até um dado número, que,
+quando analisamos o caso otimizado, é $\sqrt{n}$. Testa se $n$ é divisível por 2, se não for,
+elimina da lista todos os múltiplos de 2, e testa a divisão por 3. Se $n$ não é
+divisível por 3, então elimina-se todos os múltiplos de 3 que ainda não foram
+eliminados da lista. O algoritmo segue este método até atingir $\sqrt{n}$.
+Caso $n$ não seja divisível por nenhum dos números testados, então pode-se
+afirmar com certeza que $n$ é primo.
+
+Apesar desse algoritmo ser caro em termos computacionais, ele retorna com a
+resposta correta. Contudo, para casos práticos, onde a primalidade a ser
+descoberta é a de números muito grandes, o processo da fatoração deixa de ser
+interessante. Veremos a seguir um método mais eficaz, que apesar de ser
+probabilístico, apresenta um custo computacional muito menor.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection*{Teorema de Fermat}
+
+Surgiu no ano 1640, e segundo ele é possível dizer se um número é primo sem
+que seja necessário efetuar a fatoração (que é um processo custoso, como
+vimos anteriormente).
+
+Seu teorema diz o seguinte:
+
+\textit{Se $p$ é primo, então para todo $1 \leq a < p$},
+
+$\quad a^{p-1} \equiv 1 \pmod p$\\
+
+
+\textit{Prova:} Seja $S = \{1,2,\ldots,p-1\}$. Provaremos que, quando todos os
+elementos de $S$ são multiplicados por $a$ módulo $p$, os números resultantes
+são todos distintos e não-nulos. Ainda, por estarem todos dentro do intervalo
+$[1,p-1]$, necessariamente eles são uma permutação de $S$.
+
+Os números $a\cdot i\bmod p$ são todos distintos porque se $a\cdot i \equiv
+a\cdot j \pmod p$, então basta dividir ambos por $a$ para obtermos $i\equiv j
+\pmod p$.
+
+Tais números também são não-nulos porque $a\cdot i \equiv 0$ significa que
+$i\equiv 0$, pois assumimos que $a \ne 0$, portanto podemos dividir ambos os
+lados por $a$.
+
+Podemos então escrever o conjunto $S$ de duas maneiras:
+
+$S = \{1,2,\ldots,p-1\} = \{a\cdot1 \bmod p, a\cdot2\bmod p,\ldots,
+a\cdot(p-1)\bmod p\}$
+
+Multiplicando os elementos em cada uma dessas representações, temos:
+
+$(p-1)! \equiv a^{p-1} \cdot (p-1)! \pmod p$
+
+Por termos assumido que $p$ é primo, $(p-1)$ é seu primo relativo, e portanto
+podemos dividir ambos os lados por $(p-1)!$, obtendo:
+
+$1 \equiv  a^{p-1} \pmod p$
+\vspace{1.2em}
+
+Este teorema nos dá a impressão de que nenhum teste de fatoração é necessário,
+mas existe um detalhe sobre o teorema que é importante ressaltar: \textit{Todo
+número primo passa no teste de Fermat, mas nem todo número composto reprova}.
+Por exemplo, $341 = 11 \cdot 31$ não é primo e ainda assim $2^{340} \equiv 1
+\bmod 341$.
+
+Um número composto tem de falhar para algum valor de $a$, vejamos então como
+encontrar os erros.
+
+\textbf{Lema} \textit{Se $a^{N-1} \not\equiv 1 \bmod N$ para algum primo
+relativo de $N$, então o mesmo acontece para pelo menos metade das escolhas
+de $a < N$.}
+
+\textit{Prova.} Fixe algum valor de $a$ para o qual $a^{N-1}\not\equiv 1 \bmod
+N$. Qualquer elemento $b < N$ que passa no teste de Fermat com relação a $N$
+(ou seja, $b^{N-1} \equiv 1 \bmod N$) possui um gêmeo, $a\cdot b$, que falha
+no teste:
+
+$(a\cdot b)^{N-1}\equiv a^{N-1}\cdot b^{N-1}\equiv a^{N-1} \not\equiv 1 \bmod
+N$
+
+Além disso, todos esses elementos $a\cdot b$, para um $a$ fixo, para diferentes
+$b$'s são distintos pela mesma razão que $a\cdot i \not\equiv a\cdot j$ na
+prova do teste de Fermat.
+
+Podemos então afirmar:
+
+Se $N$ é primo, então $a^{N-1} \equiv 1 \bmod N$ para todo $a<N$.\\
+Se $N$ não é primo, então $a^{N-1} \equiv 1 \bmod N$ para pelo menos metade
+dos valores de $a<N$.
+
+O algoritmo do nosso teste, então, possui um comportamento probabilístico,
+onde:
+
+Se $N$ é primo, o algoritmo retorna 1 com probabilidade 1;\\
+Se $N$ não é primo, o algoritmo retorna 1 com probabilidade $\leq \frac{1}{2}$
+
+Este último caso ocorre uma vez para cada um dos $a<N$, se rodarmos o
+algoritmo para cada uma das $N-1$ vezes, podemos reduzir a probabilidade de
+erro para $\frac{1}{2^{N-1}}$. Ou seja, a probabilidade de erro cai
+exponencialmente.
+
+Existe ainda um conjunto raro de números que passam no teste de Fermat para
+todo $a$ primo relativo de $N$, são os chamados números de
+\textit{Carmichael}. Vamos falar brevemente sobre eles agora.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection*{Números de \textit{Carmichael}}
+
+São números que passam no teste de Fermat para todos os primos relativos de um
+certo $N$. O menor número de \textit{Carmichael} é 561. Ele não é primo, no
+entanto $a^{560} \equiv 1 \pmod 561$ para todos os valores de $a$ que são
+primos relativos de 561.
+
+Por serem números muito raros, por muito tempo se pensou que fossem finitos,
+mas hoje sabe-se que os números de Carmichael são infinitos, porém,
+raríssimos.
+
+Para contornar o problema que eles geram, existe um teste de primalidade
+ligeiramente mais refinado. Escreva $N-1$ na forma $2^tu$, como no algoritmo
+já estudado, escolheremos aleatoriamente um valor $a$ e verificaremos $a^{N-1}
+\bmod N$. Realizamos essa computação primeiro determinando $a^u$, e depois
+faremos sucessivas elevações ao quadrado, afim de obter:
+
+$a^u\bmod N, a^{2u}\bmod N, \ldots, a^{2^tu} \equiv a^{N-1}\bmod N$
+
+Se $a^{N-1} \not\equiv 1 \bmod N$, quando $N$ é composto segundo o pequeno
+teorema de Fermat, então terminamos. Mas se $a^{N-1} \equiv \bmod N$,
+conduzimos mais um teste: em algum momento da sequência anterior, passamos por
+1 pela primeira vez. Se isso aconteceu depois da primeira posição (ou seja, se
+$a^u \bmod N \ne 1$), e se o valor anterior da lista não é $-1 \bmod N$,
+declaramos $N$ composto.
+
+Neste caso, encontramos uma \textit{raiz quadrada não trivial} de 1 módulo
+$N$: um número que não é $\pm 1\bmod N$, mas que, quando elevado ao quadrado,
+é igual a $1\bmod N$. Tal número somente pode existir se $N$ é composto.
+
+Através dessa verificação da raiz quadrada, em conjunto com o teste anterior
+de Fermat, pelo menos $\frac{3}{4}$ dos possíveis valores de $a$ entre
+$1..N-1$ revelarão um número composto $N$, mesmo se ele é um número de
+Carmichael.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1.5em}
+\subsection*{Gerando primos aleatórios}
+
+Nosso próximo objetivo é obter um algortimo rápido para selecionar números
+primos aleatórios com algumas centenas de bits de tamanho. Segundo o teorema
+dos números primos de Lagrange, os números primos são abundantes: um número
+aleatório de $n$ bits de comprimento tem uma chance aproximada de
+$\frac{1,44}{n}$ de ser primo.\\
+\\
+\textbf{Teorema dos números primos de Lagrange} \textit{Seja $\pi (x)$ o
+número de primos $\leq x$. Então $\pi (x) \approx x/(\ln x)$, ou mais
+precisamente,}
+
+$\quad \lim_{x \to \infty}\frac{\pi(x)}{(x/\ln x)} = 1$
+
+\vspace{1em}
+Tal abundância facilita a geração de um primo aleatório de $n$ bits:
+\begin{itemize}
+  \item Selecione um número aleatório $N$ de $n$ bits;
+  \item Execute um teste de primalidade sobre $N$;
+  \item Se ele passar no teste, mostre-o; senão volte ao início.
+\end{itemize}
+
+Quão rápido é esse algoritmo? Se o $N$ selecionado aleatoriamente for
+realmente primo, o que acontece com probabilidade de pelo menos $1/n$, ele
+certamente passará no teste. Portanto, o algortimo vai parar em
+aproximadamente $\mathcal{O}(n)$ rodadas.
+
+Mas qual o melhor teste de primalidade a ser aplicado? Como em nosso caso
+estamos utilizando números escolhidos aleatoriamente (e não por um
+adversário), é suficiente realizar o teste de Fermat com base $a=2$ (mas para
+ser mais eficaz, podemos utilizar $\{2,3,5\}$, porque para números aleatórios
+o teste de Fermat tem uma probabilidade de falha muito menor que a taxa de
+pior caso que vimos anteriormente, de $1/2$. O algortimo resultante é bastante
+rápido, gerando primos que têm centenas de bits de comprimento em uma fração
+de segundo, mesmo num computador comum.
+
+Mas qual a probabilidade de um número apresentado pelo algoritmo ser de fato
+um primo?
+
+Para compreendermos a eficácia do teste de Fermat, vamos estudar o seguinte
+cenário:
+
+Suponha que realizemos um teste com base $a=2$ para todos os $N \leq 25\times
+10^9$. Nesse intervalo há cerca de $10^9$ primos e cerva de 20.000 compostos
+que passam no teste. Portanto a chance de gerar erradamente um composto é
+aproximadamente $20.000/10^9 = 2\times 10^{-5}$. Mas essa chance de erro
+decresce rapidamente, à medida que aumentamos o comprimento dos números
+envolvidos.
