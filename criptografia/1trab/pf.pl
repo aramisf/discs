@@ -9,7 +9,6 @@ require "lib/Playfair.pm";
 my $texto_cifrado;                    # Sera lido da entrada, 1o parametro
 my $dicionario;                       # Idem ^, 2o parametro
 
-
 # String gigante contendo o texto inteiro cifrado
 my $texto_cifrado_str;
 
@@ -43,6 +42,9 @@ while (<$texto_cifrado>) {
   $texto_cifrado_str .= $_;
 }
 
+# Somente caracteres minusculos
+$texto_cifrado_str  = lc $texto_cifrado_str;
+
 # Caso nao exista um diretorio para conter os resultados:
 mkdir "resultados" unless -d "resultados";
 
@@ -51,11 +53,12 @@ while (my $chave  = <$dicionario>) {
 
   # Removendo espacos em branco
   $chave  =~ s/\s+//g;
-  my $arq = "resultados/$chave";
 
-  # Menos processamento e mais memoria
-  Playfair::decrypt($chave,$texto_cifrado_str,$arq);
-
+  Playfair::decrypt($chave,$texto_cifrado_str,0);
 }
+
+# Neste ponto do programa teremos uma lista com as 5 chaves mais provaveis
+# (sendo o primeiro eh o mais provavel)
+Playfair::resultados($texto_cifrado_str);
 
 exit 0;

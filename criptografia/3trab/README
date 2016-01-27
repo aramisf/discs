@@ -4,3 +4,58 @@ IMPLEMENTACAO DA MAQUINA DE ROTOR:
   - A parte interna eh conectada pelo aluno, mas a forma de conectar as partes
     deve estar clara para ser alterada;
   - Parametro de entrada: a posicao inicial dos rotores.
+
+- - -
+
+DOCUMENTACAO
+
+Para criar o programa executavel, digite make. Para limpar o diretorio, digite
+make clean.
+
+Uma vez criado o executavel, para cifrar um texto, digite
+
+./rotores -c <arq1> [-s <arq3>] z1..zn
+
+
+E para usar o programa para decifrar um texto, digite
+
+./rotores -d <arq2> [-s <arq3>] z1..zn
+
+                                                                     
+Onde:                                                                
+ - z[1-n] sao numeros inteiros indicando o deslocamento inicial dos rotores;
+ - arq1 eh o arquivo texto a ser cifrado (valido somente com a opcao 'c')
+ - arq2 eh o arquivo texto a ser decifrado (valido somente com a opcao 'd')
+ - arq3 eh o arquivo com os valores dos pinos de saida de cada rotor, que eh
+   opcional, pois o programa jah contem uma ligacao interna sugerida.
+
+
+
+SOBRE:
+  Os rotores sao criados conforme a quantidade de parametros passados na linha
+  de comando, sem considerar nesta contagem as chaves -c, -d e -s. Note que eh
+  feita uma verificacao da quantidade de parametros e da quantidade de linhas
+  do arquivo fonte contendo as informacoes de conexao interna do circuito do
+  rotor. Por padrao o programa oferece dados para construir 3 rotores.
+
+  Ao criar os rotores com os devidos deslocamentos, o programa ja conecta os
+  rotores entre si. Armazenando internamente ponteiros para os rotores
+  vizinhos (quando aplicavel). Por isso nao eh possivel cifrar e decifrar ao
+  mesmo tempo, pois seria necessario reiniciar a posicao dos rotores para
+  fazer uma nova tarefa.
+
+  O programa uma uma mascara de teclado para encontrar os pinos de cada rotor,
+  uma vez encontrado o pino de entrada para um determinado caractere, o
+  primeiro rotor (ou a primeira catraca da maquina) efetua as devidas
+  operacoes, conforme o procedimento em questao (se cifragem ou decifragem),
+  avisando os mecanismos seguintes. Ou seja, o programa principal cria os
+  rotores, e coloca a entrada apenas no primeiro rotor. Este, por sua vez, se
+  comunica automaticamente com o rotor seguinte, e assim por diante, ateh que
+  o ultimo rotor seja ativado. Entao, o ultimo rotor imprime na saida padrao o
+  resultado em formato de caractere.
+
+  O fluxo de execucao dos processos de cifragem e decifragem sao inversamente
+  proporcionais.
+
+  O programa ignora caracteres que nao estejam no intervalo [a-z].
+

@@ -47,11 +47,11 @@ is  Playfair::gera_matriz("XehRrxish"),
 # de saida e comparamos com o resultado esperado.
 
 my $chave = 'camisa';
-my $arq   = 'teste_camisa';
+my $arq   = "resultados/$chave.txt";
 my $crypt = "rhiwdimt";     # Note q o texto passado para a funcao jah vem sem
                             # os espacos entre os caracteres.
 
-Playfair::decrypt($chave,$crypt,$arq);
+Playfair::decrypt($chave,$crypt,1);
 
 ok( -f $arq, "Decrypt cria o arquivo de saida");
 open(my $arq_read, "<", $arq);
@@ -62,7 +62,7 @@ while(<$arq_read>) {
   $result .= $_;
 }
 
-is $result, "pl ay fa ir \n", "Decifrado com sucesso";
+is $result, "p l a y f a i r \n", "Decifrado com sucesso";
 is `rm -f $arq`, '', "Arquivo teste removido com sucesso.";
 
 done_testing();

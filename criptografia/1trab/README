@@ -7,9 +7,7 @@ PLAYFAIR:
 Premissas:
 
   - Todos os caracteres da entrada nao sao acentuados;
-  - Nao aparecem numeros na entrada. Se aparecerem serao tratados como se
-    fossem caracteres, ou seja, ocorrera um erro de decifragem no par onde
-    aparecerem;
+  - Os unicos caracteres validos para a entrada sao [A-Za-z]
   - i's e j's serao todos substituidos por i;
 
 
@@ -18,19 +16,20 @@ Instrucoes de uso:
   - Para executar os testes:
     `make teste';
 
-  - Para criar um dicionario com palavras validas da lingua portuguesa:
-    `make lista';
-
   - Para criar o arquivo executavel:
     `make';
 
   - Para remover os arquivos criados:
     `make clean';
 
-  Depois de criado o executavel, execute-o assim:
+  Depois de criado o executavel, voce pode executa-lo assim:
     `./playfair <ARQ1> <ARQ2>'
 
     Onde:
       - <ARQ1> eh o arquivo contendo o texto a ser decifrado;
       - <ARQ2> eh o arquivo contendo a lista de possiveis chaves para decifrar
         o texto contido em <ARQ1>;
+
+
+O programa gera automaticamente uma lista sugerida contendo palavras da lingua
+portuguesa. Mudei a opcao do comando `make lista', e agora basta rodar `make'.
