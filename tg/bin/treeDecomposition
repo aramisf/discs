@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#-- Main file for Tree Decompositon algortihm --#
+
+# Global libs, to handle stdin and exiting methods
+from sys import argv, exit as sys_exit
+
+# In case environment is correctly set:
+try:
+    from treed import * # treed will be the Tree Decomposition library.
+
+    # Thought that one lib to handle stdin might help, but this is something
+    # that could be discussed, of course.
+    import utils
+
+# But if someone forgot to prepare environment:
+except ImportError:
+
+    # Technique to edit $PYTHONPATH variable inside a program:
+    # 1. Accessing PATH variable:
+    from sys import path
+
+    # 2. Getting directory name and absolute path:
+    from os.path import dirname, abspath
+
+    # 3. Adding ../lib/ to my current PATH:
+    path.append (dirname (abspath (argv[0]) ) + "/../lib/")
+
+    # /Technique
+
+    # Now it should work:
+    from treed import *
+    import utils
+
+
+# Function to handle bad program calls:
+def usage():
+
+    print "Use:\n\t%s <file>\n" %(argv[0])
+    print "Where <file> is a matrix representation of a graph"
+    sys_exit(1)
+
+
+# Main program starts here:
+if len(argv) != 2:
+    usage()
+
+
+else:
+
+    # Considering that there will be a lib to do this, it would look like:
+    graph = utils.readGraph(argv[1]) # But this is just for now. May be changed.
+
+    # Defining possible answers:
+    yes = ["Y","y",""]
+    no = ["N","n"]
+    possible_answers = yes + no
+
+
+    # Asking user about what to do:
+    ANS = raw_input("Do you want to set Maximum Tree Width? [Y/n] ")
+
+    while not ANS in possible_answers:
+        print "Ok... again..."
+        ANS = raw_input("- Do you want to set Maximum Tree Width? [Y/n] ")
+
+
+    # And then starting a Tree Decomposition of this graph:
+    if ANS in yes:
+        k = int(raw_input("Ok, enter k value: "))
+        print "Building tree decomposition with width %d..." % k
+        myTree = TreeDecomposition (graph,k)
+
+    elif ANS in no:
+        print "Building simple tree decomposition..."
+        myTree = TreeDecomposition (graph)
+

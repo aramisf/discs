@@ -1,0 +1,11 @@
+# Enunciado:
+# 12. Rede em estrela montada como 2 árvores, em cada uma um switch principal,
+# conectado com 6 switches a 100Mbps, cada um destes com 20 máquinas a 10 Mbps,
+# os 2 switches principais conectados por um cabo a 1Gbps.
+# - variar a qtde de transmissores 30/40/50/60 transmissores - todos os
+# transmissores em uma das árvoes;
+# - 10 receptores - todos os receptores na outra árvore;
+# - cada transmissor gera 20 mensagens por segundo;
+# - atraso da transmissão 10 ms;
+# - simular 3 minutos de vida da rede;
+# - gerar gráfico da taxa de entrega e da latência da rede.

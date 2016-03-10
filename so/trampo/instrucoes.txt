@@ -1,0 +1,16 @@
+Trabalho de SO:
+
+O programa recebe na linha de comando os seguintes parametros:
+
+1o - Arquivo contento as informacoes dos pontos;
+2o - numero de threads produtoras desejadas;
+3o - numero de threads consumidoras desejadas.
+
+Exemplo:
+
+- Para executar o programa com um arquivo chamado cells.20k, utilizando 3
+  threads produtoras e 5 consumidoras, basta passar os seguintes parametros
+  na linha de comando:
+
+$ ./bin/terapia-tumores cells.20k 3 5
+

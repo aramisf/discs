@@ -1,0 +1,69 @@
+Texto retirado de:
+http://www.inf.ufpr.br/elias/redes/tpRedesII2011-1.html
+
+Trabalho Prático de Redes de Computadores II - Turma 2011/1
+Consulta Distribuída Recursiva
+
+
+Entrega: Todos os trabalhos serão acessados quarta-feira dia 08 de junho de
+2011; não serão aceitos trabalhos disponibilizados após esta data.
+
+O trabalho deve ser feito em dupla; o código, os testes e o relatório devem ser
+feitos por ambos os membros da dupla. Use esta oportunidade para melhorar sua
+habilidade de trabalhar em equipe.
+
+Nas próximas aulas todas as duplas devem informar ao professor os nomes dos
+alunos, bem como a URL do trabalho.
+
+Descrição do Trabalho
+
+Construa um sistema que implementa uma calculadora remota. O cliente faz uma
+requisição com uma expressão aritmética que será respondida por um servidor,
+como indicado a seguir.
+
+Implemente uma sequência de N>=3 servidores; cada um dos servidores tem um
+identificador sequencial no intervalo de 1 a N. Apenas o servidor de
+identificador N executa a expressão aritmética e retorna o resultado. Um
+servidor com identificador i no intervalo 1..(N-1) simplesmente repassa a
+expressão ao seguinte (com identificador i+1) e aguarda o resultado, que repassa
+ao processo de quem recebeu a requisição (cliente ou servidor com identificador
+i-1).
+
+Cada servidor pode acessar um arquivo de configuração, que indica seu
+identificador local, bem como os demais identificadores do sistema que lhe
+permitam saber o que fazer quando chega uma requisição.
+
+Cada dupla deve definir qual protocolo de transporte usar, TCP ou UDP. Deve ser
+definido também o protocolo de comunicação, incluindo o formato das expressões
+aritméticas bem como da resposta.
+
+Serão valorizados os sistemas que fizerem uso de IPv6, para isso basta usar a
+biblioteca adequada.
+
+Mostre claramente como vc fez o trabalho e demonstre claramente o sucesso da sua
+estratégia. Simule a comunicação do cliente com diversos servidores (ex.: com o
+servidor N diretamente, ou com o servidor 1, ou servidor 2, etc.) Faça
+demonstrações pelo menos para N=3 e N=4.
+
+ENTREGA DO TRABALHO
+
+Deve ser construída uma página Web, que contém em documentos HTML, os seguintes
+itens:
+
+Relatório de como foi feito o trabalho e quais foram os resultados obtidos. Use
+desenhos, diagramas, figuras, todos os recursos que permitam ao professor
+compreender como a dupla estruturou o trabalho e quais resultados obteve.
+Código Fonte comentado. ATENÇÃO: acrescente a todo programa a terminação ".txt"
+para que possa ser diretamente aberto em um browser. Exemplos: cliente.py.txt ou
+servidor.c.txt Logs de execução dos processos cliente/servidores, que demonstrem
+a execução correta destes processos. Os testes devem ser exaustivos até o ponto
+que demonstrem com clareza a funcionalidade correta do sistema.  Observações:
+
+Não serão aceitos trabalhos impressos, nem em meio ótico/magnético.  Alguns
+trabalhos serão defendidos no laboratório, portanto certifique-se que seu
+trabalho funciona aqui.  Pode ser usada qualquer linguagem de programação. A
+diversidade é bem vinda! 
+
+Prof. Elias P. Duarte Jr.     Departamento de Informática     UFPR
+
+

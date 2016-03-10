@@ -1,0 +1,18 @@
+Atencao
+
+Os aquivos que geram as diferentes qtdes de mensagens diferem apenas no nome do
+arquivo de saida e na qtde de mensagens. O resto do arquivo é o mesmo:
+
+$ diff 1msg.tcl 10msg.tcl
+34c34
+< set saida_tr [open tr_files/mps1.tr w]
+---
+> set saida_tr [open tr_files/mps10.tr w]
+38c38
+< set MESGS 1
+---
+> set MESGS 10
+$
+
+Mesmo assim, os arquivos estao todos neste diretorio.
+

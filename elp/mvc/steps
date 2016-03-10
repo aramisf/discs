@@ -1,0 +1,9 @@
+# Sequencia de passos para um exemplo
+
+rails blog
+rake db:create
+rails server
+rm public/index.html
+rails generate controller home index
+rails generate scaffold Post name:string title:string content:text
+rails generate scaffold HighScore game:string score:integer

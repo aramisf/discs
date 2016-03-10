@@ -1,0 +1,75 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[top=2.8cm,right=2.5cm,bottom=2.5cm,left=3cm]{geometry}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+%\usepackage{here}
+
+% Sem data:
+\date{ }
+
+
+%----------------------------------------------------------
+% Inicio do documento
+\begin{document}
+
+\title{
+Redes 2\\
+Prova 2 - $1^o$ Semestre 2011
+}
+
+\author {
+Prof. Elias P. Duarte Jr.
+}
+
+\maketitle
+
+\begin{enumerate}
+
+\item As aplicações de tempo real, tais como jogos pela Internet e VoIP, que
+possuem restrições temporais específicas sobre entrega de pacotes, não podem ser
+construídas com TCP/IP. Por que?
+
+\item Um dos algoritmos de controle de congestionamento para o TCP utiliza a
+retransmissão rápida (\textit{fast retransmission}). \textbf{(A)} explique a
+estratégia. \textbf{(B)} por que ela torna a retransmissão rápida?
+
+\item É muito importante que o TCP calcule o intervalo de time-out de forma
+precisa. O uso do desvio médio do RTT se mostrou melhor para estimar o time-out
+do que simplesmente o cálculo da média de RTT's. Por que?
+
+\item Quando se programa um servidor TCP, iterativo, ou concorrente, deve-se
+definir o tamanho da fila de espera de clientes. Um tamanho sugerido para esta
+fila é 5. Como você explica que um número tão pequeno seja usado mesmo para
+servidores concorrentes que atendem centenas/milhares de clientes
+simultaneamente?
+
+\item O que imprime o programa abaixo? Dica: conte com cuidado quantos processos
+executam cada instrução!
+\\
+
+\texttt{i=1;\\
+pid = fork();\\
+printf("\%d\char`\\n",i);\\
+if (pid) i++;\\
+fork();\\
+printf("\%d\char`\\n",i);\\
+}
+
+\item Explique (inclusive com um desenho) como funciona a consulta recursiva no
+DNS. Leve em conta todos os possíveis componentes envolvidos na consulta,
+inclusive o resolvedor, servidor de nomes local e servidor raiz.
+
+\item Faça uma comparação dos protocolos DHCP e RARP. Mostre 1 característica em
+que são idênticos e 3 características em que diferem.
+
+\item Existem duas famílias de algoritmos de roteamento: Bellman-Ford e
+Dijkstra. Responda e explique: estes algoritmos podem ser aplicados tanto para o
+roteamento interno a um Sistema Autônomo quanto para o roteamento entre Sistemas
+Autônomos?
+
+
+\end{enumerate}
+
+% Fim do documento
+\end{document}

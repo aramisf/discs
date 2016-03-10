@@ -1,0 +1,47 @@
+============================================================
+TRABALHO
+
+-> Sao uma ou duas apresentacoes (dependendo do tempo que o aluno julgar necessario), com duracao de no maximo 1:30 cada
+-> As datas e horarios devem ser marcados **diretamente com o professor**
+-> Pode ser escolhida qualquer data do semestre letivo, com data limite dada pelo ultimo dia do semestre letivo (excluindo a semana de finais dos alunos de graduacao)
+-> Nao havera apresentacoes de topicos duplicados. Assim que escolher o tema, mande **email** ao professor com o topico preferido. Os que mandarem antes tem prioridade.
+-> Individual ou em dupla. No caso de dupla, indique os nomes ao professor por email.
+
+O que deve ser feito:
+
+1 - Texto escrito **em LaTeX** com o material do topico escolhido (min 10 paginas, max 20 paginas)
+2 - Apresentacao para o professor (a apresentacao e publica, ou seja, qualquer pessoa interessada pode ver)
+
+
+Os topicos podem ser os seguintes:
+
+
+Aritmetica basica e modular  (DPV 1.1 e 1.2)
+Teste de Primalidade (DPV 1.3)
+Hash Universal (DPV 1.4)
+Multiplicacao. Medianas, e Multiplicacao de Matrizes (DPV 2.1, 2.4 e 2.5)
+Estrutura de Dados para Conjuntos Disjuntos, Codificacao de Huffman e Formulas de Horn - DPV (5.1.4, 5.2, 5.3)
+Distancia de Edicao e Conjuntos Independentes em Arvores (DPV 6.3, 6.7)
+Jogos de Soma Zero (DPV 7.5)
+Algoritmos Simplex (DPV 7.6)
+Estrutura de Dados Aumentantes (CLRS 14)
+Fluxo Maximo - Algoritmos de Push-Relabel (CLRS 26.4 e 26.5)
+Algoritmos de Matrizes (CLRS 28)
+Cache Otimo e Arborecencias Minimas (KT 4.3 e 4.9)
+Cobertura por Vertices pequena e Problemas Dificeis em Arvore (KT 10.1 e 10.2)
+Decomposicoes de Grafos em Arvores (KT 10.4)
+Classificacao usando Busca Local (KT 12.6)
+Hashing Aleatorizado (KT 13.6)
+
+
+OBS1: CLRS e 3a Edicao
+OBS2: Alguns topicos necessitam de um pre-requisito de algum assunto, portanto escolham  com atencao o topico.
+OBS3: Possivelmente nao havera tempo suficiente para apresentar o topico completo. Faz parte da avaliacao o aluno escolher as partes interessantes de cada topico, que caibam nas duas apresentacoes a serem feitas.
+
+
+O que sera avaliado:
+
+1 - Qualidade do Texto Escrito: formatacao correta em LaTeX (10%), clareza na explicacao (25%)
+2 - Qualidade da Apresentacao: clareza na explicacao (25%), entendimento da assunto pelo aluno (40%)
+
+DICA: Faca uma previa da sua apresentacao para um amigo (se ele gostar e entender, e um bom indicativo)

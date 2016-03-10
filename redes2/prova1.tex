@@ -1,0 +1,66 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[top=2.8cm,right=2.5cm,bottom=2.5cm,left=3cm]{geometry}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+%\usepackage{here}
+
+% Sem data:
+\date{ }
+
+
+%----------------------------------------------------------
+% Inicio do documento
+\begin{document}
+
+\title{
+Redes 2\\
+Prova 1 - $1^o$ Semestre 2011
+}
+
+\author {
+Prof. Elias P. Duarte Jr.
+}
+
+\maketitle
+
+\begin{enumerate}
+
+\item As camadas 5 e 6 do modelo OSI (Sessão e Apresentação) não estão presentes
+no modelo TCP/IP da Internet. Responda: \textbf{(A)} O que aconteceu com a
+funcionalidade destas camadas no modelo TCP/IP? \textbf{(B)} Existe alguma
+vantagem em implementar estas funções em camadas exclusivas, como o modelo
+ISO/OSI?
+
+\item Os endereços IP são organizados em classes, sendo a classe D de
+\textit{multicast}. \textbf{(A)} O que e multicast? \textbf{(B)} Cite 1 (uma)
+situação em que o multicast melhora a eficiência da transmissão na Internet.
+
+\item Considere o endereço IP \textbf{192.34.82.201} e a máscara de subrede
+\textbf{255.255.255.192}. Responda: \textbf{(A)} qual host está sendo
+endereçado?  \textbf{(B)} Quantas subredes internas a organização possui?
+
+\item Com relação à fragmentação no protocolo IPv4 responda: \textbf{(A)} os
+fragmentos podem ser re-fragmentados antes de chegar ao destino? \textbf{(B)} os
+fragmentos podem ser juntados no pacote original antes de chegar ao destino? Por
+que?
+
+\item O campo TTL do pacote IPv4 permite determinar um tempo máximo de vida de
+um pacote IP, antes que seja removido da rede. Explique como este campo é
+implementado.
+
+\item O CIDR permitiu que o IPv4 continuasse sendo usado na Internet por ter
+resolvido \textit{dois} problemas. Explique.
+
+\item Considere o código formado por mensagens de 3 bits, e checksum
+correspondente a 1 único bit de paridade. \textbf{(A)} Mostre todas as
+palavras deste código. \textbf{(B)} Qual a distância do código? Explique sua
+resposta.
+
+\item O popular comando \texttt{ping}, implementado em virtualmente todos os
+sistemas operacionais, é uma implementação do ICMP Echo-Request-Reply.
+Exatamente o que significa uma expressão bem sucedida do \texttt{ping}?
+
+\end{enumerate}
+
+\end{document}
